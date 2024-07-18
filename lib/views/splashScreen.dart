@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:meeting_app/model/components/CustomText.dart';
 import 'package:meeting_app/utils/AppColor.dart';
-import 'package:meeting_app/views/HomePage.dart';
+import 'package:meeting_app/views/signUpScreen.dart';
 import 'package:page_transition/page_transition.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -20,7 +20,7 @@ class SplashScreen extends StatelessWidget {
           ],
         ),
       ),
-      nextScreen: HomePage(),
+      nextScreen: SignUpScreen(),
       splashTransition: SplashTransition.fadeTransition,
       duration: 3000,
       backgroundColor: const Color(0xff1a1a1a),
