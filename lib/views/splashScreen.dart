@@ -1,30 +1,52 @@
-import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:meeting_app/Routeres/RouterContstants.dart';
 import 'package:meeting_app/model/components/CustomText.dart';
 import 'package:meeting_app/utils/AppColor.dart';
-import 'package:meeting_app/views/signUpScreen.dart';
-import 'package:page_transition/page_transition.dart';
+import 'package:go_router/go_router.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _navigateToNextScreen();
+  }
+
+  void _navigateToNextScreen() {
+    Future.delayed(const Duration(seconds: 3), () {
+      if (mounted) {
+        context.go(RouteConst.signMain);
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return AnimatedSplashScreen(
-      splash: Center(
+    return Scaffold(
+      backgroundColor: const Color(0xff1a1a1a),
+      body: Center(
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset("assets/logos/mainLogo.svg"),
-            const CustomText(text: "MeetSpace" , fontFamily: "Gilroy",fontWeight: FontWeight.bold,fontSize: 26,color: AppColor.white,)
+            SvgPicture.asset("assets/logos/mainLogo.svg", width: 50, height: 50),
+            const SizedBox(width: 10),
+            const CustomText(
+              text: "MeetSpace",
+              fontFamily: "Gilroy",
+              fontWeight: FontWeight.bold,
+              fontSize: 26,
+              color: AppColor.white,
+            ),
           ],
         ),
       ),
-      nextScreen: SignUpScreen(),
-      splashTransition: SplashTransition.fadeTransition,
-      duration: 3000,
-      backgroundColor: const Color(0xff1a1a1a),
-      pageTransitionType: PageTransitionType.rightToLeft,
     );
   }
 }

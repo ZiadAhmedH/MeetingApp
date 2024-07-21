@@ -1,20 +1,20 @@
 import 'dart:ui';
 
 class AppColor {
-
+ // drak
   static const Color primaryColor = Color(0xff1a1a1a);
   static const Color secondaryColor = Color(0xff2c2c2c);
   static const Color black = Color(0xff000000);
   static const Color blackBtn = Color(0xFF262626);
 
-
+// light
   static const Color white = Color(0xffffffff);
   static const Color grey = Color(0xff8a8a8a);
   static const Color lightGrey = Color(0xffd1d1d1);
   static const Color darkGrey = Color(0xff4a4a4a);
 
 
-
+// colors
   static const Color brown = Color(0xff795548);
   static const Color teal = Color(0xff009688);
   static const Color green = Color(0xff2ecc71);
@@ -43,7 +43,6 @@ class AppColor {
 
 
   static const Color primaryBlue = Color(0xFF2C74FF);
-
   static const Color lightBlue = Color(0xff03a9f4);
   static const Color blueAccent = Color(0xff448aff);
   static const Color cyanAccent = Color(0xff18ffff);

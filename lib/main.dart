@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:meeting_app/Routeres/go_Router.dart';
 import 'package:meeting_app/views/splashScreen.dart';
 
 void main(){
@@ -12,8 +13,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return   MaterialApp(
-        home: const SplashScreen(),
+    return   MaterialApp.router(
+      title: 'Meeting App',
+     routerConfig: AppRouter().router,
     );
   }
 }
