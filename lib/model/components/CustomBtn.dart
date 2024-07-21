@@ -16,7 +16,7 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return  InkWell(
       onTap: (){
-        context.go(routeName);
+        context.pushNamed(routeName);
       },
       child: Container(
         width: double.infinity - 50,

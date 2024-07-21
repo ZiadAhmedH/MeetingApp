@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:meeting_app/Routeres/RouterContstants.dart';
 import 'package:meeting_app/views/HomePage.dart';
-import 'package:meeting_app/views/LoginScreen.dart';
-import 'package:meeting_app/views/signMainScreen.dart';
-import 'package:meeting_app/views/signUpScreen.dart';
+import 'package:meeting_app/views/AuthScreens/LoginScreen.dart';
+import 'package:meeting_app/views/AuthScreens/signMainScreen.dart';
+import 'package:meeting_app/views/AuthScreens/signUpScreen.dart';
 import 'package:meeting_app/views/splashScreen.dart';
 
 class AppRouter {
@@ -15,7 +15,7 @@ class AppRouter {
           name: RouteConst.splash,
           path: '/',
           pageBuilder: (context, state) {
-            return const MaterialPage(child: SplashScreen());
+            return const MaterialPage(child: LoginScreen());
           }),
       GoRoute(
           name: RouteConst.signMain,
@@ -30,6 +30,7 @@ class AppRouter {
             return const MaterialPage(child: SignUpScreen());
           }),
       GoRoute(
+           name: RouteConst.login,
           path: '/login',
           pageBuilder: (context, state) {
             return const MaterialPage(child: LoginScreen());
@@ -42,6 +43,6 @@ class AppRouter {
         },
       ),
     ],
-    redirect: (context, state) {},
+
   );
 }
