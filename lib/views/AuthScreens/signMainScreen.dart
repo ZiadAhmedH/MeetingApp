@@ -37,9 +37,9 @@ class SignMainScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Column(
                 children: [
-                  CustomButton(text: "sign Up", backgroundColor: AppColor.primaryBlue,borderColor: AppColor.primaryBlue, routeName: RouteConst.signUp,),
+                  CustomButton(isClickable: 1, text: "sign Up", backgroundColor: AppColor.primaryBlue,borderColor: AppColor.primaryBlue, routeName: RouteConst.signUp,),
                   const SizedBox(height: 20,),
-                  CustomButton(text: "Log in", backgroundColor: AppColor.blackBtn,borderColor: AppColor.primaryBlue,routeName: RouteConst.login, ),
+                  CustomButton(isClickable: 1, text: "Log in", backgroundColor: AppColor.blackBtn,borderColor: AppColor.primaryBlue,routeName: RouteConst.login, ),
                   const SizedBox(height: 20,),
                 ],
               ),

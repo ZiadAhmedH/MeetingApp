@@ -16,15 +16,16 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _navigateToNextScreen();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _navigateToNextScreen();
+    });
   }
 
-  void _navigateToNextScreen() {
-    Future.delayed(const Duration(seconds: 3), () {
-      if (mounted) {
-        context.go(RouteConst.signMain);
-      }
-    });
+  void _navigateToNextScreen() async {
+    await Future.delayed(const Duration(seconds: 3));
+    if (mounted) {
+      context.go(RouteConst.signMain);
+    }
   }
 
   @override

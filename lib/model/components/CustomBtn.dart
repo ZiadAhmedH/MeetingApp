@@ -10,12 +10,14 @@ class CustomButton extends StatelessWidget {
   final Color backgroundColor;
   final String routeName;
   final String text;
+  final int isClickable;
 
-  const CustomButton({super.key, required this.borderColor, required this.backgroundColor, required this.routeName, required this.text});
+  const CustomButton({super.key, required this.borderColor, required this.backgroundColor, required this.routeName, required this.text, required this.isClickable});
   @override
   Widget build(BuildContext context) {
     return  InkWell(
       onTap: (){
+        if(isClickable == 1)
         context.pushNamed(routeName);
       },
       child: Container(

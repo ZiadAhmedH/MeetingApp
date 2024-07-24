@@ -15,7 +15,7 @@ class AppRouter {
           name: RouteConst.splash,
           path: '/',
           pageBuilder: (context, state) {
-            return const MaterialPage(child: LoginScreen());
+            return const MaterialPage(child: SplashScreen());
           }),
       GoRoute(
           name: RouteConst.signMain,
