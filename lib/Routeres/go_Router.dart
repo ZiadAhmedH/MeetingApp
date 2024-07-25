@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:meeting_app/Routeres/RouterContstants.dart';
 import 'package:meeting_app/views/HomePage.dart';
-import 'package:meeting_app/views/AuthScreens/LoginScreen.dart';
+import 'package:meeting_app/views/AuthScreens/LoginSection/LoginScreen.dart';
 import 'package:meeting_app/views/AuthScreens/signMainScreen.dart';
 import 'package:meeting_app/views/AuthScreens/signUpScreen.dart';
 import 'package:meeting_app/views/splashScreen.dart';

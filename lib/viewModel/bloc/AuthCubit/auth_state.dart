@@ -10,7 +10,7 @@ class AuthLoadingState extends AuthState {}
 
 
 
-class AcceptTermsState extends AuthState {}
+class AcceptTermsIsOnOrOffState extends AuthState {}
 
 
 

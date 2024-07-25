@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meeting_app/Routeres/RouterContstants.dart';
 import 'package:meeting_app/model/components/CustomBtn.dart';
@@ -8,6 +9,7 @@ import 'package:meeting_app/model/components/CustomText.dart';
 import 'package:meeting_app/model/components/TextFormFeild.dart';
 import 'package:meeting_app/utils/AppColor.dart';
 import 'package:meeting_app/viewModel/bloc/AuthCubit/auth_cubit.dart';
+import 'package:meeting_app/views/AuthScreens/LoginSection/loginSection.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -52,33 +54,25 @@ class LoginScreen extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      CustomTextFormField(
-                        hintText: 'Enter your email address',
-                        controller: null,
-                        obscureText: false,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter your email';
-                          }
-                          return null;
-                        },
-                      ),
+
+                      const LoginSection(),
+
                       const SizedBox(
                         height: 20,
                       ),
                       CustomRadioButton(
-                          onTap: () {
-                            authCubit.acceptTerms();
-                          },
+                          // ignore: void_checks
                           value: authCubit.isAcceptTerms ? 1 : 0,
                           groupValue: 1,
                           onChanged: (value) {
+                            print(value);
                             authCubit.acceptTerms();
                           },
-                          labelText: 'Remember me'),
+                          labelText: 'I have read and accept the Terms of Service and Privacy Policy.'),
                     ],
                   ),
                 ),
+                
                 CustomButton(
                     borderColor: AppColor.darkGrey,
                     backgroundColor: authCubit.isAcceptTerms 
