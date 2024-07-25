@@ -60,15 +60,21 @@ class LoginScreen extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      CustomRadioButton(
-                          // ignore: void_checks
-                          value: authCubit.isAcceptTerms ? 1 : 0,
-                          groupValue: 1,
-                          onChanged: (value) {
-                            print(value);
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          IconButton(onPressed:() {
                             authCubit.acceptTerms();
-                          },
-                          labelText: 'I have read and accept the Terms of Service and Privacy Policy.'),
+                          }, icon: Icon(Icons.circle ,size: 15, color: authCubit.isAcceptTerms ? AppColor.primaryBlue : AppColor.white,)),
+                          const CustomText(
+                            text: 'I accept the terms and conditions',
+                            fontFamily: 'Gilroy',
+                            fontWeight: FontWeight.w200,
+                            color: AppColor.white,
+                            fontSize: 12,
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
