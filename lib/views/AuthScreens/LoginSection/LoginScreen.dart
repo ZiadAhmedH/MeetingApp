@@ -31,9 +31,8 @@ class LoginScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(
-                        height: 50,
-                      ),
+                      const SizedBox(height: 50,),
+
                       const CustomText(
                         text: 'Welcome Back !',
                         fontFamily: 'Gilroy',
@@ -41,25 +40,22 @@ class LoginScreen extends StatelessWidget {
                         color: AppColor.white,
                         fontSize: 20,
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
+
+                      const SizedBox(height: 10,),
+
                       const CustomText(
                         text: 'Plearse log in to join the meeting hub',
-                        fontFamily: 'Gilroy',
+                        fontFamily: 'Gilroy',  
                         fontWeight: FontWeight.w200,
                         color: AppColor.white,
                         fontSize: 16,
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
+                      const SizedBox(height: 20,),
 
                       const LoginSection(),
 
-                      const SizedBox(
-                        height: 20,
-                      ),
+                      const SizedBox(height: 20,),
+
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -67,7 +63,7 @@ class LoginScreen extends StatelessWidget {
                             authCubit.acceptTerms();
                           }, icon: Icon(Icons.circle ,size: 15, color: authCubit.isAcceptTerms ? AppColor.primaryBlue : AppColor.white,)),
                           const CustomText(
-                            text: 'I accept the terms and conditions',
+                            text: 'I have read and accept the Terms of Service and Privacy Policy.',
                             fontFamily: 'Gilroy',
                             fontWeight: FontWeight.w200,
                             color: AppColor.white,

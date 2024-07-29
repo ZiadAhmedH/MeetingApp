@@ -8,13 +8,15 @@ import 'package:meeting_app/viewModel/bloc/AuthCubit/auth_cubit.dart';
 import 'package:meeting_app/viewModel/bloc/blocObserver.dart';
 import 'package:meeting_app/views/splashScreen.dart';
 
+import 'viewModel/data/SharedPrefrences.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
     Bloc.observer = MyBlocObserver();
   await Firebase.initializeApp(
   options: DefaultFirebaseOptions.currentPlatform,
 );
-
+   LocalData.init();
   runApp(const MyApp());
 }
 
@@ -23,10 +25,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return   MultiBlocProvider(
+    return  MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => AuthCubit()),
-      
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
