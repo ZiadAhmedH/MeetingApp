@@ -84,7 +84,7 @@ class SignUpScreen extends StatelessWidget {
                               icon: Icon(
                                 Icons.circle,
                                 size: 15,
-                                color: authCubit.isAcceptTerms
+                                color: authCubit.isAcceptTermsLogin
                                     ? AppColor.primaryBlue
                                     : AppColor.white,
                               )),
@@ -105,11 +105,11 @@ class SignUpScreen extends StatelessWidget {
                 ),
                 CustomButton(
                     borderColor: AppColor.darkGrey,
-                    backgroundColor: authCubit.isAcceptTerms
+                    backgroundColor: authCubit.isAcceptTermsLogin
                         ? AppColor.primaryBlue
                         : AppColor.darkGrey,
                     routeName: RouteConst.home,
-                    isClickable: authCubit.isAcceptTerms ? 1 : 0,
+                    isClickable: authCubit.isAcceptTermsLogin ? 1 : 0,
                     text: "Next"),
               ],
             ),

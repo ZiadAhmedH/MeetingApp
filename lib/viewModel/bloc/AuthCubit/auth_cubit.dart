@@ -17,7 +17,8 @@ class AuthCubit extends Cubit<AuthState> {
 
   static AuthCubit get(context) => BlocProvider.of(context);
 
-  bool isAcceptTerms = false;
+  bool isAcceptTermsLogin = false;
+  bool isAcceptTermsSignUp = false;
   bool isPassWordShowed = false;
 
 
@@ -29,8 +30,8 @@ class AuthCubit extends Cubit<AuthState> {
 
 
   void acceptTerms() {
-    isAcceptTerms = !isAcceptTerms;
-    print(isAcceptTerms);
+    isAcceptTermsLogin = !isAcceptTermsLogin;
+    print(isAcceptTermsLogin);
     emit(AcceptTermsIsOnOrOffState());
   }
 

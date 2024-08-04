@@ -61,7 +61,7 @@ class LoginScreen extends StatelessWidget {
                         children: [
                           IconButton(onPressed:() {
                             authCubit.acceptTerms();
-                          }, icon: Icon(Icons.circle ,size: 15, color: authCubit.isAcceptTerms ? AppColor.primaryBlue : AppColor.white,)),
+                          }, icon: Icon(Icons.circle ,size: 15, color: authCubit.isAcceptTermsLogin ? AppColor.primaryBlue : AppColor.white,)),
                           const CustomText(
                             text: 'I have read and accept the Terms of Service and Privacy Policy.',
                             fontFamily: 'Gilroy',
@@ -77,11 +77,11 @@ class LoginScreen extends StatelessWidget {
                 
                 CustomButton(
                     borderColor: AppColor.darkGrey,
-                    backgroundColor: authCubit.isAcceptTerms 
+                    backgroundColor: authCubit.isAcceptTermsLogin
                         ? AppColor.primaryBlue
                         : AppColor.darkGrey,
                     routeName: RouteConst.home,
-                    isClickable: authCubit.isAcceptTerms? 1 : 0,
+                    isClickable: authCubit.isAcceptTermsLogin? 1 : 0,
                     text: "Next"),
               ],
             ),
