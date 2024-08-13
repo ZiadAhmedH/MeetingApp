@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meeting_app/Routeres/RouterContstants.dart';
-import 'package:meeting_app/model/components/CustomBtn.dart';
+import 'package:meeting_app/model/components/CustomBtnRouter.dart';
 import 'package:meeting_app/model/components/CustomRadio.dart';
 import 'package:meeting_app/model/components/CustomText.dart';
 import 'package:meeting_app/model/components/TextFormFeild.dart';
@@ -62,12 +62,15 @@ class LoginScreen extends StatelessWidget {
                           IconButton(onPressed:() {
                             authCubit.acceptTerms();
                           }, icon: Icon(Icons.circle ,size: 15, color: authCubit.isAcceptTermsLogin ? AppColor.primaryBlue : AppColor.white,)),
-                          const CustomText(
-                            text: 'I have read and accept the Terms of Service and Privacy Policy.',
-                            fontFamily: 'Gilroy',
-                            fontWeight: FontWeight.w200,
-                            color: AppColor.white,
-                            fontSize: 12,
+
+                          const  Flexible(
+                            child:  CustomText(
+                              text: 'I have read and accept the Terms of Service and Privacy Policy.',
+                              fontFamily: 'Gilroy',
+                              fontWeight: FontWeight.w200,
+                              color: AppColor.white,
+                              fontSize: 12,
+                            ),
                           ),
                         ],
                       ),
@@ -75,7 +78,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
                 
-                CustomButton(
+                CustomButtonRouter(
                     borderColor: AppColor.darkGrey,
                     backgroundColor: authCubit.isAcceptTermsLogin
                         ? AppColor.primaryBlue

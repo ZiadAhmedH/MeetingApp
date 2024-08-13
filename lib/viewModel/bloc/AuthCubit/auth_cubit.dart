@@ -28,6 +28,17 @@ class AuthCubit extends Cubit<AuthState> {
   TextEditingController loginEmail = TextEditingController();
   TextEditingController loginPassword = TextEditingController();
 
+  // SignUp Controllers
+  GlobalKey<FormState> signKey = GlobalKey<FormState>();
+  TextEditingController signUpEmail = TextEditingController();
+  TextEditingController signUpPassword = TextEditingController();
+  TextEditingController signUpUserName = TextEditingController();
+
+  // Password Controllers
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+   bool passwordStrength = false;
+
 
   void acceptTerms() {
     isAcceptTermsLogin = !isAcceptTermsLogin;

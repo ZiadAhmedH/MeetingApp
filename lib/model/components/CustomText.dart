@@ -29,24 +29,24 @@ class CustomText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child: Text(
-        text,
-        style: TextStyle(
-          decoration:decoration ,
-          decorationColor: decorationColor,
-          decorationThickness: decorationThickness,
-          textBaseline: textBaseline,
-          fontSize: fontSize ?? 14.0, // Default font size is 14.0 if not provided
-          fontWeight: fontWeight ?? FontWeight.normal, // Default is normal weight
-          color: color ?? Colors.black, // Default color is black if not provided
-          fontStyle: fontStyle ?? FontStyle.normal, // Default is normal style
-          fontFamily: fontFamily, // No default font family
-        ),
-        textAlign: textAlign,
-        maxLines: maxLines,
+    return Text(
+      text,
+      style: TextStyle(
         overflow: overflow,
+        decoration:decoration ,
+        decorationColor: decorationColor,
+        decorationThickness: decorationThickness,
+        textBaseline: textBaseline,
+        fontSize: fontSize ?? 14.0, // Default font size is 14.0 if not provided
+        fontWeight: fontWeight ?? FontWeight.normal, // Default is normal weight
+        color: color ?? Colors.black, // Default color is black if not provided
+        fontStyle: fontStyle ?? FontStyle.normal, // Default is normal style
+        fontFamily: fontFamily, // No default font family
       ),
+      textAlign: textAlign,
+      maxLines: maxLines,
+      overflow: overflow,
+      softWrap: true,
     );
   }
 }

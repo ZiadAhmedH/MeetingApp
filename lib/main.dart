@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meeting_app/Routeres/go_Router.dart';
 import 'package:meeting_app/firebase_options.dart';
 import 'package:meeting_app/viewModel/bloc/AuthCubit/auth_cubit.dart';
+import 'package:meeting_app/viewModel/bloc/VerfiyCubit/verfiy_cubit.dart';
 import 'package:meeting_app/viewModel/bloc/blocObserver.dart';
 import 'package:meeting_app/views/splashScreen.dart';
 
@@ -28,6 +29,8 @@ class MyApp extends StatelessWidget {
     return  MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => AuthCubit()),
+        BlocProvider(create: (context) => VerfiyCubit()),
+        
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,

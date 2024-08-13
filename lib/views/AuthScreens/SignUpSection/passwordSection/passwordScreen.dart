@@ -1,10 +1,14 @@
 import 'package:fancy_password_field/fancy_password_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:meeting_app/Routeres/RouterContstants.dart';
 import 'package:meeting_app/utils/RegexConst.dart';
-import '../../../model/components/CustomText.dart';
-import '../../../model/components/TextFormFeild.dart';
-import '../../../utils/AppColor.dart';
-import '../../../viewModel/bloc/AuthCubit/auth_cubit.dart';
+import 'package:meeting_app/views/AuthScreens/SignUpSection/passwordSection/passwordValidationScetion.dart';
+import '../../../../model/components/CustomBtnRouter.dart';
+import '../../../../model/components/CustomText.dart';
+import '../../../../model/components/TextFormFeild.dart';
+import '../../../../utils/AppColor.dart';
+import '../../../../viewModel/bloc/AuthCubit/auth_cubit.dart';
 class PasswordScreen extends StatelessWidget {
   const PasswordScreen({super.key});
 
@@ -15,7 +19,12 @@ class PasswordScreen extends StatelessWidget {
       backgroundColor: AppColor.primaryColor,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
+        child: BlocConsumer<AuthCubit, AuthState>(
+  listener: (context, state) {
+    // TODO: implement listener
+  },
+  builder: (context, state) {
+    return ListView(
           children: [
             Expanded(
               child: Column(
@@ -45,51 +54,15 @@ class PasswordScreen extends StatelessWidget {
                     height: 20,
                   ),
 
-                  FancyPasswordField(
-                    decoration: InputDecoration(
-                      hintText: 'Enter your password',
-                      hintStyle: const TextStyle(color: Colors.grey),
-                      filled: true,
-                      fillColor: AppColor.lightBlack, // Dark background color
-                      contentPadding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                        borderSide: const BorderSide(
-                          color: AppColor.grey,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                        borderSide: const BorderSide(
-                            color: AppColor.grey
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                        borderSide: const BorderSide(
-                          color: Colors.blue,
-                        ),
-                      ),
-                    ),
-                    style: const TextStyle(color: AppColor.white), // Text color
-                    controller: authCubit.passwordController,
-                    validationRules: {
-                      DigitValidationRule(),
-                      UppercaseValidationRule(),
-                      LowercaseValidationRule(),
-                      SpecialCharacterValidationRule(),
-                      MinCharactersValidationRule(6),
-                      MaxCharactersValidationRule(12),
-                    },
+                  const PasswordValidationSection(),
 
-                  ),
                 const SizedBox(
                   height: 20,
                 ),
                   CustomTextFormField(
-                    hintText: 'Enter your password',
+                    hintText: 'R-Enter your password',
                     controller: authCubit.confirmPasswordController,
-                    obscureText: false,
+                    obscureText: true,
                     icon: const Icon(
                       Icons.lock,
                       color: AppColor.lightBlack,
@@ -108,8 +81,17 @@ class PasswordScreen extends StatelessWidget {
                 ],
               ),
             ),
+            CustomButtonRouter(
+              borderColor: AppColor.darkGrey,
+              backgroundColor:(authCubit.passwordStrength &&authCubit.passwordController.text == authCubit.confirmPasswordController.text  ) ? AppColor.primaryBlue : AppColor.darkGrey,
+              text: 'Next',
+              routeName: RouteConst.home,
+              isClickable: (authCubit.passwordStrength &&authCubit.passwordController.text == authCubit.confirmPasswordController.text  ) ? 1 : 0,
+            ),
           ],
-        ),
+        );
+  },
+),
       ),
     );
   }

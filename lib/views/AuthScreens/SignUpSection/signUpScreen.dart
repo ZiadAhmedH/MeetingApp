@@ -1,11 +1,18 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:go_router/go_router.dart';
 import 'package:meeting_app/Routeres/RouterContstants.dart';
-import 'package:meeting_app/model/components/CustomBtn.dart';
+import 'package:meeting_app/model/components/CustomBtnRouter.dart';
 import 'package:meeting_app/model/components/CustomText.dart';
 import 'package:meeting_app/model/components/TextFormFeild.dart';
 import 'package:meeting_app/utils/AppColor.dart';
 import 'package:meeting_app/viewModel/bloc/AuthCubit/auth_cubit.dart';
+import 'package:meeting_app/viewModel/bloc/VerfiyCubit/verfiy_cubit.dart';
+
+import '../../../model/components/CustomBtn.dart';
+import 'signUpSection/SignUpSection.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
@@ -13,6 +20,7 @@ class SignUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var authCubit = AuthCubit.get(context);
+    var verifyCubit = VerfiyCubit.get(context);
     return BlocBuilder<AuthCubit, AuthState>(
       bloc: authCubit,
       builder: (context, state) {
@@ -22,6 +30,7 @@ class SignUpScreen extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
+
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,30 +59,9 @@ class SignUpScreen extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      CustomTextFormField(
-                        hintText: 'Enter your email address',
-                        controller: authCubit.loginEmail,
-                        obscureText: false,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter your email';
-                          }
-                          String emailPattern =
-                              r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$';
-                          RegExp regex = RegExp(emailPattern);
-                          if (!regex.hasMatch(value)) {
-                            return 'Please enter a valid email address';
-                          }
-                          return null;
-                        },
-                        icon: const Icon(
-                          Icons.meeting_room,
-                          color: AppColor.lightBlack,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
+
+                      SignUpSection(),
+
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -88,27 +76,37 @@ class SignUpScreen extends StatelessWidget {
                                     ? AppColor.primaryBlue
                                     : AppColor.white,
                               )),
-                          const CustomText(
-                            text:
-                                'I have read and accept the Terms of Service and Privacy Policy.',
-                            fontFamily: 'Gilroy',
-                            fontWeight: FontWeight.w200,
-                            color: AppColor.white,
-                            fontSize: 12,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
+
+                          const Flexible(
+                            child:  CustomText(
+                              text:
+                                  'I have read and accept the Terms of Service and Privacy Policy.',
+                              fontFamily: 'Gilroy',
+                              fontWeight: FontWeight.w200,
+                              color: AppColor.white,
+                              fontSize: 12,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ],
                       ),
                     ],
                   ),
                 ),
+
                 CustomButton(
+                  onTap: (){
+                    if(authCubit.signKey.currentState!.validate()){
+                       verifyCubit.submitPhoneNumber(phone: verifyCubit.userPhoneNumber.text);
+                       context.pushNamed(RouteConst.verify);
+                    }
+                  },
+                    textColor: AppColor.white,
                     borderColor: AppColor.darkGrey,
                     backgroundColor: authCubit.isAcceptTermsLogin
                         ? AppColor.primaryBlue
                         : AppColor.darkGrey,
-                    routeName: RouteConst.home,
                     isClickable: authCubit.isAcceptTermsLogin ? 1 : 0,
                     text: "Next"),
               ],

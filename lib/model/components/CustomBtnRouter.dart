@@ -4,7 +4,7 @@ import 'package:meeting_app/model/components/CustomText.dart';
 import 'package:meeting_app/utils/AppColor.dart';
 
 import '../../Routeres/RouterContstants.dart';
-class CustomButton extends StatelessWidget {
+class CustomButtonRouter extends StatelessWidget {
 
   final Color borderColor;
   final Color backgroundColor;
@@ -12,7 +12,7 @@ class CustomButton extends StatelessWidget {
   final String text;
   final int isClickable;
 
-  const CustomButton({super.key, required this.borderColor, required this.backgroundColor, required this.routeName, required this.text, required this.isClickable});
+  const CustomButtonRouter({super.key, required this.borderColor, required this.backgroundColor, required this.routeName, required this.text, required this.isClickable});
   @override
   Widget build(BuildContext context) {
     return  InkWell(

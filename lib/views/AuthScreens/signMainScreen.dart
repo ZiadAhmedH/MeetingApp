@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:meeting_app/Routeres/RouterContstants.dart';
-import 'package:meeting_app/model/components/CustomBtn.dart';
+import 'package:meeting_app/model/components/CustomBtnRouter.dart';
 import 'package:meeting_app/model/components/CustomText.dart';
 import 'package:meeting_app/utils/AppColor.dart';
 class SignMainScreen extends StatelessWidget {
@@ -37,9 +37,9 @@ class SignMainScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Column(
                 children: [
-                  CustomButton(isClickable: 1, text: "sign Up", backgroundColor: AppColor.primaryBlue,borderColor: AppColor.primaryBlue, routeName: RouteConst.signUp,),
+                  CustomButtonRouter(isClickable: 1, text: "sign Up", backgroundColor: AppColor.primaryBlue,borderColor: AppColor.primaryBlue, routeName: RouteConst.signUp,),
                   const SizedBox(height: 20,),
-                  CustomButton(isClickable: 1, text: "Log in", backgroundColor: AppColor.blackBtn,borderColor: AppColor.primaryBlue,routeName: RouteConst.login, ),
+                  CustomButtonRouter(isClickable: 1, text: "Log in", backgroundColor: AppColor.blackBtn,borderColor: AppColor.primaryBlue,routeName: RouteConst.login, ),
                   const SizedBox(height: 20,),
                 ],
               ),

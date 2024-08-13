@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meeting_app/model/components/TextFormFeild.dart';
 import 'package:meeting_app/utils/AppColor.dart';
+import 'package:meeting_app/utils/RegexConst.dart';
 import 'package:meeting_app/viewModel/bloc/AuthCubit/auth_cubit.dart';
 
 class LoginSection extends StatelessWidget {
@@ -11,7 +12,7 @@ class LoginSection extends StatelessWidget {
     var authCubit = AuthCubit.get(context);
 
     return Form(
-      key: authCubit.loginKey,
+       key: authCubit.loginKey,
       child: Column(
         children: [
           CustomTextFormField(
@@ -22,9 +23,7 @@ class LoginSection extends StatelessWidget {
               if (value!.isEmpty) {
                 return 'Please enter your email';
               }
-              String emailPattern =
-                  r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$';
-              RegExp regex = RegExp(emailPattern);
+              RegExp regex = RegExp(RegexConst.email);
               if (!regex.hasMatch(value)) {
                 return 'Please enter a valid email address';
               }
