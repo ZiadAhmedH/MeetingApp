@@ -28,9 +28,9 @@ class VerfiyCubit extends Cubit<VerfiyState> {
 
     await auth.verifyPhoneNumber(
       phoneNumber: phoneNumber,
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        await auth.signInWithCredential(credential);
-      },
+      // Not used in auth I Only use it to to Practice in Otp and Main sign up with email and password
+      // not with phone number
+      verificationCompleted: (PhoneAuthCredential credential) async {},
       verificationFailed: (FirebaseAuthException e) {
         Fluttertoast.showToast(
           msg: e.message.toString(),
@@ -75,7 +75,6 @@ class VerfiyCubit extends Cubit<VerfiyState> {
     }
   }
 
-
   void verifyOTP({required String smsCode, required String verificationId}) async {
     try {
       PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: smsCode);
@@ -83,7 +82,6 @@ class VerfiyCubit extends Cubit<VerfiyState> {
       emit(VerfiySuccessState());
       print(phoneAuthCredential.smsCode.toString());
       print(phoneAuthCredential.verificationId);
-      print(phoneAuthCredential);
       isVerify = true;
     } on FirebaseAuthException catch (e) {
       Fluttertoast.showToast(msg: '${e.message}');

@@ -17,10 +17,24 @@ class AcceptTermsIsOnOrOffState extends AuthState {}
 class PasswordAppearanceState extends AuthState{}
 
 
+// password match
+class PasswordMatchState extends AuthState{}
+class PasswordNotMatchState extends AuthState{}
+
+
 // login 
 class LoadingLoginState extends AuthState{}
 class SuccessLoginState extends AuthState{}
 class ErrorLoginState extends AuthState{}
+
+
+// sign up
+class LoadingRegisterState extends AuthState{}
+class SuccessRegisterState extends AuthState{}
+class ErrorRegisterState extends AuthState{}
+
+
+
 
 
 

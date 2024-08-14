@@ -47,6 +47,7 @@
   shared_preferences: ^2.2.3
   fluttertoast: ^8.2.6
   fancy_password_field: ^2.0.7
+  cloud_firestore: ^5.2.1
 
  dev_dependencies:
    flutter_test:
