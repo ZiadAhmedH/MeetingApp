@@ -1,14 +1,10 @@
-import 'package:fancy_password_field/fancy_password_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:meeting_app/Routeres/RouterContstants.dart';
 import 'package:meeting_app/model/components/CustomBtn.dart';
-import 'package:meeting_app/utils/RegexConst.dart';
+import 'package:meeting_app/model/components/CustomBtnRouter.dart';
 import 'package:meeting_app/views/AuthScreens/SignUpSection/passwordSection/passwordValidationScetion.dart';
-import '../../../../model/components/CustomBtnRouter.dart';
 import '../../../../model/components/CustomText.dart';
-import '../../../../model/components/TextFormFeild.dart';
 import '../../../../utils/AppColor.dart';
 import '../../../../viewModel/bloc/AuthCubit/auth_cubit.dart';
 
@@ -62,7 +58,7 @@ class PasswordScreen extends StatelessWidget {
             ),
             BlocBuilder<AuthCubit, AuthState>(
               builder: (context, state) {
-                return  CustomButton(
+                return CustomButtonRouter(
                     borderColor: AppColor.darkGrey,
                     backgroundColor: (authCubit.passwordStrength &&
                         authCubit.passwordController.text ==
@@ -72,14 +68,10 @@ class PasswordScreen extends StatelessWidget {
                     text: 'Next',
                     isClickable: (authCubit.passwordStrength &&
                         authCubit.passwordController.text ==
-                            authCubit.confirmPasswordController.text) ? 1 : 0,
-                    onTap: () {
-                      authCubit.signUpWithFire();
-                    },
-                    textColor: AppColor.white);
+                            authCubit.confirmPasswordController.text) ? 1 : 0, routeName: RouteConst.inputProfileInfo,
+                  );
               },
             ),
-
           ],
         ),
       ),

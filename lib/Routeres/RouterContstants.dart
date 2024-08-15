@@ -6,4 +6,5 @@ class RouteConst{
     static  String home = '/home';
     static  String verify = '/verify';
     static  String password = '/password';
+    static  String inputProfileInfo  = '/inputProfileInfo';
 }

@@ -5,10 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meeting_app/Routeres/go_Router.dart';
 import 'package:meeting_app/firebase_options.dart';
 import 'package:meeting_app/viewModel/bloc/AuthCubit/auth_cubit.dart';
+import 'package:meeting_app/viewModel/bloc/ProfileCubit/profile_cubit.dart';
 import 'package:meeting_app/viewModel/bloc/VerfiyCubit/verfiy_cubit.dart';
 import 'package:meeting_app/viewModel/bloc/blocObserver.dart';
-import 'package:meeting_app/views/splashScreen.dart';
-
 import 'viewModel/data/SharedPrefrences.dart';
 
 Future<void> main() async {
@@ -30,6 +29,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => AuthCubit()),
         BlocProvider(create: (context) => VerfiyCubit()),
+        BlocProvider(create: (context) => ProfileCubit()),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,

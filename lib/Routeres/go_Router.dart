@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:meeting_app/Routeres/RouterContstants.dart';
 import 'package:meeting_app/views/AuthScreens/SignUpSection/VerifyScreen.dart';
+import 'package:meeting_app/views/AuthScreens/SignUpSection/userInfoSection/UserInfoSection.dart';
 import 'package:meeting_app/views/AuthScreens/signMainScreen.dart';
 import 'package:meeting_app/views/HomePage.dart';
 import 'package:meeting_app/views/AuthScreens/LoginSection/LoginScreen.dart';
@@ -49,6 +50,12 @@ class AppRouter {
           path:"/password",
           pageBuilder: (context, state) {
         return const MaterialPage(child: PasswordScreen());
+      }),
+      GoRoute(
+          name: RouteConst.inputProfileInfo,
+          path: "/inputProfileInfo",
+          pageBuilder: (context, state) {
+        return const MaterialPage(child: UserInfoSection());
       }),
       GoRoute(
         name: RouteConst.home,

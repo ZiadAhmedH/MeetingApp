@@ -15,7 +15,6 @@ part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
-
   static AuthCubit get(context) => BlocProvider.of(context);
 
   bool isAcceptTermsLogin = false;
