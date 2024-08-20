@@ -14,7 +14,7 @@ class VerfiyCubit extends Cubit<VerfiyState> {
 
 
   TextEditingController verificationCode = TextEditingController();
-  TextEditingController userPhoneNumber = TextEditingController();
+ static TextEditingController userPhoneNumber = TextEditingController();
   final auth = FirebaseAuth.instance;
   String? verificationId; // Add this as a class member
   bool isVerify = false;

@@ -8,13 +8,18 @@ class CustomTextFormField extends StatelessWidget {
   final String? Function(String?)? validator;
   final Function(String)? onChanged;
   Icon icon;
-  
+  final bool readOnly;
+  final TextInputType? keyboardType;
 
-  CustomTextFormField({super.key, 
+
+  CustomTextFormField({
+    super.key,
     required this.hintText,
     this.controller,
     this.obscureText = false,
+    this.keyboardType, // Optional and nullable
     this.validator,
+    this.readOnly = false,
     this.onChanged,
     required this.icon,
   });
@@ -22,10 +27,12 @@ class CustomTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+       readOnly: readOnly,
       controller: controller,
       obscureText: obscureText,
       validator: validator,
       onChanged: onChanged,
+      keyboardType: keyboardType ,
       decoration: InputDecoration(
         suffixIcon: icon ,
         hintText: hintText,

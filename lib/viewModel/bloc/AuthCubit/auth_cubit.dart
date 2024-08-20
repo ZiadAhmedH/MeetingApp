@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:meeting_app/utils/AppColor.dart';
+import 'package:meeting_app/viewModel/bloc/CommonFunction.dart';
+import 'package:meeting_app/viewModel/bloc/ProfileCubit/profile_cubit.dart';
 import 'package:meta/meta.dart';
 import '../../../utils/CollectionConst.dart';
 import '../../data/SharedKeys.dart';
@@ -13,11 +15,10 @@ import '../VerfiyCubit/verfiy_cubit.dart';
 
 part 'auth_state.dart';
 
-class AuthCubit extends Cubit<AuthState> {
+class AuthCubit extends Cubit<AuthState>  implements CommonFun{
   AuthCubit() : super(AuthInitial());
   static AuthCubit get(context) => BlocProvider.of(context);
 
-  bool isAcceptTermsLogin = false;
   bool isAcceptTermsSignUp = false;
   bool isPassWordShowed = false;
 
@@ -77,13 +78,26 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> addUserToFireStore(UserCredential userCredential) async {
     await FirebaseFirestore.instance.collection(Collections.users).doc(
         userCredential.user?.uid).set({
+      "UserName": "${ProfileCubit.firstName.text} ${ProfileCubit.lastName.text}",
       "Email": signUpEmail.text,
-      "UserName": "test",
-      "profileImage" : "testtt",
-       "phone": VerfiyCubit().userPhoneNumber.text,
+      "Location": ProfileCubit.userLocation.text,
+      "JobTitle": "${ProfileCubit.currentStatus}",
+      "profileImage" : ".....",
+       "phone": VerfiyCubit.userPhoneNumber.text,
       "uid": userCredential.user?.uid
     });
     print("gooood");
+
+    print(""""
+    ${ProfileCubit.firstName.text} 
+    ${ProfileCubit.lastName.text}
+    ${signUpEmail.text}
+    ${ProfileCubit.userLocation.text}
+    ${ProfileCubit.currentStatus}
+    ${VerfiyCubit.userPhoneNumber.text}
+    ${userCredential.user?.uid}
+    """);
+
   }
 
 
@@ -109,11 +123,6 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
 
-  void acceptTerms() {
-    isAcceptTermsLogin = !isAcceptTermsLogin;
-    print(isAcceptTermsLogin);
-    emit(AcceptTermsIsOnOrOffState());
-  }
 
   void showPassword() {
     isPassWordShowed = !isPassWordShowed;
@@ -131,6 +140,16 @@ class AuthCubit extends Cubit<AuthState> {
     confirmPasswordController.removeListener(passwordConfirmation);
     return super.close();
   }
+
+  @override
+  void acceptTerms() {
+    isAcceptTerms = !isAcceptTerms;
+    print(isAcceptTerms);
+    emit(AcceptTermsIsOnOrOffState());
+  }
+
+  @override
+  bool isAcceptTerms = false;
 
 
 

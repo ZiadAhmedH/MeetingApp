@@ -39,7 +39,7 @@ class VerifyScreen extends StatelessWidget {
                      ),
                       CustomText(
                        text:
-                           "We have sent a verification code to your Phone number ${verfiyCubit.userPhoneNumber.text}",
+                           "We have sent a verification code to your Phone number ${VerfiyCubit.userPhoneNumber.text}",
                        fontFamily: 'Gilroy',
                        fontWeight: FontWeight.w200,
                        color: AppColor.white,
@@ -51,6 +51,7 @@ class VerifyScreen extends StatelessWidget {
                      CustomTextFormField(
                        hintText: 'Enter your verification code',
                        controller: verfiyCubit.verificationCode,
+                       keyboardType: TextInputType.number,
                        obscureText: false,
                        validator: (value) {
                          if (value!.isEmpty) {

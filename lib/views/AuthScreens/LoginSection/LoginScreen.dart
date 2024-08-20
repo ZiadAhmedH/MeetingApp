@@ -61,7 +61,7 @@ class LoginScreen extends StatelessWidget {
                         children: [
                           IconButton(onPressed:() {
                             authCubit.acceptTerms();
-                          }, icon: Icon(Icons.circle ,size: 15, color: authCubit.isAcceptTermsLogin ? AppColor.primaryBlue : AppColor.white,)),
+                          }, icon: Icon(Icons.circle ,size: 15, color: authCubit.isAcceptTerms ? AppColor.primaryBlue : AppColor.white,)),
 
                           const  Flexible(
                             child:  CustomText(
@@ -80,11 +80,11 @@ class LoginScreen extends StatelessWidget {
                 
                 CustomButtonRouter(
                     borderColor: AppColor.darkGrey,
-                    backgroundColor: authCubit.isAcceptTermsLogin
+                    backgroundColor: authCubit.isAcceptTerms
                         ? AppColor.primaryBlue
                         : AppColor.darkGrey,
                     routeName: RouteConst.home,
-                    isClickable: authCubit.isAcceptTermsLogin? 1 : 0,
+                    isClickable: authCubit.isAcceptTerms? 1 : 0,
                     text: "Next"),
               ],
             ),

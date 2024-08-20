@@ -1,31 +1,53 @@
-import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:meta/meta.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+import '../CommonFunction.dart';
 
 part 'profile_state.dart';
 
-class ProfileCubit extends Cubit<ProfileState> {
+class ProfileCubit extends Cubit<ProfileState>  implements CommonFun{
   ProfileCubit() : super(ProfileInitial());
   static ProfileCubit get(context) => BlocProvider.of(context);
+  final Dio dio = Dio();
 
-
+// user Profile
   XFile? image;
   final ImagePicker _picker = ImagePicker();
+ static String countryName = '';
+
+ GlobalKey<FormState> profileKey = GlobalKey<FormState>();
+ static TextEditingController userLocation = TextEditingController();
+ static TextEditingController firstName = TextEditingController();
+ static TextEditingController lastName = TextEditingController();
+
+  @override
+  bool isAcceptTerms = false;
+
+  static String currentStatus = 'Software Engineer';
+  List<String> jobTitle = [
+    'Software Engineer',
+    'Doctor',
+    'Nurse',
+    'Teacher',
+    'Student',
+    'Businessman',
+    'Others'
+  ];
 
 
+
+// Image Picker
   Future<void> pickImageFromGallery() async {
     emit(ImagePickerLoading());
-
     var permissionStatus = await Permission.storage.request();
-
     if (permissionStatus.isGranted) {
       try {
         XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
         if (pickedFile != null) {
           image = pickedFile;
-          print(image!.path);
           emit(ImagePickerSuccess(pickedFile));
         } else {
           emit(ImagePickerError('No image selected.'));
@@ -39,6 +61,35 @@ class ProfileCubit extends Cubit<ProfileState> {
       await openAppSettings();
       emit(ImagePickerError('Permission permanently denied. Please enable it in settings.'));
     }
+  }
+
+  // Changing Job Title
+  void changingJobTitle(String value) {
+    currentStatus = value;
+    emit(ChangingStatusState());
+  }
+// Get Country
+  Future<void> getCountry() async {
+    emit(CountryLoading());
+    try {
+      final ipResponse = await dio.get('https://api64.ipify.org?format=json');
+
+      final ip = ipResponse.data['ip'];
+
+      final countryResponse = await dio.get('https://ipinfo.io/$ip/json');
+      final country = countryResponse.data['timezone'];
+       countryName = country;
+       userLocation.text = countryName;
+       emit(CountrySuccess(country));
+    } catch (e) {
+      emit(CountryError('Failed to get country: $e'));
+    }
+  }
+// Accept Terms
+  @override
+  void acceptTerms() {
+    isAcceptTerms = !isAcceptTerms;
+    emit(AcceptTermsState(isAcceptTerms));
   }
 
 
