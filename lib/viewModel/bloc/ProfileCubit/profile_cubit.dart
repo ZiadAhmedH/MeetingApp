@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -8,20 +11,21 @@ import '../CommonFunction.dart';
 
 part 'profile_state.dart';
 
-class ProfileCubit extends Cubit<ProfileState>  implements CommonFun{
+class ProfileCubit extends Cubit<ProfileState>  implements CommonFun {
   ProfileCubit() : super(ProfileInitial());
+
   static ProfileCubit get(context) => BlocProvider.of(context);
   final Dio dio = Dio();
 
 // user Profile
   XFile? image;
   final ImagePicker _picker = ImagePicker();
- static String countryName = '';
+  static String countryName = '';
 
- GlobalKey<FormState> profileKey = GlobalKey<FormState>();
- static TextEditingController userLocation = TextEditingController();
- static TextEditingController firstName = TextEditingController();
- static TextEditingController lastName = TextEditingController();
+  GlobalKey<FormState> profileKey = GlobalKey<FormState>();
+  static TextEditingController userLocation = TextEditingController();
+  static TextEditingController firstName = TextEditingController();
+  static TextEditingController lastName = TextEditingController();
 
   @override
   bool isAcceptTerms = false;
@@ -38,14 +42,14 @@ class ProfileCubit extends Cubit<ProfileState>  implements CommonFun{
   ];
 
 
-
 // Image Picker
   Future<void> pickImageFromGallery() async {
     emit(ImagePickerLoading());
     var permissionStatus = await Permission.storage.request();
     if (permissionStatus.isGranted) {
       try {
-        XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+        XFile? pickedFile = await _picker.pickImage(
+            source: ImageSource.gallery);
         if (pickedFile != null) {
           image = pickedFile;
           emit(ImagePickerSuccess(pickedFile));
@@ -59,8 +63,22 @@ class ProfileCubit extends Cubit<ProfileState>  implements CommonFun{
       emit(ImagePickerError('Gallery permission is required to pick images'));
     } else if (permissionStatus.isPermanentlyDenied) {
       await openAppSettings();
-      emit(ImagePickerError('Permission permanently denied. Please enable it in settings.'));
+      emit(ImagePickerError(
+          'Permission permanently denied. Please enable it in settings.'));
     }
+  }
+
+  Future<void> uploadImage(
+      {required XFile image, required Function(String) onSuccess}) async {
+    print(image.name);
+    await FirebaseStorage.instance.ref()
+        .child("ProfileImage/${image.name}")
+        .putFile(File(image.path))
+        .then((photo) {
+      photo.ref.getDownloadURL().then((value) => onSuccess(value));
+    });
+
+
   }
 
   // Changing Job Title
@@ -78,22 +96,20 @@ class ProfileCubit extends Cubit<ProfileState>  implements CommonFun{
 
       final countryResponse = await dio.get('https://ipinfo.io/$ip/json');
       final country = countryResponse.data['timezone'];
-       countryName = country;
-       userLocation.text = countryName;
-       emit(CountrySuccess(country));
+      countryName = country;
+      userLocation.text = countryName;
+      emit(CountrySuccess(country));
     } catch (e) {
       emit(CountryError('Failed to get country: $e'));
     }
   }
-// Accept Terms
+
+
   @override
   void acceptTerms() {
     isAcceptTerms = !isAcceptTerms;
     emit(AcceptTermsState(isAcceptTerms));
   }
-
-
-
 
 
 }
