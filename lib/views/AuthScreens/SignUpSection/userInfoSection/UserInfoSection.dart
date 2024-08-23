@@ -31,7 +31,7 @@ class UserInfoSection extends StatelessWidget {
         return Scaffold(
           backgroundColor: AppColor.primaryColor,
           body: Padding(
-            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.02),
+            padding: const EdgeInsets.all(8.0),
             child: ListView(
               children: [
                 Column(
@@ -65,8 +65,12 @@ class UserInfoSection extends StatelessWidget {
                     isClickable: profileCubit.isAcceptTerms ? 1 : 0,
                     onTap: () {
                       if(profileCubit.profileKey.currentState!.validate()) {
-                         authCubit.signUpWithFire();
-                         context.pushReplacement(RouteConst.signMain);
+                         authCubit.signUpWithFire().then((value) {
+
+                           context.pushReplacement(RouteConst.signMain);
+                         }).catchError((e) {
+                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+                         });
                       }
                     },
                     textColor: AppColor.white,

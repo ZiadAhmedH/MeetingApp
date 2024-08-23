@@ -19,8 +19,10 @@ class AuthCubit extends Cubit<AuthState>  implements CommonFun{
   AuthCubit() : super(AuthInitial());
   static AuthCubit get(context) => BlocProvider.of(context);
 
-  bool isAcceptTermsSignUp = false;
+  @override
+  bool isAcceptTerms = false;
   bool isPassWordShowed = false;
+
 
 
   // Login Controllers
@@ -88,22 +90,14 @@ class AuthCubit extends Cubit<AuthState>  implements CommonFun{
     });
     print("gooood");
 
-    print(""""
-    ${ProfileCubit.firstName.text} 
-    ${ProfileCubit.lastName.text}
-    ${signUpEmail.text}
-    ${ProfileCubit.userLocation.text}
-    ${ProfileCubit.currentStatus}
-    ${VerfiyCubit.userPhoneNumber.text}
-    ${userCredential.user?.uid}
-    """);
-
   }
 
 
   void storeDataFirebase(UserCredential value) {
     debugPrint("Using StoreDataFirebase");
     LocalData.setData(key: SharedKey.uid, value: value.user?.uid);
+    LocalData.setData(key: SharedKey.email, value: value.user?.email);
+    LocalData.setData(key: SharedKey.isLogin, value: true);
   }
 
 
@@ -148,8 +142,7 @@ class AuthCubit extends Cubit<AuthState>  implements CommonFun{
     emit(AcceptTermsIsOnOrOffState());
   }
 
-  @override
-  bool isAcceptTerms = false;
+
 
 
 

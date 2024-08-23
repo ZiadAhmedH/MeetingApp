@@ -56,7 +56,6 @@ class PasswordScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-
                 BlocBuilder<AuthCubit, AuthState>(
                   builder: (context, state) {
                     return CustomButtonRouter(

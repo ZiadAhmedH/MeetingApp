@@ -4,6 +4,9 @@ import 'package:meeting_app/Routeres/RouterContstants.dart';
 import 'package:meeting_app/model/components/CustomText.dart';
 import 'package:meeting_app/utils/AppColor.dart';
 import 'package:go_router/go_router.dart';
+import 'package:meeting_app/viewModel/data/SharedPrefrences.dart';
+
+import '../viewModel/data/SharedKeys.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -24,7 +27,9 @@ class _SplashScreenState extends State<SplashScreen> {
   void _navigateToNextScreen() async {
     await Future.delayed(const Duration(seconds: 3));
     if (mounted) {
-      context.go(RouteConst.signMain);
+      LocalData.getData(key: SharedKey.isLogin)
+          ? GoRouter.of(context).go(RouteConst.home)
+          : GoRouter.of(context).go(RouteConst.signMain);
     }
   }
 
@@ -36,7 +41,8 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset("assets/logos/mainLogo.svg", width: 50, height: 50),
+            SvgPicture.asset("assets/logos/mainLogo.svg",
+                width: 50, height: 50),
             const SizedBox(width: 10),
             const CustomText(
               text: "MeetSpace",
