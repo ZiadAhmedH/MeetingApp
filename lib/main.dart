@@ -6,6 +6,7 @@ import 'package:meeting_app/Routeres/go_Router.dart';
 import 'package:meeting_app/firebase_options.dart';
 import 'package:meeting_app/viewModel/bloc/AuthCubit/auth_cubit.dart';
 import 'package:meeting_app/viewModel/bloc/ProfileCubit/profile_cubit.dart';
+import 'package:meeting_app/viewModel/bloc/ThemeCubit/theme_cubit.dart';
 import 'package:meeting_app/viewModel/bloc/VerfiyCubit/verfiy_cubit.dart';
 import 'package:meeting_app/viewModel/bloc/blocObserver.dart';
 import 'viewModel/data/SharedPrefrences.dart';
@@ -30,10 +31,12 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => AuthCubit()),
         BlocProvider(create: (context) => VerfiyCubit()),
         BlocProvider(create: (context) => ProfileCubit()),
+        BlocProvider(create: (context) => ThemeCubit()),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: 'Meeting App',
+       theme: ThemeCubit.lightTheme,
        routerConfig: AppRouter().router,
       ),
     );
