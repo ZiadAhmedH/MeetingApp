@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:meeting_app/model/components/CustomText.dart';
 import 'package:meeting_app/utils/AppColor.dart';
+import 'package:meeting_app/utils/ThemeExtension.dart';
 
 import '../../Routeres/RouterContstants.dart';
 class CustomButtonRouter extends StatelessWidget {
@@ -30,7 +31,7 @@ class CustomButtonRouter extends StatelessWidget {
           border: Border.all(color: borderColor , width: 1)
         ),
         child: Center(
-          child: CustomText(text:text , fontFamily: "Gilroy",fontWeight: FontWeight.normal,fontSize: 16,color: AppColor.white,)
+          child: CustomText(text:text , fontFamily: "Gilroy",fontWeight: FontWeight.normal,fontSize: 16,color: context.secondaryTextColor,)
         ),
       ),
     );

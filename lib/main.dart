@@ -1,4 +1,3 @@
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,11 +12,12 @@ import 'viewModel/data/SharedPrefrences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-    Bloc.observer = MyBlocObserver();
+  Bloc.observer = MyBlocObserver();
   await Firebase.initializeApp(
-  options: DefaultFirebaseOptions.currentPlatform,
-);
-   LocalData.init();
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  LocalData.init();
+  //LocalData.clearData();
   runApp(const MyApp());
 }
 
@@ -26,18 +26,22 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  MultiBlocProvider(
+    return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => AuthCubit()),
         BlocProvider(create: (context) => VerfiyCubit()),
         BlocProvider(create: (context) => ProfileCubit()),
-        BlocProvider(create: (context) => ThemeCubit()),
+        BlocProvider(create: (context) => ThemesCubit()),
       ],
-      child: MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        title: 'Meeting App',
-       theme: ThemeCubit.lightTheme,
-       routerConfig: AppRouter().router,
+      child: BlocBuilder<ThemesCubit, ThemeData>(
+        builder: (context, themeState) {
+          return MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            title: 'Meeting App',
+            theme: themeState,
+            routerConfig: AppRouter().router,
+          );
+        },
       ),
     );
   }
