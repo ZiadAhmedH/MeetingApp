@@ -75,7 +75,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
                 CustomButton(
-                    borderColor: AppColor.darkGrey,
+                    borderColor: AppColor.lightGrey,
                     backgroundColor: authCubit.isAcceptTerms
                         ? AppColor.primaryBlue
                         : AppColor.darkGrey,

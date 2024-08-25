@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meeting_app/utils/AppColor.dart';
+import 'package:meeting_app/utils/ThemeExtension.dart';
 
 class CustomTextFormField extends StatelessWidget {
   final String? hintText;
@@ -38,18 +39,18 @@ class CustomTextFormField extends StatelessWidget {
         hintText: hintText,
         hintStyle: const TextStyle(color: Colors.grey),
         filled: true,
-        fillColor: AppColor.lightBlack, // Dark background color
+        fillColor: context.primaryTextColor,
         contentPadding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
           borderSide: const BorderSide(
-            color: AppColor.grey,
+            color: AppColor.lightGrey,
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
           borderSide: const BorderSide(
-            color: AppColor.grey
+            color: AppColor.lightGrey,
           ),
         ),
         focusedBorder: OutlineInputBorder(
@@ -60,7 +61,7 @@ class CustomTextFormField extends StatelessWidget {
         ),
       ),
       
-      style: const TextStyle(color: AppColor.white), // Text color
+      style: TextStyle(color: context.thirdTextColor), // Text color
     );
   }
 }

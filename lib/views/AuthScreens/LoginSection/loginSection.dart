@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:meeting_app/model/components/TextFormFeild.dart';
 import 'package:meeting_app/utils/AppColor.dart';
 import 'package:meeting_app/utils/RegexConst.dart';
+import 'package:meeting_app/utils/ThemeExtension.dart';
 import 'package:meeting_app/viewModel/bloc/AuthCubit/auth_cubit.dart';
 
 class LoginSection extends StatelessWidget {
@@ -29,9 +30,9 @@ class LoginSection extends StatelessWidget {
               }
               return null;
             },
-            icon: const Icon(
+            icon:  Icon(
               Icons.meeting_room,
-              color: AppColor.lightBlack,
+              color: context.primaryTextColor,
             ),
           ),
           const SizedBox(
@@ -54,7 +55,7 @@ class LoginSection extends StatelessWidget {
                 authCubit.isPassWordShowed
                     ? Icons.visibility
                     : Icons.visibility_off,
-                color: AppColor.lightBlack,
+                color: AppColor.lightGrey,
               )),
         ],
       ),

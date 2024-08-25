@@ -8,6 +8,7 @@ import 'package:meeting_app/model/components/CustomBtnRouter.dart';
 import 'package:meeting_app/model/components/CustomText.dart';
 import 'package:meeting_app/model/components/TextFormFeild.dart';
 import 'package:meeting_app/utils/AppColor.dart';
+import 'package:meeting_app/utils/ThemeExtension.dart';
 import 'package:meeting_app/viewModel/bloc/AuthCubit/auth_cubit.dart';
 import 'package:meeting_app/viewModel/bloc/VerfiyCubit/verfiy_cubit.dart';
 import 'package:meeting_app/views/AuthScreens/SignUpSection/userInfoSection/AcceptTermsSection.dart';
@@ -26,7 +27,7 @@ class SignUpScreen extends StatelessWidget {
       bloc: authCubit,
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: AppColor.primaryColor,
+          backgroundColor: context.primaryBackgroundColor,
           body: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -43,10 +44,10 @@ class SignUpScreen extends StatelessWidget {
                         text: 'Start you Meeting Now !',
                         fontFamily: 'Gilroy',
                         fontWeight: FontWeight.bold,
-                        color: AppColor.white,
+                        color: context.thirdTextColor,
                         fontSize: 20,
                       ),
-                      SizedBox(
+                     const SizedBox(
                         height: 10,
                       ),
                       CustomText(
@@ -54,14 +55,14 @@ class SignUpScreen extends StatelessWidget {
                             'Entering your email to start your meeting hub today',
                         fontFamily: 'Gilroy',
                         fontWeight: FontWeight.w200,
-                        color: AppColor.white,
+                        color: context.thirdTextColor,
                         fontSize: 16,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
 
-                      SignUpSection(),
+                      const SignUpSection(),
 
                       AcceptTerms(
                         cubit: authCubit,
@@ -83,7 +84,7 @@ class SignUpScreen extends StatelessWidget {
                     }
                   },
                     textColor: AppColor.white,
-                    borderColor: AppColor.darkGrey,
+                    borderColor: AppColor.lightGrey,
                     backgroundColor: authCubit.isAcceptTerms
                         ? AppColor.primaryBlue
                         : AppColor.darkGrey,

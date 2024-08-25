@@ -1,5 +1,6 @@
 import 'package:fancy_password_field/fancy_password_field.dart';
 import 'package:flutter/material.dart';
+import 'package:meeting_app/utils/ThemeExtension.dart';
 
 import '../../../../model/components/TextFormFeild.dart';
 import '../../../../utils/AppColor.dart';
@@ -15,28 +16,28 @@ class PasswordValidationSection extends StatelessWidget {
         FancyPasswordField(
           hidePasswordIcon:const  Icon(
             Icons.visibility_off,
-            color: AppColor.grey,
+            color: AppColor.lightGrey,
           ),
           showPasswordIcon:const  Icon(
             Icons.remove_red_eye,
             color: AppColor.grey,
           ),
-          style: const TextStyle(color: AppColor.white),
+          style: TextStyle(color: context.thirdTextColor),
           decoration: InputDecoration(
             hintText: 'Enter your password',
-            hintStyle: const TextStyle(color: AppColor.white),
-            fillColor: AppColor.lightBlack, // Dark background color
+            hintStyle: TextStyle(color: AppColor.lightGrey),
+            fillColor: context.primaryTextColor,
             contentPadding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8.0),
               borderSide: const BorderSide(
-                color: AppColor.grey,
+                color: AppColor.lightGrey,
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8.0),
               borderSide: const BorderSide(
-                  color: AppColor.grey
+                  color: AppColor.lightGrey
               ),
             ),
             focusedBorder: OutlineInputBorder(
@@ -102,7 +103,7 @@ class PasswordValidationSection extends StatelessWidget {
           obscureText: true,
           icon: const Icon(
             Icons.lock,
-            color: AppColor.lightBlack,
+            color: AppColor.lightGrey,
           ),
           validator: (value) {
             if (value!.isEmpty) {

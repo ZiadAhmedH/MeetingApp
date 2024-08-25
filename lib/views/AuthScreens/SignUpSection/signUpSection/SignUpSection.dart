@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meeting_app/utils/RegexConst.dart';
+import 'package:meeting_app/utils/ThemeExtension.dart';
 import 'package:meeting_app/viewModel/bloc/VerfiyCubit/verfiy_cubit.dart';
 import 'package:meeting_app/views/AuthScreens/SignUpSection/VerifyScreen.dart';
 import '../../../../model/components/TextFormFeild.dart';
@@ -31,9 +32,9 @@ class SignUpSection extends StatelessWidget {
                 }
                 return null;
               },
-              icon: const Icon(
+              icon:  Icon(
                 Icons.meeting_room,
-                color: AppColor.lightBlack,
+                color: context.primaryTextColor,
               ),
             ),
             const SizedBox(
@@ -55,7 +56,7 @@ class SignUpSection extends StatelessWidget {
               },
               icon: const Icon(
                 Icons.phone,
-                color: AppColor.darkGrey,
+                color: AppColor.lightGrey,
               ),
             ),
           ],

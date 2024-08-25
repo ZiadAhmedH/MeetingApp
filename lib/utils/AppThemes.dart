@@ -11,10 +11,12 @@ class AppThemes {
       iconTheme: IconThemeData(color: Colors.white),
       titleTextStyle: TextStyle(color: AppColor.black),
     ),
-    textTheme:  TextTheme(
-      bodyText1:  TextStyle(color: AppColor.white),
-      bodyText2:  TextStyle(color: AppColor.primaryBlue),
-      bodyMedium:  TextStyle(color: AppColor.black),
+    textTheme:  const TextTheme(
+      bodyMedium:  TextStyle(color: AppColor.white),
+      bodySmall:  TextStyle(color: AppColor.primaryBlue),
+      bodyLarge: TextStyle(color: AppColor.black),
+      headlineLarge: TextStyle(color: AppColor.white),
+      headlineMedium: TextStyle(color: AppColor.darkGrey),
     ),
     buttonTheme: const ButtonThemeData(
       buttonColor: AppColor.primaryBlue,
@@ -30,10 +32,12 @@ class AppThemes {
     appBarTheme: AppBarTheme(
       color: Colors.grey[900],
       iconTheme: const IconThemeData(color: Colors.white),),
-    textTheme:  TextTheme(
-      bodyText1: TextStyle(color: AppColor.white),
-      bodyText2: TextStyle(color: AppColor.white),
-      bodyMedium: TextStyle(color: AppColor.white),
+    textTheme:  const TextTheme(
+      bodyMedium:  TextStyle(color: AppColor.darkGrey),
+      bodySmall:  TextStyle(color: AppColor.primaryBlue),
+      bodyLarge: TextStyle(color: AppColor.black),
+      headlineLarge: TextStyle(color: AppColor.lightBlack),
+      headlineMedium: TextStyle(color: AppColor.white),
     ),
     buttonTheme: const ButtonThemeData(
       buttonColor: AppColor.primaryBlue,

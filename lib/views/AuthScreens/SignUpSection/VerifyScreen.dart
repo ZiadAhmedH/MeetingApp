@@ -1,5 +1,7 @@
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:meeting_app/utils/ThemeExtension.dart';
 import 'package:meeting_app/viewModel/bloc/VerfiyCubit/verfiy_cubit.dart';
 import 'package:meeting_app/Routeres/RouterContstants.dart';
 import '../../../model/components/CustomBtn.dart';
@@ -15,7 +17,7 @@ class VerifyScreen extends StatelessWidget {
     var verfiyCubit = VerfiyCubit.get(context);
     var authCubit = AuthCubit.get(context);
     return  Scaffold(
-      backgroundColor: AppColor.primaryColor,
+      backgroundColor: context.primaryBackgroundColor,
          body: Padding(
            padding: const EdgeInsets.all(8.0),
            child: Column(
@@ -27,11 +29,11 @@ class VerifyScreen extends StatelessWidget {
                      const SizedBox(
                        height: 50,
                      ),
-                     const CustomText(
+                      CustomText(
                        text: 'Verify your account',
                        fontFamily: 'Gilroy',
                        fontWeight: FontWeight.bold,
-                       color: AppColor.white,
+                       color: context.thirdTextColor,
                        fontSize: 20,
                      ),
                      const SizedBox(
@@ -42,7 +44,7 @@ class VerifyScreen extends StatelessWidget {
                            "We have sent a verification code to your Phone number ${VerfiyCubit.userPhoneNumber.text}",
                        fontFamily: 'Gilroy',
                        fontWeight: FontWeight.w200,
-                       color: AppColor.white,
+                       color: context.thirdTextColor,
                        fontSize: 16,
                      ),
                      const SizedBox(
@@ -59,9 +61,9 @@ class VerifyScreen extends StatelessWidget {
                          }
                          return null;
                        },
-                       icon: const Icon(
+                       icon: Icon(
                          Icons.meeting_room,
-                         color: AppColor.lightBlack,
+                         color:context.primaryTextColor ,
                        ),
                      ),
                      const SizedBox(
@@ -69,9 +71,9 @@ class VerifyScreen extends StatelessWidget {
                      ),
                      CustomButton(
                        borderColor: AppColor.white,
-                       backgroundColor: AppColor.white,
+                       backgroundColor: context.filledColor2!,
                        text: 'Verify',
-                       textColor: AppColor.primaryColor,
+                       textColor: context.primaryTextColor!,
                        isClickable: 1,
                        onTap: () {
                         verfiyCubit.onSmsCodeSubmitted();
