@@ -61,7 +61,7 @@ class CustomTextFormField extends StatelessWidget {
         ),
       ),
       
-      style: TextStyle(color: context.thirdTextColor), // Text color
+      style: TextStyle(color: context.thirdTextColor,fontWeight: FontWeight.bold), // Text color
     );
   }
 }

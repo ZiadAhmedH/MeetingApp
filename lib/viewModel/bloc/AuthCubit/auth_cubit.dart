@@ -84,10 +84,11 @@ class AuthCubit extends Cubit<AuthState>  implements CommonFun{
       "Email": signUpEmail.text,
       "Location": ProfileCubit.userLocation.text,
       "JobTitle": "${ProfileCubit.currentStatus}",
-      "profileImage" : ".....",
+      "profileImage" : "",
        "phone": VerfiyCubit.userPhoneNumber.text,
       "uid": userCredential.user?.uid
     });
+    ProfileCubit().uploadImage(image: ProfileCubit().image!); // upload image to firebase storage & get url
     print("gooood");
 
   }
@@ -129,10 +130,9 @@ class AuthCubit extends Cubit<AuthState>  implements CommonFun{
     confirmPasswordController.addListener(passwordConfirmation);
   }
 
-  Future<void> closeListeners() {
+   void closeListeners() {
     passwordController.removeListener(passwordConfirmation);
     confirmPasswordController.removeListener(passwordConfirmation);
-    return super.close();
   }
 
   @override
@@ -140,6 +140,16 @@ class AuthCubit extends Cubit<AuthState>  implements CommonFun{
     isAcceptTerms = !isAcceptTerms;
     print(isAcceptTerms);
     emit(AcceptTermsIsOnOrOffState());
+  }
+
+  void clearControllers() {
+    closeListeners();
+    loginEmail.clear();
+    loginPassword.clear();
+    signUpEmail.clear();
+    signUpUserName.clear();
+    passwordController.clear();
+    confirmPasswordController.clear();
   }
 
 

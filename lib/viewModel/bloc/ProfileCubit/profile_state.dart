@@ -27,7 +27,7 @@ class ImagePickerError extends ProfileState {
 class ChangingStatusState extends ProfileState {}
 
 
-
+// Country
 class CountryLoading extends ProfileState {}
 class CountrySuccess extends ProfileState {
   final String country;
@@ -38,8 +38,16 @@ class CountryError extends ProfileState {
   CountryError(this.message);
 }
 
-
+// terms
 class AcceptTermsState extends ProfileState {
   final bool isAcceptTerms;
   AcceptTermsState(this.isAcceptTerms);
 }
+
+// Profile
+class LoadingUserInfoState extends ProfileState {}
+class SuccessUserInfoState extends ProfileState {}
+class ProfileError extends ProfileState {
+
+}
+

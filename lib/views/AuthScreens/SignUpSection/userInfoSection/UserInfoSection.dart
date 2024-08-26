@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:meeting_app/Routeres/RouterContstants.dart';
 import 'package:meeting_app/model/components/CustomBtn.dart';
 import 'package:meeting_app/model/components/TextFormFeild.dart';
+import 'package:meeting_app/utils/ThemeExtension.dart';
 import 'package:meeting_app/views/AuthScreens/SignUpSection/userInfoSection/imageSection.dart';
 import 'package:meeting_app/views/AuthScreens/SignUpSection/userInfoSection/profileSection.dart';
 import '../../../../model/components/CustomText.dart';
@@ -20,6 +21,7 @@ class UserInfoSection extends StatelessWidget {
   Widget build(BuildContext context) {
     var profileCubit = ProfileCubit.get(context);
     var authCubit = AuthCubit.get(context);
+
     // Get screen dimensions
     final mediaQuery = MediaQuery.of(context);
     final screenWidth = mediaQuery.size.width;
@@ -29,7 +31,7 @@ class UserInfoSection extends StatelessWidget {
       bloc: profileCubit..getCountry(),
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: AppColor.primaryColor,
+          backgroundColor: context.primaryBackgroundColor,
           body: Padding(
             padding: const EdgeInsets.all(8.0),
             child: ListView(
@@ -44,20 +46,20 @@ class UserInfoSection extends StatelessWidget {
                           text: 'Create your Profile',
                           fontFamily: 'Gilroy',
                           fontWeight: FontWeight.bold,
-                          color: AppColor.white,
-                          fontSize: screenWidth * 0.05, // 5% of screen width
+                          color: context.thirdTextColor,
+                          fontSize: screenWidth * 0.05,
                         ),
                       ],
                     ),
-                    SizedBox(height: screenHeight * 0.02), // 2% of screen height
+                    SizedBox(height: screenHeight * 0.02),
                     const ImageSection(),
-                    SizedBox(height: screenHeight * 0.02), // 2% of screen height
+                    SizedBox(height: screenHeight * 0.02),
                     const ProfileInputSection(),
                   ],
                 ),
-                SizedBox(height: screenHeight * 0.3), // 30% of screen height
+                SizedBox(height: screenHeight * 0.3),
                 Padding(
-                  padding: EdgeInsets.only(bottom: screenHeight * 0.02), // 2% of screen height
+                  padding: EdgeInsets.only(bottom: screenHeight * 0.02),
                   child: CustomButton(
                     borderColor: AppColor.grey,
                     backgroundColor: profileCubit.isAcceptTerms ? AppColor.primaryBlue : AppColor.grey,
@@ -66,8 +68,9 @@ class UserInfoSection extends StatelessWidget {
                     onTap: () {
                       if(profileCubit.profileKey.currentState!.validate()) {
                          authCubit.signUpWithFire().then((value) {
-
                            context.pushReplacement(RouteConst.signMain);
+                           authCubit.clearControllers();
+                           profileCubit.uploadImage(image: profileCubit.image!);
                          }).catchError((e) {
                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
                          });

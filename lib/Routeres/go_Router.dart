@@ -4,12 +4,11 @@ import 'package:meeting_app/Routeres/RouterContstants.dart';
 import 'package:meeting_app/views/AuthScreens/SignUpSection/VerifyScreen.dart';
 import 'package:meeting_app/views/AuthScreens/SignUpSection/userInfoSection/UserInfoSection.dart';
 import 'package:meeting_app/views/AuthScreens/signMainScreen.dart';
-import 'package:meeting_app/views/HomePage.dart';
 import 'package:meeting_app/views/AuthScreens/LoginSection/LoginScreen.dart';
 import 'package:meeting_app/views/AuthScreens/SignUpSection/signUpScreen.dart';
 import 'package:meeting_app/views/splashScreen.dart';
-
 import '../views/AuthScreens/SignUpSection/passwordSection/passwordScreen.dart';
+import '../views/HomeScreen/HomePage.dart';
 
 class AppRouter {
   GoRouter router = GoRouter(

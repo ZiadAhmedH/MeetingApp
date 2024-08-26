@@ -1,12 +1,19 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:meeting_app/viewModel/bloc/AuthCubit/auth_cubit.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../../model/Models/UserModel.dart';
+import '../../../utils/CollectionConst.dart';
+import '../../data/SharedKeys.dart';
+import '../../data/SharedPrefrences.dart';
 import '../CommonFunction.dart';
 
 part 'profile_state.dart';
@@ -21,6 +28,7 @@ class ProfileCubit extends Cubit<ProfileState>  implements CommonFun {
   XFile? image;
   final ImagePicker _picker = ImagePicker();
   static String countryName = '';
+  UserModel? User;
 
   GlobalKey<FormState> profileKey = GlobalKey<FormState>();
   static TextEditingController userLocation = TextEditingController();
@@ -67,18 +75,41 @@ class ProfileCubit extends Cubit<ProfileState>  implements CommonFun {
           'Permission permanently denied. Please enable it in settings.'));
     }
   }
+  Future<void>getUserInfoFire()async {
+    emit(LoadingUserInfoState());
+    await FirebaseFirestore.instance.collection(Collections.users).snapshots().listen((value) {
+      for (var doc in value.docs) {
+        String docUid = doc.get('uid');
+        if (LocalData.getData(key: SharedKey.uid) == docUid) {
+          print(doc.id);
+          print(LocalData.getData(key: SharedKey.uid));
+          User = UserModel(
+            email: doc.get('Email'),
+            userName: doc.get("UserName"),
+            profileImage: doc.get("profileImage"),
+            phone: doc.get("phone"),
+            location: doc.get("Location"),
+            jobTitle: doc.get("JobTitle"),
+          );
+          print(User?.email);
+        }
+      }
+      emit(SuccessUserInfoState());
+    });
+  }
 
   Future<void> uploadImage(
-      {required XFile image, required Function(String) onSuccess}) async {
+      {required XFile image}) async {
     print(image.name);
     await FirebaseStorage.instance.ref()
-        .child("ProfileImage/${image.name}")
-        .putFile(File(image.path))
-        .then((photo) {
-      photo.ref.getDownloadURL().then((value) => onSuccess(value));
+        .child("ProfileImage/${LocalData.getData(key: SharedKey.uid)}/${image.name}")
+        .putFile(File(image.path)).then((value){
+      value.ref.getDownloadURL().then((value) {
+        FirebaseFirestore.instance.collection(Collections.users).doc(LocalData.getData(key: SharedKey.uid)).update({
+          "profileImage": value
+        });
+      });
     });
-
-
   }
 
   // Changing Job Title

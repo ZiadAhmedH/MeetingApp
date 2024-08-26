@@ -1,7 +1,6 @@
 import 'package:fancy_password_field/fancy_password_field.dart';
 import 'package:flutter/material.dart';
 import 'package:meeting_app/utils/ThemeExtension.dart';
-
 import '../../../../model/components/TextFormFeild.dart';
 import '../../../../utils/AppColor.dart';
 import '../../../../viewModel/bloc/AuthCubit/auth_cubit.dart';
@@ -20,12 +19,13 @@ class PasswordValidationSection extends StatelessWidget {
           ),
           showPasswordIcon:const  Icon(
             Icons.remove_red_eye,
-            color: AppColor.grey,
+            color: AppColor.lightGrey,
           ),
           style: TextStyle(color: context.thirdTextColor),
           decoration: InputDecoration(
             hintText: 'Enter your password',
-            hintStyle: TextStyle(color: AppColor.lightGrey),
+            hintStyle: const TextStyle(color: Colors.grey),
+            filled: true,
             fillColor: context.primaryTextColor,
             contentPadding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
             border: OutlineInputBorder(

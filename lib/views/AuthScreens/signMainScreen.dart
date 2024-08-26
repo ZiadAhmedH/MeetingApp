@@ -50,7 +50,7 @@ class SignMainScreen extends StatelessWidget {
               child: Column(
                 children: [
                   CustomButton(
-                    textColor: context.primaryTextColor!,
+                    textColor: context.thirdTextColor!,
                     text: "Sign up",
                     backgroundColor: AppColor.primaryBlue,
                     borderColor: AppColor.primaryBlue,
@@ -64,7 +64,7 @@ class SignMainScreen extends StatelessWidget {
                  CustomButton(
                    textColor: context.secondaryTextColor!,
                     text: "Log in",
-                    backgroundColor: AppColor.white,
+                    backgroundColor: context.primaryBackgroundColor,
                     borderColor: AppColor.primaryBlue,
                     onTap: () {
                       context.pushNamed(RouteConst.login);

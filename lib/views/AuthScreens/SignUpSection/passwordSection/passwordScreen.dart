@@ -79,7 +79,7 @@ class PasswordScreen extends StatelessWidget {
                   },
                     isClickable: (authCubit.passwordStrength &&
                         authCubit.passwordController.text ==
-                            authCubit.confirmPasswordController.text) ? 1 : 0,  textColor: context.primaryTextColor!,
+                            authCubit.confirmPasswordController.text) ? 1 : 0,  textColor: context.thirdTextColor!,
                   );
               },
             ),

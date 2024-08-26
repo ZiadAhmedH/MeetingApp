@@ -35,7 +35,7 @@ class AppThemes {
     textTheme:  const TextTheme(
       bodyMedium:  TextStyle(color: AppColor.darkGrey),
       bodySmall:  TextStyle(color: AppColor.primaryBlue),
-      bodyLarge: TextStyle(color: AppColor.black),
+      bodyLarge: TextStyle(color: AppColor.white),
       headlineLarge: TextStyle(color: AppColor.lightBlack),
       headlineMedium: TextStyle(color: AppColor.white),
     ),

@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 
+import 'package:flutter/material.dart';
+import 'package:meeting_app/utils/ThemeExtension.dart';
 import '../../../../model/components/CustomText.dart';
 import '../../../../model/components/TextFormFeild.dart';
 import '../../../../utils/AppColor.dart';
@@ -16,13 +17,13 @@ class ProfileInputSection extends StatelessWidget {
       key: profileCubit.profileKey,
       child: Column(
         children: [
-          const Row(
+           Row(
             children: [
               CustomText(
                 text: 'Your Profile',
                 fontFamily: 'Gilroy',
                 fontWeight: FontWeight.normal,
-                color: AppColor.white,
+                color: context.thirdTextColor,
                 fontSize: 20,
               ),
             ],
@@ -68,7 +69,9 @@ class ProfileInputSection extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
+
           const DropDownSection(),
+
           const SizedBox(
             height: 10,
           ),

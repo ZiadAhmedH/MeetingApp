@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:meeting_app/utils/ThemeExtension.dart';
 
 import '../../../../utils/AppColor.dart';
 import '../../../../viewModel/bloc/ProfileCubit/profile_cubit.dart';
@@ -16,9 +17,9 @@ class DropDownSection extends StatelessWidget {
       builder: (context, state) {
         return Container(
           decoration: BoxDecoration(
-            color: AppColor.lightBlack,
+            color: context.primaryBackgroundColor,
             borderRadius: BorderRadius.circular(8.0),
-            border: Border.all(color: AppColor.grey , width: 1.0),
+            border: Border.all(color: AppColor.lightGrey , width: 1.0),
           ),
           child: DropdownButton(
             alignment: Alignment.bottomCenter,
@@ -40,7 +41,7 @@ class DropDownSection extends StatelessWidget {
                   ),
                   child: Text(
                     value,
-                    style: const TextStyle(color: AppColor.white , fontSize: 16.0, fontWeight: FontWeight.normal, fontFamily: 'Gilroy'),
+                    style:  TextStyle(color: context.thirdTextColor, fontSize: 16.0, fontWeight: FontWeight.normal, fontFamily: 'Gilroy'),
                   ),
                 )
               );
@@ -52,7 +53,7 @@ class DropDownSection extends StatelessWidget {
             style: const TextStyle(color: AppColor.white),
             isExpanded: true,
             borderRadius: BorderRadius.circular(8.0),
-            dropdownColor: AppColor.lightBlack,
+            dropdownColor: context.primaryBackgroundColor,
 
           ),
         );
