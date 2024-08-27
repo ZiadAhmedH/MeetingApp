@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:meeting_app/utils/AppColor.dart';
 
 class AppThemes {
+
+  // light theme ###
   static final ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     primaryColor: AppColor.lightWhite,
@@ -24,7 +26,7 @@ class AppThemes {
     ),
     // Add other light theme properties as needed
   );
-
+ // dark theme ###
   static final ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
     primaryColor: AppColor.primaryColor,

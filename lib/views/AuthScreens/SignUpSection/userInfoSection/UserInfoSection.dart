@@ -69,10 +69,6 @@ class UserInfoSection extends StatelessWidget {
                       if(profileCubit.profileKey.currentState!.validate()) {
                          authCubit.signUpWithFire().then((value) {
                            context.pushReplacement(RouteConst.signMain);
-                           authCubit.clearControllers();
-                           profileCubit.uploadImage(image: profileCubit.image!);
-                         }).catchError((e) {
-                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
                          });
                       }
                     },

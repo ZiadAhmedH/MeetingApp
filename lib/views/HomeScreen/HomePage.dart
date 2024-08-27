@@ -20,9 +20,13 @@ class HomePage extends StatelessWidget {
        appBar:AppBar(
          backgroundColor:context.primaryBackgroundColor ,
           title:CustomText(text: "Meeting" ,fontFamily: "Gilroy",fontWeight: FontWeight.bold,fontSize: 20,color: context.thirdTextColor,),
-         leading: CircleAvatar(
-           radius: 20,
-           backgroundColor: context.primaryIconColor,
+         leading: InkWell(
+           onTap: (){
+           },
+           child: CircleAvatar(
+             radius: 20,
+             backgroundColor: context.primaryIconColor,
+           ),
          ),
        ) ,
 
@@ -31,7 +35,6 @@ class HomePage extends StatelessWidget {
             children: [
               TextButton(
                 onPressed: (){
-                  profileCubit.uploadImage(image: profileCubit.image!);
                 }, child: Text("change"),
               ),
             ],

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../utils/AppColor.dart';
+import '../../../../viewModel/bloc/AuthCubit/auth_cubit.dart';
 import '../../../../viewModel/bloc/ProfileCubit/profile_cubit.dart';
 
 class ImageSection extends StatelessWidget {
@@ -12,12 +13,16 @@ class ImageSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var profileCubit = ProfileCubit.get(context);
+    var authCubit = AuthCubit.get(context);
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         return SizedBox(
           child: InkWell(
             onTap: () {
               profileCubit.pickImageFromGallery();
+              if(profileCubit.image != null) {
+                profileCubit.uploadImage(image: profileCubit.image!, email:authCubit.signUpEmail.text , uid: authCubit.currentUid);
+              }
             },
             child: CircleAvatar(
               radius: 50,

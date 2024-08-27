@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,11 +21,12 @@ class AuthCubit extends Cubit<AuthState>  implements CommonFun{
   AuthCubit() : super(AuthInitial());
   static AuthCubit get(context) => BlocProvider.of(context);
 
+
   @override
   bool isAcceptTerms = false;
   bool isPassWordShowed = false;
 
-
+  String currentUid = "";
 
   // Login Controllers
   GlobalKey<FormState> loginKey = GlobalKey<FormState>();
@@ -50,6 +53,7 @@ class AuthCubit extends Cubit<AuthState>  implements CommonFun{
         password: loginPassword.text,
       ).then((value) {
         debugPrint(value.user?.email);
+        print(value.user?.uid);
         storeDataFirebase(value);
         Fluttertoast.showToast(
             msg: "Login Successfully", backgroundColor: AppColor.green);
@@ -78,20 +82,24 @@ class AuthCubit extends Cubit<AuthState>  implements CommonFun{
 
 
   Future<void> addUserToFireStore(UserCredential userCredential) async {
-    await FirebaseFirestore.instance.collection(Collections.users).doc(
-        userCredential.user?.uid).set({
+    final user = userCredential.user;
+    if (user == null) {
+      throw Exception("User is null. Unable to add to Firestore.");
+    }
+    final uid = user.uid;
+    currentUid = uid;
+    await FirebaseFirestore.instance.collection(Collections.users).doc(uid).set({
       "UserName": "${ProfileCubit.firstName.text} ${ProfileCubit.lastName.text}",
       "Email": signUpEmail.text,
       "Location": ProfileCubit.userLocation.text,
-      "JobTitle": "${ProfileCubit.currentStatus}",
-      "profileImage" : "",
-       "phone": VerfiyCubit.userPhoneNumber.text,
-      "uid": userCredential.user?.uid
+      "JobTitle": ProfileCubit.currentStatus,
+      "profileImage": "awaiting",
+      "phone": VerfiyCubit.userPhoneNumber.text,
+      "uid": uid
     });
-    ProfileCubit().uploadImage(image: ProfileCubit().image!); // upload image to firebase storage & get url
-    print("gooood");
-
+    log("User added to Firestore" + currentUid);
   }
+
 
 
   void storeDataFirebase(UserCredential value) {

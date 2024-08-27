@@ -1,21 +1,17 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meeting_app/viewModel/bloc/AuthCubit/auth_cubit.dart';
 import 'package:permission_handler/permission_handler.dart';
-
 import '../../../model/Models/UserModel.dart';
 import '../../../utils/CollectionConst.dart';
 import '../../data/SharedKeys.dart';
 import '../../data/SharedPrefrences.dart';
 import '../CommonFunction.dart';
-
 part 'profile_state.dart';
 
 class ProfileCubit extends Cubit<ProfileState>  implements CommonFun {
@@ -98,18 +94,21 @@ class ProfileCubit extends Cubit<ProfileState>  implements CommonFun {
     });
   }
 
-  Future<void> uploadImage(
-      {required XFile image}) async {
+  void uploadImage(
+      {required XFile image , required String email,required uid})  async {
     print(image.name);
-    await FirebaseStorage.instance.ref()
-        .child("ProfileImage/${LocalData.getData(key: SharedKey.uid)}/${image.name}")
+    print("The UUUUUUSSSSSEEERRRR Email IS $email");
+    FirebaseStorage.instance.ref()
+        .child("ProfileImage/$email/${image.name}")
         .putFile(File(image.path)).then((value){
       value.ref.getDownloadURL().then((value) {
-        FirebaseFirestore.instance.collection(Collections.users).doc(LocalData.getData(key: SharedKey.uid)).update({
+        FirebaseFirestore.instance.collection(Collections.users).doc(uid).update({
           "profileImage": value
         });
       });
     });
+
+
   }
 
   // Changing Job Title
