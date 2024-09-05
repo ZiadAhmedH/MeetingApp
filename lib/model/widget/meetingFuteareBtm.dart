@@ -15,10 +15,9 @@ class MeetingFBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return  LayoutBuilder(
-      builder: (context, constraints) {
-        return   Column(
+    return   Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment:CrossAxisAlignment.center ,
           children: [
             InkWell(
               onTap: onTap,
@@ -31,15 +30,13 @@ class MeetingFBtn extends StatelessWidget {
                 ),
                 child: Icon(
                  icon,
-                  color: context.thirdTextColor,
+                  color: AppColor.white,
                 ),
               ),
             ),
             CustomText(text: text ,fontSize: 15,fontWeight: FontWeight.w200,color:context.thirdTextColor,fontFamily: 'Gilroy',)
           ],
         );
-      },
 
-    );
   }
 }

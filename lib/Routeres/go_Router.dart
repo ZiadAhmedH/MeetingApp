@@ -6,9 +6,8 @@ import 'package:meeting_app/views/AuthScreens/SignUpSection/userInfoSection/User
 import 'package:meeting_app/views/AuthScreens/signMainScreen.dart';
 import 'package:meeting_app/views/AuthScreens/LoginSection/LoginScreen.dart';
 import 'package:meeting_app/views/AuthScreens/SignUpSection/signUpScreen.dart';
-import 'package:meeting_app/views/splashScreen.dart';
 import '../views/AuthScreens/SignUpSection/passwordSection/passwordScreen.dart';
-import '../views/HomeScreen/HomePage.dart';
+import '../views/HomeScreens/HomeScreen.dart';
 
 class AppRouter {
   GoRouter router = GoRouter(
@@ -18,7 +17,7 @@ class AppRouter {
           name: RouteConst.splash,
           path: '/',
           pageBuilder: (context, state) {
-            return const MaterialPage(child: HomePage());
+            return const MaterialPage(child: HomeScreen());
           }),
       GoRoute(
           name: RouteConst.signMain,
@@ -60,9 +59,12 @@ class AppRouter {
         name: RouteConst.home,
         path: '/home',
         pageBuilder: (context, state) {
-          return const MaterialPage(child: HomePage());
+          return const MaterialPage(child: HomeScreen());
         },
       ),
+
+
+
 
     ],
 

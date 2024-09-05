@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meeting_app/Routeres/go_Router.dart';
 import 'package:meeting_app/firebase_options.dart';
 import 'package:meeting_app/viewModel/bloc/AuthCubit/auth_cubit.dart';
+import 'package:meeting_app/viewModel/bloc/NavigationCubit/navigation_cubit.dart';
 import 'package:meeting_app/viewModel/bloc/ProfileCubit/profile_cubit.dart';
 import 'package:meeting_app/viewModel/bloc/ThemeCubit/theme_cubit.dart';
 import 'package:meeting_app/viewModel/bloc/VerfiyCubit/verfiy_cubit.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => VerfiyCubit()),
         BlocProvider(create: (context) => ProfileCubit()),
         BlocProvider(create: (context) => ThemesCubit()),
+        BlocProvider(create: (context) => NavigationCubit()),
       ],
       child: BlocBuilder<ThemesCubit, ThemeData>(
         builder: (context, themeState) {
