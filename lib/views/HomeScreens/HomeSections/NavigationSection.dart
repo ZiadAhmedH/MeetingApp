@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:meeting_app/utils/AppColor.dart';
 import 'package:meeting_app/utils/ThemeExtension.dart';
 
 import '../../../viewModel/bloc/NavigationCubit/navigation_cubit.dart';
+
 class NavigationSection extends StatelessWidget {
   const NavigationSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-
     var navigationCubit = NavigationCubit.get(context);
     return BottomNavigationBar(
       elevation: 1,
       useLegacyColorScheme: true,
       backgroundColor: context.primaryBackgroundColor,
       currentIndex: navigationCubit.currentIndex,
-      items: const <BottomNavigationBarItem>[
+      items:  const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(FontAwesomeIcons.video),
           label: 'Meeting',
@@ -35,6 +36,8 @@ class NavigationSection extends StatelessWidget {
       onTap: (index) {
         navigationCubit.changeIndex(index);
       },
+
+
     );
   }
 }

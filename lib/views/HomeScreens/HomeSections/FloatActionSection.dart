@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:meeting_app/utils/AppColor.dart';
 import 'package:meeting_app/utils/ThemeExtension.dart';
 
@@ -43,7 +44,7 @@ class FloatingActionSection extends StatelessWidget {
         Row(
           children: [
             Text(
-              'Email',
+              'Add Meeting',
               style: TextStyle(
                   color: context.thirdTextColor, fontWeight: FontWeight.bold),
             ),
@@ -53,14 +54,14 @@ class FloatingActionSection extends StatelessWidget {
               shape: CircleBorder(),
               heroTag: null,
               onPressed: null,
-              child: Icon(Icons.email , color: Colors.white,),
+              child: Icon(Icons.meeting_room , color: Colors.white,),
             ),
           ],
         ),
         Row(
           children: [
             Text(
-              'Email',
+              'Add Chat',
               style: TextStyle(
                   color: context.thirdTextColor, fontWeight: FontWeight.bold),
             ),
@@ -70,7 +71,7 @@ class FloatingActionSection extends StatelessWidget {
               shape: CircleBorder(),
               heroTag: null,
               onPressed: null,
-              child: Icon(Icons.email , color: Colors.white,),
+              child: Icon(FontAwesomeIcons.comment , color: Colors.white,),
             ),
           ],
         ),

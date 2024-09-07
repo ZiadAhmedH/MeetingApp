@@ -22,6 +22,9 @@ class NavigationCubit extends Cubit<NavigationState> {
     currentIndex = index;
     emit(NavigationChangeIndexState());
   }
+  void changeNavigation(){
+    emit(NavigationChanged());
+  }
 
 
 

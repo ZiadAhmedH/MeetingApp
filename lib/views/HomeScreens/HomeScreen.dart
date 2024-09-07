@@ -13,14 +13,11 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var navigationCubit = NavigationCubit.get(context);
-
     return BlocConsumer<NavigationCubit, NavigationState>(
       listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
           body: navigationCubit.pages[navigationCubit.currentIndex],
-
-
           floatingActionButton: const FloatingActionSection(),
           floatingActionButtonLocation: ExpandableFab.location,
           bottomNavigationBar:  NavigationSection(),

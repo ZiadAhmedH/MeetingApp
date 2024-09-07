@@ -7,8 +7,5 @@ class NavigationInitial extends NavigationState {}
 
 class NavigationChangeIndexState extends NavigationState {}
 
-class NavigationMeetingState extends NavigationState {}
 
-class NavigationChatsState extends NavigationState {}
-
-class NavigationProfileState extends NavigationState {}
+class NavigationChanged extends NavigationState {}

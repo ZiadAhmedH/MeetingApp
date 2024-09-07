@@ -17,7 +17,7 @@ class MainHomeSection extends StatelessWidget {
         const AppBarHomeSection(),
         const MeetingSection(),
 
-        const Divider(color: AppColor.lightGrey, thickness: 1),
+        const Divider(color: AppColor.darkGrey, thickness: 1),
 
         // Add any additional content here
         Expanded(
@@ -45,7 +45,7 @@ class MainHomeSection extends StatelessWidget {
               )
           ),
         ),
-        const Divider(color: AppColor.lightGrey, thickness: 1),
+        const Divider(color: AppColor.darkGrey, thickness: 1),
 
       ],
     );
