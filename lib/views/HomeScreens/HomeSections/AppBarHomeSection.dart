@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meeting_app/utils/ThemeExtension.dart';
+import 'package:meeting_app/viewModel/data/SharedKeys.dart';
+import 'package:meeting_app/viewModel/data/SharedPrefrences.dart';
 import 'package:meeting_app/views/HomeScreens/HomeSections/userImageCircular.dart';
 
 import '../../../model/components/CustomText.dart';
@@ -23,7 +25,8 @@ class AppBarHomeSection extends StatelessWidget {
             Row(
               children: [
                 const UserImageCircular(),
-                CustomText(text:"Meeting",fontFamily: 'Gilory',fontWeight: FontWeight.bold,fontSize: 25,color: context.thirdTextColor, ),
+                CustomText(text:"Meeting ",fontFamily: 'Gilory',fontWeight: FontWeight.bold,fontSize: 25,color: context.thirdTextColor, ),
+                CustomText(text: LocalData.getData(key: SharedKey.email),fontFamily: 'Gilory',fontWeight: FontWeight.bold,fontSize: 12,color: context.primaryTextColor,)
               ],
             ),
 

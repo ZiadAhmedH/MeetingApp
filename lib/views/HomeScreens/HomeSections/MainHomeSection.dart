@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meeting_app/utils/ThemeExtension.dart';
 import 'package:meeting_app/views/HomeScreens/HomeSections/AppBarHomeSection.dart';
-import 'package:meeting_app/views/HomeScreens/HomeSections/MeetingSection.dart';
+import 'package:meeting_app/views/HomeScreens/HomeSections/NavBar.dart';
 
 import '../../../model/components/CustomText.dart';
 import '../../../utils/AppColor.dart';

@@ -41,7 +41,7 @@ class CustomText extends StatelessWidget {
         fontWeight: fontWeight ?? FontWeight.normal, // Default is normal weight
         color: color ?? Colors.black, // Default color is black if not provided
         fontStyle: fontStyle ?? FontStyle.normal, // Default is normal style
-        fontFamily: fontFamily, // No default font family
+        fontFamily: 'Gilroy', // No default font family
       ),
       textAlign: textAlign,
       maxLines: maxLines,

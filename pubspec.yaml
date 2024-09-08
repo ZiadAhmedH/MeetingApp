@@ -56,6 +56,11 @@
   font_awesome_flutter: ^10.7.0
   flutter_expandable_fab: ^2.2.0
   envied: ^0.5.4+1
+  env:
+    path: env
+  zego_uikit_prebuilt_call: ^4.12.11
+  zego_uikit_signaling_plugin: ^2.8.2
+  zego_uikit_prebuilt_video_conference: ^2.8.3
 
  dev_dependencies:
    flutter_test:
@@ -68,6 +73,7 @@
   # rules and activating additional ones.
    flutter_lints: ^4.0.0
    envied_generator: ^0.5.4+1
+   build_runner: ^2.4.9
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

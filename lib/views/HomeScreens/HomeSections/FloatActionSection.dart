@@ -3,6 +3,7 @@ import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:meeting_app/utils/AppColor.dart';
 import 'package:meeting_app/utils/ThemeExtension.dart';
+import 'package:meeting_app/views/HomeScreens/MeetingScreen/MeetingSections/Meeting_Settings_Screen.dart';
 
 class FloatingActionSection extends StatelessWidget {
   const FloatingActionSection({super.key});
@@ -53,7 +54,9 @@ class FloatingActionSection extends StatelessWidget {
               backgroundColor: AppColor.primaryBlue,
               shape: CircleBorder(),
               heroTag: null,
-              onPressed: null,
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => MeetingSettings()));
+              },
               child: Icon(Icons.meeting_room , color: Colors.white,),
             ),
           ],
