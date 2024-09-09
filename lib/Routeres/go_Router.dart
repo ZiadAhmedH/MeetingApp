@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:meeting_app/Routeres/RouterContstants.dart';
-import 'package:meeting_app/views/AuthScreens/SignUpSection/VerifyScreen.dart';
-import 'package:meeting_app/views/AuthScreens/SignUpSection/userInfoSection/UserInfoSection.dart';
-import 'package:meeting_app/views/AuthScreens/signMainScreen.dart';
-import 'package:meeting_app/views/AuthScreens/LoginSection/LoginScreen.dart';
-import 'package:meeting_app/views/AuthScreens/SignUpSection/signUpScreen.dart';
-import 'package:meeting_app/views/splashScreen.dart';
-import '../views/AuthScreens/SignUpSection/passwordSection/passwordScreen.dart';
-import '../views/HomeScreens/HomeScreen.dart';
+
+import '../view/AuthScreens/LoginSection/LoginScreen.dart';
+import '../view/AuthScreens/SignUpSection/VerifyScreen.dart';
+import '../view/AuthScreens/SignUpSection/passwordSection/passwordScreen.dart';
+import '../view/AuthScreens/SignUpSection/signUpScreen.dart';
+import '../view/AuthScreens/SignUpSection/userInfoSection/UserInfoSection.dart';
+import '../view/AuthScreens/signMainScreen.dart';
+import '../view/HomeScreens/HomeScreen.dart';
+import '../view/splashScreen.dart';
+
 
 class AppRouter {
   GoRouter router = GoRouter(

@@ -4,3 +4,7 @@ part of 'meeting_cubit.dart';
 abstract class MeetingState {}
 
 class MeetingInitial extends MeetingState {}
+
+
+
+class MeetingGeneratedIdState extends MeetingState {}

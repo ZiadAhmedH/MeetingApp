@@ -1,10 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meeting_app/views/HomeScreens/ProfileScreen/ProfileScreen.dart';
 import 'package:meta/meta.dart';
+import '../../../view/HomeScreens/ChatScreen/ChatScreen.dart';
+import '../../../view/HomeScreens/HomeSections/MainHomeSection.dart';
+import '../../../view/HomeScreens/ProfileScreen/ProfileScreen.dart';
 
-import '../../../views/HomeScreens/ChatScreen/ChatScreen.dart';
-import '../../../views/HomeScreens/HomeSections/MainHomeSection.dart';
 
 part 'navigation_state.dart';
 
