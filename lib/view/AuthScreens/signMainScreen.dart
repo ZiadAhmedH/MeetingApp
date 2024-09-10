@@ -17,6 +17,7 @@ class SignMainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: Center(
@@ -67,6 +68,7 @@ class SignMainScreen extends StatelessWidget {
                     backgroundColor: context.primaryBackgroundColor,
                     borderColor: AppColor.primaryBlue,
                     onTap: () {
+
                       context.pushNamed(RouteConst.login);
                     }, isClickable: 1,
                  ),

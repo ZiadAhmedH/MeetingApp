@@ -93,7 +93,6 @@ class AuthCubit extends Cubit<AuthState>  implements CommonFun{
       "Email": signUpEmail.text,
       "Location": ProfileCubit.userLocation.text,
       "JobTitle": ProfileCubit.currentStatus,
-      "profileImage": ProfileCubit.image?.path.toString() ?? "Fake Fuck Tired",
       "phone": VerfiyCubit.userPhoneNumber.text,
       "uid": uid
     });

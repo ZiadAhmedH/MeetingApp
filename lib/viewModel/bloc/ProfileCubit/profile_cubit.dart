@@ -21,7 +21,7 @@ class ProfileCubit extends Cubit<ProfileState>  implements CommonFun {
   final Dio dio = Dio();
 
 // user Profile
-  static XFile? image;
+   XFile? image;
   final ImagePicker _picker = ImagePicker();
   static String countryName = '';
   UserModel? User;
@@ -56,7 +56,6 @@ class ProfileCubit extends Cubit<ProfileState>  implements CommonFun {
             source: ImageSource.gallery);
         if (pickedFile != null) {
           image = pickedFile;
-          uploadImage(uid:uid , email:email ,image: image! );
           emit(ImagePickerSuccess(pickedFile));
         } else {
           emit(ImagePickerError('No image selected.'));
@@ -95,11 +94,11 @@ class ProfileCubit extends Cubit<ProfileState>  implements CommonFun {
     });
   }
 
-    void uploadImage(
+    Future<void> uploadImage(
       {required XFile image , required String email,required uid})  async {
     print(image.name);
     print("The UUUUUUSSSSSEEERRRR Email IS $email");
-    FirebaseStorage.instance.ref()
+   await FirebaseStorage.instance.ref()
         .child("ProfileImage/${email.toString()}/${image.name}")
         .putFile(File(image.path)).then((value){
       value.ref.getDownloadURL().then((value) {
@@ -108,9 +107,7 @@ class ProfileCubit extends Cubit<ProfileState>  implements CommonFun {
         });
       });
     });
-
     emit(UploadImageSuccess(image.path));
-
 
   }
 
