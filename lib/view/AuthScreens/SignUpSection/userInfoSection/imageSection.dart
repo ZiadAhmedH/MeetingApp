@@ -19,15 +19,13 @@ class ImageSection extends StatelessWidget {
         return SizedBox(
           child: InkWell(
             onTap: () {
-              profileCubit.pickImageFromGallery();
-              if(profileCubit.image != null) {
-                profileCubit.uploadImage(image: profileCubit.image!, email:authCubit.signUpEmail.text , uid: authCubit.currentUid);
-              }
+              profileCubit.pickImageFromGallery(email:authCubit.signUpEmail.text , uid: authCubit.currentUid);
+
             },
             child: CircleAvatar(
               radius: 50,
               backgroundColor: AppColor.grey,
-              child: profileCubit.image == null
+              child: ProfileCubit.image == null
                   ? const Icon(
                 Icons.person,
                 size: 50,
@@ -36,7 +34,7 @@ class ImageSection extends StatelessWidget {
                   : ClipRRect(
                 borderRadius: BorderRadius.circular(50),
                 child: Image.file(
-                  File(profileCubit.image!.path),
+                  File(ProfileCubit.image!.path),
                   width: 100,
                   height: 100,
                   fit: BoxFit.cover,

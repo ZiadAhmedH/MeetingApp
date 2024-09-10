@@ -23,6 +23,14 @@ class ImagePickerError extends ProfileState {
 }
 
 
+// Status
+
+class UploadImageSuccess extends ProfileState {
+  final String imageUrl;
+  UploadImageSuccess(this.imageUrl);
+}
+
+
 
 class ChangingStatusState extends ProfileState {}
 

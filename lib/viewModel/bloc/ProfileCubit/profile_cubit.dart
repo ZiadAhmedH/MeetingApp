@@ -21,7 +21,7 @@ class ProfileCubit extends Cubit<ProfileState>  implements CommonFun {
   final Dio dio = Dio();
 
 // user Profile
-  XFile? image;
+  static XFile? image;
   final ImagePicker _picker = ImagePicker();
   static String countryName = '';
   UserModel? User;
@@ -47,7 +47,7 @@ class ProfileCubit extends Cubit<ProfileState>  implements CommonFun {
 
 
 // Image Picker
-  Future<void> pickImageFromGallery() async {
+  Future<void> pickImageFromGallery({required uid , required email}) async {
     emit(ImagePickerLoading());
     var permissionStatus = await Permission.storage.request();
     if (permissionStatus.isGranted) {
@@ -56,6 +56,7 @@ class ProfileCubit extends Cubit<ProfileState>  implements CommonFun {
             source: ImageSource.gallery);
         if (pickedFile != null) {
           image = pickedFile;
+          uploadImage(uid:uid , email:email ,image: image! );
           emit(ImagePickerSuccess(pickedFile));
         } else {
           emit(ImagePickerError('No image selected.'));
@@ -94,12 +95,12 @@ class ProfileCubit extends Cubit<ProfileState>  implements CommonFun {
     });
   }
 
-  void uploadImage(
+    void uploadImage(
       {required XFile image , required String email,required uid})  async {
     print(image.name);
     print("The UUUUUUSSSSSEEERRRR Email IS $email");
     FirebaseStorage.instance.ref()
-        .child("ProfileImage/$email/${image.name}")
+        .child("ProfileImage/${email.toString()}/${image.name}")
         .putFile(File(image.path)).then((value){
       value.ref.getDownloadURL().then((value) {
         FirebaseFirestore.instance.collection(Collections.users).doc(uid).update({
@@ -107,6 +108,8 @@ class ProfileCubit extends Cubit<ProfileState>  implements CommonFun {
         });
       });
     });
+
+    emit(UploadImageSuccess(image.path));
 
 
   }
@@ -139,6 +142,13 @@ class ProfileCubit extends Cubit<ProfileState>  implements CommonFun {
   void acceptTerms() {
     isAcceptTerms = !isAcceptTerms;
     emit(AcceptTermsState(isAcceptTerms));
+  }
+
+
+  void disposeController(){
+    userLocation.dispose();
+    firstName.dispose();
+    lastName.dispose();
   }
 
 

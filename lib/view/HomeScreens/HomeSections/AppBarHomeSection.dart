@@ -26,7 +26,7 @@ class AppBarHomeSection extends StatelessWidget {
               children: [
                 const UserImageCircular(),
                 CustomText(text:"Meeting ",fontFamily: 'Gilory',fontWeight: FontWeight.bold,fontSize: 25,color: context.thirdTextColor, ),
-                CustomText(text: LocalData.getData(key: SharedKey.email),fontFamily: 'Gilory',fontWeight: FontWeight.bold,fontSize: 12,color: context.primaryTextColor,)
+                CustomText(text: profileCubit.User?.userName ?? "Failed to get User",fontFamily: 'Gilory',fontWeight: FontWeight.bold,fontSize: 12,color: context.primaryTextColor,)
               ],
             ),
 

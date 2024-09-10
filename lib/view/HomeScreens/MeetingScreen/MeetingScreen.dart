@@ -9,6 +9,7 @@ class MeetingScreen extends StatelessWidget {
   final String meetingId;
 
   const MeetingScreen({super.key, required this.meetingId});
+
   @override
   Widget build(BuildContext context) {
     return  SafeArea(
@@ -28,8 +29,7 @@ class MeetingScreen extends StatelessWidget {
             confirmButtonName: "Confirm",
           ),
         ),
-
-      ),
+      )
     );
   }
 }

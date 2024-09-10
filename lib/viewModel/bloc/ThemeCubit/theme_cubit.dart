@@ -23,7 +23,7 @@ class ThemesCubit extends Cubit<ThemeData> {
   Future<void> _getThemeFromPrefs() async {
     final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     final savedThemeIndex = sharedPreferences.getInt('theme') ?? 0;
-    final savedTheme = savedThemeIndex == 0 ? AppThemes.lightTheme : AppThemes.darkTheme;
+    final savedTheme = savedThemeIndex == 0 ? AppThemes.darkTheme : AppThemes.lightTheme;
     emit(savedTheme);
   }
 
