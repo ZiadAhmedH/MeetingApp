@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../utils/AppColor.dart';
-import '../../../viewModel/bloc/ProfileCubit/profile_cubit.dart';
+import '../../../../utils/AppColor.dart';
+import '../../../../viewModel/bloc/ProfileCubit/profile_cubit.dart';
 class UserImageCircular extends StatelessWidget {
   const UserImageCircular({super.key});
 
@@ -14,6 +14,9 @@ class UserImageCircular extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColor.grey,
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: AppColor.lightGrey,
+          width: 2,)
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),

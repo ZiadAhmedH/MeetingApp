@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:meeting_app/viewModel/bloc/NavigationCubit/navigation_cubit.dart';
 
-import 'HomeSections/FloatActionSection.dart';
-import 'HomeSections/NavigationSection.dart';
+import 'HomeSections/DownBar_Section/FloatActionSection.dart';
+import 'HomeSections/DownBar_Section/NavigationSection.dart';
 
 
 class HomeScreen extends StatelessWidget {

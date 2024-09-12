@@ -4,7 +4,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meeting_app/model/components/CustomBtn.dart';
 import 'package:meeting_app/model/components/CustomText.dart';
-import 'package:meeting_app/model/widget/textSelectable.dart';
 import 'package:meeting_app/utils/ThemeExtension.dart';
 import 'package:meeting_app/viewModel/bloc/MeetingCubit/meeting_cubit.dart';
 import '../../../../utils/AppColor.dart';
@@ -98,28 +97,30 @@ class MeetingSettings extends StatelessWidget {
 
             CustomText(text: "Meeting Duration", fontSize: 20.0, fontWeight: FontWeight.bold, color: context.thirdTextColor),
 
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 10,
-              width: MediaQuery.of(context).size.width - 80,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                        itemCount: meetingCubit.durationList.length,
-                        itemBuilder: (context, index) {
-                      return TextSelectable(text: meetingCubit.durationList[index], borderColor:meetingCubit.selectedDuration == index ? AppColor.primaryBlue : AppColor.lightGrey, index: index);
-                    },
-                    separatorBuilder: (context, index) {
-                      return const SizedBox(width: 10,);
-                    },
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            // SizedBox(
+            //   height: MediaQuery.of(context).size.height / 10,
+            //   width: MediaQuery.of(context).size.width - 80,
+            //   child: Row(
+            //     mainAxisSize: MainAxisSize.min,
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: [
+            //       Expanded(
+            //         child: ListView.separated(
+            //           scrollDirection: Axis.horizontal,
+            //             itemCount: meetingCubit.durationList.length,
+            //             itemBuilder: (context, index) {
+            //           return TextSelectable(text: meetingCubit.durationList[index], borderColor:meetingCubit.selectedDuration == index ? AppColor.primaryBlue : AppColor.lightGrey, index: index);
+            //         },
+            //         separatorBuilder: (context, index) {
+            //           return const SizedBox(width: 10,);
+            //         },
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+
+            const CustomText(text: "60 Minutes", fontSize: 20.0, fontWeight: FontWeight.bold, color: AppColor.primaryBlue),
 
             const SizedBox(height: 20),
 

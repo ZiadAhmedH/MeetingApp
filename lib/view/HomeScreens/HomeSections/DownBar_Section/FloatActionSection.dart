@@ -3,7 +3,7 @@ import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:meeting_app/utils/AppColor.dart';
 import 'package:meeting_app/utils/ThemeExtension.dart';
-import '../MeetingScreen/MeetingSections/Meeting_Settings_Screen.dart';
+import '../../MeetingScreen/MeetingSections/Meeting_Settings_Screen.dart';
 
 class FloatingActionSection extends StatelessWidget {
   const FloatingActionSection({super.key});

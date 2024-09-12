@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:meeting_app/utils/AppColor.dart';
 import 'package:meeting_app/utils/ThemeExtension.dart';
 
-import '../../../viewModel/bloc/NavigationCubit/navigation_cubit.dart';
+import '../../../../viewModel/bloc/NavigationCubit/navigation_cubit.dart';
 
 class NavigationSection extends StatelessWidget {
   const NavigationSection({super.key});

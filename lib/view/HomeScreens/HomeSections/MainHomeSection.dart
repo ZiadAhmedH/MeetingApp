@@ -4,8 +4,8 @@ import 'package:meeting_app/utils/ThemeExtension.dart';
 import 'package:meeting_app/viewModel/bloc/ProfileCubit/profile_cubit.dart';
 import '../../../model/components/CustomText.dart';
 import '../../../utils/AppColor.dart';
-import 'AppBarHomeSection.dart';
-import 'NavBar.dart';
+import 'AppBar_Section/AppBarHomeSection.dart';
+import 'AppBar_Section/NavBar.dart';
 
 class MainHomeSection extends StatelessWidget {
   const MainHomeSection({super.key});

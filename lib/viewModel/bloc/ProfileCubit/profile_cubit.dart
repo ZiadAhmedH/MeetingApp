@@ -5,7 +5,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:meeting_app/viewModel/bloc/AuthCubit/auth_cubit.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../../model/Models/UserModel.dart';
 import '../../../utils/CollectionConst.dart';
@@ -116,6 +115,7 @@ class ProfileCubit extends Cubit<ProfileState>  implements CommonFun {
     currentStatus = value;
     emit(ChangingStatusState());
   }
+
 // Get Country
   Future<void> getCountry() async {
     emit(CountryLoading());
