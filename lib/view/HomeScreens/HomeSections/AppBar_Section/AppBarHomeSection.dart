@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meeting_app/utils/ThemeExtension.dart';
 import 'package:meeting_app/view/HomeScreens/HomeSections/AppBar_Section/userImageCircular.dart';
 import 'package:meeting_app/viewModel/data/SharedKeys.dart';
@@ -14,8 +15,9 @@ class AppBarHomeSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var themeCubit = ThemesCubit.get(context);
-    var profileCubit = ProfileCubit.get(context);
 
+    return BlocBuilder<ProfileCubit, ProfileState>(
+  builder: (context, state) {
     return Column(
       children: [
         SizedBox(height: MediaQuery.of(context).size.height * 0.05,),
@@ -25,9 +27,8 @@ class AppBarHomeSection extends StatelessWidget {
 
             Row(
               children: [
-                const UserImageCircular(),
+                 UserImageCircular(),
                 CustomText(text:"Meeting ",fontFamily: 'Gilory',fontWeight: FontWeight.bold,fontSize: 25,color: context.thirdTextColor, ),
-                CustomText(text: profileCubit.User?.userName ?? "Failed to get User",fontFamily: 'Gilory',fontWeight: FontWeight.bold,fontSize: 12,color: context.primaryTextColor,)
               ],
             ),
 
@@ -56,5 +57,7 @@ class AppBarHomeSection extends StatelessWidget {
 
       ],
     );
+  },
+);
   }
 }

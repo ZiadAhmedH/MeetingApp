@@ -14,7 +14,9 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var navigationCubit = NavigationCubit.get(context);
     return BlocConsumer<NavigationCubit, NavigationState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+
+      },
       builder: (context, state) {
         return Scaffold(
           body: navigationCubit.pages[navigationCubit.currentIndex],

@@ -24,6 +24,12 @@ class MeetingScreen extends StatelessWidget {
         userName:profileCubit.User?.userName ?? "User Name Not Found",
         conferenceID: meetingId,
         config: ZegoUIKitPrebuiltVideoConferenceConfig(
+          avatarBuilder: (context, size, user, extraInfo) {
+            return CircleAvatar(
+              radius: size.width / 2,
+              backgroundImage: NetworkImage(profileCubit.User!.profileImage ?? "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png"),
+            );
+          },
           turnOnCameraWhenJoining:meetingCubit.isCameraOn,
           turnOnMicrophoneWhenJoining: meetingCubit.isMicrophoneOn,
           useSpeakerWhenJoining: meetingCubit.isSpeakerOn,
@@ -33,7 +39,6 @@ class MeetingScreen extends StatelessWidget {
             cancelButtonName: "Cancel",
             confirmButtonName: "Confirm",
           ),
-
         ),
       )
     );

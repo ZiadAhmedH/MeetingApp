@@ -7,7 +7,10 @@ class MeetingInitial extends MeetingState {}
 
 
  // Random Id Generated State
-class MeetingGeneratedIdState extends MeetingState {}
+class MeetingGeneratedIdState extends MeetingState {
+  final String meetingId;
+  MeetingGeneratedIdState(this.meetingId);
+}
 
 
 // meeting Setting Section states
@@ -20,3 +23,14 @@ class MeetingSpeakerToggledState extends MeetingState {}
 
 // Duration Selected State
 class MeetingDurationSelectedState extends MeetingState {}
+
+
+// Meeting Create States
+class MeetingCreateLoadingState extends MeetingState {}
+
+class MeetingCreateSuccessState extends MeetingState {
+  final String meetingId;
+  MeetingCreateSuccessState(this.meetingId);
+}
+
+class MeetingCreateFailedState extends MeetingState {}

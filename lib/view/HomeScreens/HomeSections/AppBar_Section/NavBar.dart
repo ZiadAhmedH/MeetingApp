@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:meeting_app/model/widget/meetingFuteareBtm.dart';
 
+import '../../JoinScreen/JoinScreen.dart';
+
 class MeetingSection extends StatelessWidget {
   const MeetingSection({super.key});
 
@@ -19,7 +21,9 @@ class MeetingSection extends StatelessWidget {
             children: [
               MeetingFBtn(
                 text: "Join",
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => JoinScreen()));
+                },
                 icon: FontAwesomeIcons.video,
 
               ),

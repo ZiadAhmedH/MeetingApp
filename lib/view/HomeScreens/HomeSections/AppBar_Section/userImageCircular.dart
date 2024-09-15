@@ -1,9 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../utils/AppColor.dart';
 import '../../../../viewModel/bloc/ProfileCubit/profile_cubit.dart';
+
 class UserImageCircular extends StatelessWidget {
-  const UserImageCircular({super.key});
+   UserImageCircular({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,16 +18,25 @@ class UserImageCircular extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: AppColor.lightGrey,
-          width: 2,)
+          width: 2,
+        ),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: profileCubit.User?.profileImage != null
-            ? Image.network(
-          profileCubit.User!.profileImage!,
+            ? CachedNetworkImage(
+          imageUrl: profileCubit.User!.profileImage!,
           width: 30,
           height: 30,
           fit: BoxFit.cover,
+          placeholder: (context, url) => const Center(
+            child: CircularProgressIndicator(),
+          ),
+          errorWidget: (context, url, error) => const Icon(
+            Icons.error,
+            size: 40,
+            color: AppColor.white,
+          ),
         )
             : const Icon(
           Icons.person,
