@@ -134,9 +134,7 @@ class MeetingSettings extends StatelessWidget {
                     return MeetingScreen(
                       meetingId: meetingCubit.meetingId,
                     );
-                  })).then((value) {
-                    meetingCubit.createMeeting();
-                  });
+                  }));
 
                 },
                 text: "GO TO MEETING")

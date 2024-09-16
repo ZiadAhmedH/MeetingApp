@@ -52,17 +52,12 @@ class MeetingCubit extends Cubit<MeetingState> {
 
 
 
-  Future<void> createMeeting() async {
+  Future<void> createMeeting({required duration}) async {
     emit(MeetingCreateLoadingState());
-    MeetingModel(createdAt: DateTime.timestamp(), duration: , isCameraOn: isCameraOn, isMicrophoneOn: isMicrophoneOn, isSpeakerOn: isSpeakerOn, meetingId: meetingId);
-    await FirebaseFirestore.instance.collection(Collections.users).doc(LocalData.getData(key: SharedKey.uid)).collection(Collections.meetings).add({
-      'meetingId': meetingId,
-      'isCameraOn': isCameraOn,
-      'isMicrophoneOn': isMicrophoneOn,
-      'isSpeakerOn': isSpeakerOn,
-      'duration': "$selectedDuration min",
-      'createdAt': Timestamp.now(),
-    }).then((value) {
+    var meetingInfo=  MeetingModel(createdAt: DateTime.timestamp(), duration:"$duration min" , isCameraOn: isCameraOn, isMicrophoneOn: isMicrophoneOn, isSpeakerOn: isSpeakerOn, meetingId: meetingId);
+    await FirebaseFirestore.instance.collection(Collections.users).doc(LocalData.getData(key: SharedKey.uid)).collection(Collections.meetings).add(
+        meetingInfo.toMap()
+    ).then((value) {
       emit(MeetingCreateSuccessState(meetingId));
     }).catchError((error) {
       emit(MeetingCreateFailedState());
