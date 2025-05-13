@@ -1,7 +1,5 @@
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -72,40 +70,40 @@ class ProfileCubit extends Cubit<ProfileState>  implements CommonFun {
   }
   Future<void>getUserInfoFire()async {
     emit(LoadingUserInfoState());
-    await FirebaseFirestore.instance.collection(Collections.users).snapshots().listen((value) {
-      for (var doc in value.docs) {
-        String docUid = doc.get('uid');
-        if (LocalData.getData(key: SharedKey.uid) == docUid) {
-          print(doc.id);
-          print(LocalData.getData(key: SharedKey.uid));
-          User = UserModel(
-            email: doc.get('Email'),
-            userName: doc.get("UserName"),
-            profileImage: doc.get("profileImage"),
-            phone: doc.get("phone"),
-            location: doc.get("Location"),
-            jobTitle: doc.get("JobTitle"),
-          );
-          print(User?.email);
-        }
-      }
-      emit(SuccessUserInfoState());
-    });
+    // await FirebaseFirestore.instance.collection(Collections.users).snapshots().listen((value) {
+    //   for (var doc in value.docs) {
+    //     String docUid = doc.get('uid');
+    //     if (LocalData.getData(key: SharedKey.uid) == docUid) {
+    //       print(doc.id);
+    //       print(LocalData.getData(key: SharedKey.uid));
+    //       User = UserModel(
+    //         email: doc.get('Email'),
+    //         userName: doc.get("UserName"),
+    //         profileImage: doc.get("profileImage"),
+    //         phone: doc.get("phone"),
+    //         location: doc.get("Location"),
+    //         jobTitle: doc.get("JobTitle"),
+    //       );
+    //       print(User?.email);
+    //     }
+    //   }
+    //   emit(SuccessUserInfoState());
+    // });
   }
 
     Future<void> uploadImage(
       {required XFile image , required String email,required uid})  async {
     print(image.name);
     print("The UUUUUUSSSSSEEERRRR Email IS $email");
-   await FirebaseStorage.instance.ref()
-        .child("ProfileImage/${email.toString()}/${image.name}")
-        .putFile(File(image.path)).then((value){
-      value.ref.getDownloadURL().then((value) {
-        FirebaseFirestore.instance.collection(Collections.users).doc(uid).update({
-          "profileImage": value
-        });
-      });
-    });
+  //  await FirebaseStorage.instance.ref()
+  //       .child("ProfileImage/${email.toString()}/${image.name}")
+  //       .putFile(File(image.path)).then((value){
+  //     value.ref.getDownloadURL().then((value) {
+  //       FirebaseFirestore.instance.collection(Collections.users).doc(uid).update({
+  //         "profileImage": value
+  //       });
+  //     });
+  //   });
     emit(UploadImageSuccess(image.path));
 
   }

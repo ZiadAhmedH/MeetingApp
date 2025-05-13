@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meeting_app/model/Models/meetingModel.dart';
@@ -55,13 +54,13 @@ class MeetingCubit extends Cubit<MeetingState> {
   Future<void> createMeeting({required duration}) async {
     emit(MeetingCreateLoadingState());
     var meetingInfo=  MeetingModel(createdAt: DateTime.timestamp(), duration:"$duration min" , isCameraOn: isCameraOn, isMicrophoneOn: isMicrophoneOn, isSpeakerOn: isSpeakerOn, meetingId: meetingId);
-    await FirebaseFirestore.instance.collection(Collections.users).doc(LocalData.getData(key: SharedKey.uid)).collection(Collections.meetings).add(
-        meetingInfo.toMap()
-    ).then((value) {
-      emit(MeetingCreateSuccessState(meetingId));
-    }).catchError((error) {
-      emit(MeetingCreateFailedState());
-    });
+    // await FirebaseFirestore.instance.collection(Collections.users).doc(LocalData.getData(key: SharedKey.uid)).collection(Collections.meetings).add(
+    //     meetingInfo.toMap()
+    // ).then((value) {
+    //   emit(MeetingCreateSuccessState(meetingId));
+    // }).catchError((error) {
+    //   emit(MeetingCreateFailedState());
+    // });
 
   }
 

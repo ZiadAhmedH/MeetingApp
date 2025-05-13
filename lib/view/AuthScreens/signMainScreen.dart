@@ -68,7 +68,6 @@ class SignMainScreen extends StatelessWidget {
                     backgroundColor: context.primaryBackgroundColor,
                     borderColor: AppColor.primaryBlue,
                     onTap: () {
-
                       context.pushNamed(RouteConst.login);
                     }, isClickable: 1,
                  ),

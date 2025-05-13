@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -14,7 +13,7 @@ class VerfiyCubit extends Cubit<VerfiyState> {
 
   TextEditingController verificationCode = TextEditingController();
  static TextEditingController userPhoneNumber = TextEditingController();
-  final auth = FirebaseAuth.instance;
+  // final auth = FirebaseAuth.instance;
   String? verificationId; // Add this as a class member
   bool isVerify = false;
 
@@ -25,42 +24,42 @@ class VerfiyCubit extends Cubit<VerfiyState> {
 
     emit(LoadingVerfiyState());
 
-    await auth.verifyPhoneNumber(
-      phoneNumber: phoneNumber,
-      // Not used in auth I Only use it to to Practice in Otp and Main sign up with email and password
-      // not with phone number
-      verificationCompleted: (PhoneAuthCredential credential) async {},
-      verificationFailed: (FirebaseAuthException e) {
-        Fluttertoast.showToast(
-          msg: e.message.toString(),
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
-        emit(VerfiyErrorState(e.message.toString()));
-      },
+    // await auth.verifyPhoneNumber(
+    //   phoneNumber: phoneNumber,
+    //   // Not used in auth I Only use it to to Practice in Otp and Main sign up with email and password
+    //   // not with phone number
+    //   verificationCompleted: (PhoneAuthCredential credential) async {},
+    //   verificationFailed: (FirebaseAuthException e) {
+    //     Fluttertoast.showToast(
+    //       msg: e.message.toString(),
+    //       backgroundColor: Colors.red,
+    //       textColor: Colors.white,
+    //     );
+    //     emit(VerfiyErrorState(e.message.toString()));
+    //   },
 
-      codeSent: (String verificationId, int? resendToken) {
-        Fluttertoast.showToast(
-          msg: 'Code sent to $phoneNumber',
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-        );
-        // Save the verificationId for later use
-        this.verificationId = verificationId;
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {
-         if(verificationId.isNotEmpty){
-           this.verificationId = verificationId;
-         }else{
-           Fluttertoast.showToast(
-             msg: 'Time out',
-             backgroundColor: Colors.red,
-             textColor: Colors.white,
-           );
-         }
-      },
-      timeout: const Duration(seconds: 60),
-    );
+    //   codeSent: (String verificationId, int? resendToken) {
+    //     Fluttertoast.showToast(
+    //       msg: 'Code sent to $phoneNumber',
+    //       backgroundColor: Colors.green,
+    //       textColor: Colors.white,
+    //     );
+    //     // Save the verificationId for later use
+    //     this.verificationId = verificationId;
+    //   },
+    //   codeAutoRetrievalTimeout: (String verificationId) {
+    //      if(verificationId.isNotEmpty){
+    //        this.verificationId = verificationId;
+    //      }else{
+    //        Fluttertoast.showToast(
+    //          msg: 'Time out',
+    //          backgroundColor: Colors.red,
+    //          textColor: Colors.white,
+    //        );
+    //      }
+    //   },
+    //   timeout: const Duration(seconds: 60),
+    // );
   }
 
   void onSmsCodeSubmitted() {
@@ -75,18 +74,18 @@ class VerfiyCubit extends Cubit<VerfiyState> {
   }
 
   void verifyOTP({required String smsCode, required String verificationId}) async {
-    try {
-      PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: smsCode);
-      await auth.signInWithCredential(phoneAuthCredential);
-      emit(VerfiySuccessState());
-      print(phoneAuthCredential.smsCode.toString());
-      print(phoneAuthCredential.verificationId);
-      isVerify = true;
-    } on FirebaseAuthException catch (e) {
-      Fluttertoast.showToast(msg: '${e.message}');
-    } catch (e) {
-      Fluttertoast.showToast(msg: '$e');
-    }
+    // try {
+    //   PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: smsCode);
+    //   await auth.signInWithCredential(phoneAuthCredential);
+    //   emit(VerfiySuccessState());
+    //   print(phoneAuthCredential.smsCode.toString());
+    //   print(phoneAuthCredential.verificationId);
+    //   isVerify = true;
+    // } on FirebaseAuthException catch (e) {
+    //   Fluttertoast.showToast(msg: '${e.message}');
+    // } catch (e) {
+    //   Fluttertoast.showToast(msg: '$e');
+    // }
   }
 
 

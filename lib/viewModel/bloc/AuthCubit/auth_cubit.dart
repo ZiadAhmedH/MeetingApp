@@ -1,8 +1,7 @@
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -48,64 +47,64 @@ class AuthCubit extends Cubit<AuthState>  implements CommonFun{
 
     Future<void> fireAuthLogin() async {
       emit(LoadingLoginState());
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: loginEmail.text,
-        password: loginPassword.text,
-      ).then((value) {
-        debugPrint(value.user?.email);
-        print(value.user?.uid);
-        storeDataFirebase(value);
-        Fluttertoast.showToast(
-            msg: "Login Successfully", backgroundColor: AppColor.green);
-        emit(SuccessLoginState());
-      }).catchError((error) {
-         Fluttertoast.showToast(msg: error);
-        emit(ErrorLoginState());
-      });
+      // await FirebaseAuth.instance.signInWithEmailAndPassword(
+      //   email: loginEmail.text,
+      //   password: loginPassword.text,
+      // ).then((value) {
+      //   debugPrint(value.user?.email);
+      //   print(value.user?.uid);
+      //   storeDataFirebase(value);
+      //   Fluttertoast.showToast(
+      //       msg: "Login Successfully", backgroundColor: AppColor.green);
+      //   emit(SuccessLoginState());
+      // }).catchError((error) {
+      //    Fluttertoast.showToast(msg: error);
+      //   emit(ErrorLoginState());
+      // });
     }
 
 
   Future<void> signUpWithFire() async {
     emit(LoadingRegisterState());
-    await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: signUpEmail.text, password: passwordController.text).then((value) async {
-      await addUserToFireStore(value);
-      Fluttertoast.showToast(
-          msg: "SignUp Successfully", backgroundColor: AppColor.orange);
-      emit(SuccessRegisterState());
-    }).catchError((error) {
-      emit(ErrorRegisterState());
-      Fluttertoast.showToast(msg: error.toString());
-      print(error);
-    });
+    // await FirebaseAuth.instance.createUserWithEmailAndPassword(
+    //     email: signUpEmail.text, password: passwordController.text).then((value) async {
+    //   await addUserToFireStore(value);
+    //   Fluttertoast.showToast(
+    //       msg: "SignUp Successfully", backgroundColor: AppColor.orange);
+    //   emit(SuccessRegisterState());
+    // }).catchError((error) {
+    //   emit(ErrorRegisterState());
+    //   Fluttertoast.showToast(msg: error.toString());
+    //   print(error);
+    // });
   }
 
 
-  Future<void> addUserToFireStore(UserCredential userCredential) async {
-    final user = userCredential.user;
-    if (user == null) {
-      throw Exception("User is null. Unable to add to Firestore.");
-    }
-    final uid = user.uid;
-    currentUid = uid;
-    await FirebaseFirestore.instance.collection(Collections.users).doc(uid).set({
-      "UserName": "${ProfileCubit.firstName.text} ${ProfileCubit.lastName.text}",
-      "Email": signUpEmail.text,
-      "Location": ProfileCubit.userLocation.text,
-      "JobTitle": ProfileCubit.currentStatus,
-      "phone": VerfiyCubit.userPhoneNumber.text,
-      "uid": uid
-    });
-    log("User added to Firestore" + currentUid);
+  Future<void> addUserToFireStore() async {
+    // final user = userCredential.user;
+    // if (user == null) {
+    //   throw Exception("User is null. Unable to add to Firestore.");
+    // }
+    // final uid = user.uid;
+    // currentUid = uid;
+    // await FirebaseFirestore.instance.collection(Collections.users).doc(uid).set({
+    //   "UserName": "${ProfileCubit.firstName.text} ${ProfileCubit.lastName.text}",
+    //   "Email": signUpEmail.text,
+    //   "Location": ProfileCubit.userLocation.text,
+    //   "JobTitle": ProfileCubit.currentStatus,
+    //   "phone": VerfiyCubit.userPhoneNumber.text,
+    //   "uid": uid
+    // });
+    // log("User added to Firestore" + currentUid);
   }
 
 
 
-  void storeDataFirebase(UserCredential value) {
+  void storeDataFirebase() {
     debugPrint("Using StoreDataFirebase");
-    LocalData.setData(key: SharedKey.uid, value: value.user?.uid);
-    LocalData.setData(key: SharedKey.email, value: value.user?.email);
-    LocalData.setData(key: SharedKey.isLogin, value: true);
+    // LocalData.setData(key: SharedKey.uid, value: value.user?.uid);
+    // LocalData.setData(key: SharedKey.email, value: value.user?.email);
+    // LocalData.setData(key: SharedKey.isLogin, value: true);
   }
 
 
