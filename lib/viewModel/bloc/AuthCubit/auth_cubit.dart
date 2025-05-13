@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:meeting_app/utils/AppColor.dart';
 import 'package:meeting_app/viewModel/bloc/CommonFunction.dart';
 import 'package:meeting_app/viewModel/bloc/ProfileCubit/profile_cubit.dart';
 import 'package:meta/meta.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../utils/CollectionConst.dart';
 import '../../data/SharedKeys.dart';
 import '../../data/SharedPrefrences.dart';
@@ -43,24 +45,16 @@ class AuthCubit extends Cubit<AuthState>  implements CommonFun{
   bool passwordStrength = false;
 
 
-
+   final SupabaseClient supabase = Supabase.instance.client;
 
     Future<void> fireAuthLogin() async {
       emit(LoadingLoginState());
-      // await FirebaseAuth.instance.signInWithEmailAndPassword(
-      //   email: loginEmail.text,
-      //   password: loginPassword.text,
-      // ).then((value) {
-      //   debugPrint(value.user?.email);
-      //   print(value.user?.uid);
-      //   storeDataFirebase(value);
-      //   Fluttertoast.showToast(
-      //       msg: "Login Successfully", backgroundColor: AppColor.green);
-      //   emit(SuccessLoginState());
-      // }).catchError((error) {
-      //    Fluttertoast.showToast(msg: error);
-      //   emit(ErrorLoginState());
-      // });
+    
+      
+    
+
+
+
     }
 
 
@@ -77,6 +71,15 @@ class AuthCubit extends Cubit<AuthState>  implements CommonFun{
     //   Fluttertoast.showToast(msg: error.toString());
     //   print(error);
     // });
+
+    final  response   = await supabase.auth.signUp(
+      email: loginEmail.text,
+     password: loginPassword.text,
+      );
+
+
+    
+
   }
 
 

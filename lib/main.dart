@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meeting_app/Routeres/go_Router.dart';
+import 'package:meeting_app/supabase_helper.dart';
 import 'package:meeting_app/viewModel/bloc/AuthCubit/auth_cubit.dart';
 import 'package:meeting_app/viewModel/bloc/MeetingCubit/meeting_cubit.dart';
 import 'package:meeting_app/viewModel/bloc/NavigationCubit/navigation_cubit.dart';
@@ -14,7 +15,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = MyBlocObserver();
  
-
+ await SupabaseHelper.init();
   
   LocalData.init();
   //LocalData.clearData();
