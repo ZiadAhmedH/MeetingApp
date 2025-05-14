@@ -1,0 +1,76 @@
+{
+  "project_info": {
+    "project_number": "942939728587",
+    "project_id": "video-meeting-app-ccf21",
+    "storage_bucket": "video-meeting-app-ccf21.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:942939728587:android:dfb14c67c1914f699f094e",
+        "android_client_info": {
+          "package_name": "com.example.zoom_clone_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "942939728587-21bshi8d3m8oev6du2vjtidnuhstrfb3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.zoom_clone_app",
+            "certificate_hash": "f2e2331c67cd5878b0204d39067cb32626fe30da"
+          }
+        },
+        {
+          "client_id": "942939728587-nhur2q8e60l23uo6uudgd2sd4n3mt6cm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCm4gDKFa5ARTeZvmssbThzXIWSyV5a26Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "942939728587-nhur2q8e60l23uo6uudgd2sd4n3mt6cm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:942939728587:android:e65efeef99a432aa9f094e",
+        "android_client_info": {
+          "package_name": "com.meetingapp.ziadahmed.meeting_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "942939728587-nhur2q8e60l23uo6uudgd2sd4n3mt6cm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCm4gDKFa5ARTeZvmssbThzXIWSyV5a26Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "942939728587-nhur2q8e60l23uo6uudgd2sd4n3mt6cm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

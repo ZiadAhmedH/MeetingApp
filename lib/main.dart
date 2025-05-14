@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meeting_app/Routeres/go_Router.dart';
+import 'package:meeting_app/services/auth_services.dart';
 import 'package:meeting_app/supabase_helper.dart';
 import 'package:meeting_app/viewModel/bloc/AuthCubit/auth_cubit.dart';
 import 'package:meeting_app/viewModel/bloc/MeetingCubit/meeting_cubit.dart';
 import 'package:meeting_app/viewModel/bloc/NavigationCubit/navigation_cubit.dart';
 import 'package:meeting_app/viewModel/bloc/ProfileCubit/profile_cubit.dart';
 import 'package:meeting_app/viewModel/bloc/ThemeCubit/theme_cubit.dart';
-import 'package:meeting_app/viewModel/bloc/VerfiyCubit/verfiy_cubit.dart';
 import 'package:meeting_app/viewModel/bloc/blocObserver.dart';
 import 'viewModel/data/SharedPrefrences.dart';
 
@@ -29,8 +29,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => AuthCubit()),
-        BlocProvider(create: (context) => VerfiyCubit()),
+        BlocProvider(create: (context) => AuthCubit(AuthService())),
         BlocProvider(create: (context) => ProfileCubit()),
         BlocProvider(create: (context) => ThemesCubit()),
         BlocProvider(create: (context) => NavigationCubit()),

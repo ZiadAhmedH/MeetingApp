@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:meeting_app/utils/ThemeExtension.dart';
-import 'package:meeting_app/viewModel/bloc/VerfiyCubit/verfiy_cubit.dart';
 import 'package:meeting_app/Routeres/RouterContstants.dart';
 import '../../../model/components/CustomBtn.dart';
 import '../../../model/components/CustomText.dart';
@@ -14,7 +13,6 @@ class VerifyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var verfiyCubit = VerfiyCubit.get(context);
     var authCubit = AuthCubit.get(context);
     return  Scaffold(
       backgroundColor: context.primaryBackgroundColor,
@@ -41,7 +39,7 @@ class VerifyScreen extends StatelessWidget {
                      ),
                       CustomText(
                        text:
-                           "We have sent a verification code to your Phone number ${VerfiyCubit.userPhoneNumber.text}",
+                           "We have sent a verification code to your Phone number ${authCubit.userPhoneNumber.text}",
                        fontFamily: 'Gilroy',
                        fontWeight: FontWeight.w200,
                        color: context.thirdTextColor,
@@ -52,7 +50,7 @@ class VerifyScreen extends StatelessWidget {
                      ),
                      CustomTextFormField(
                        hintText: 'Enter your verification code',
-                       controller: verfiyCubit.verificationCode,
+                       controller: authCubit.otpController,
                        keyboardType: TextInputType.number,
                        obscureText: false,
                        validator: (value) {
@@ -76,10 +74,10 @@ class VerifyScreen extends StatelessWidget {
                        textColor: context.primaryTextColor!,
                        isClickable: 1,
                        onTap: () {
-                        verfiyCubit.onSmsCodeSubmitted();
+                        authCubit.verifyOtp();
                         Future.delayed(const Duration(seconds: 2), () {
                          const CircularProgressIndicator();
-                          if (verfiyCubit.isVerify) {
+                          if (authCubit.otpController.text == authCubit.generatedOtp) {
                               context.pushReplacementNamed(RouteConst.password);
                           }
                         });

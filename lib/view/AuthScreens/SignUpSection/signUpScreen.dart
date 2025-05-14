@@ -11,7 +11,6 @@ import 'package:meeting_app/utils/AppColor.dart';
 import 'package:meeting_app/utils/ThemeExtension.dart';
 import 'package:meeting_app/view/AuthScreens/SignUpSection/userInfoSection/AcceptTermsSection.dart';
 import 'package:meeting_app/viewModel/bloc/AuthCubit/auth_cubit.dart';
-import 'package:meeting_app/viewModel/bloc/VerfiyCubit/verfiy_cubit.dart';
 
 import '../../../model/components/CustomBtn.dart';
 import 'signUpSection/SignUpSection.dart';
@@ -22,7 +21,6 @@ class SignUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var authCubit = AuthCubit.get(context);
-    var verifyCubit = VerfiyCubit.get(context);
     return BlocBuilder<AuthCubit, AuthState>(
       bloc: authCubit,
       builder: (context, state) {
@@ -79,7 +77,7 @@ class SignUpScreen extends StatelessWidget {
                 CustomButton(
                   onTap: (){
                     if(authCubit.signKey.currentState!.validate()){
-                       verifyCubit.submitPhoneNumber(phone: VerfiyCubit.userPhoneNumber.text);
+                       authCubit.sendOtp( authCubit.userPhoneNumber.text);
                        context.pushNamed(RouteConst.verify);
                     }
                   },

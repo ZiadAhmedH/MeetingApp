@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meeting_app/utils/RegexConst.dart';
 import 'package:meeting_app/utils/ThemeExtension.dart';
-import 'package:meeting_app/viewModel/bloc/VerfiyCubit/verfiy_cubit.dart';
 import '../../../../model/components/TextFormFeild.dart';
 import '../../../../utils/AppColor.dart';
 import '../../../../viewModel/bloc/AuthCubit/auth_cubit.dart';
@@ -12,7 +11,6 @@ class SignUpSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var authCubit = AuthCubit.get(context);
-    var verifyCubit = VerfiyCubit.get(context);
     return Form(
         key: authCubit.signKey,
         child: Column(
@@ -41,7 +39,7 @@ class SignUpSection extends StatelessWidget {
             ),
             CustomTextFormField(
               hintText: 'Enter your Phone number',
-              controller: VerfiyCubit.userPhoneNumber,
+              controller: authCubit.userPhoneNumber,
               obscureText: false,
               validator: (value) {
                 if (value!.isEmpty) {
