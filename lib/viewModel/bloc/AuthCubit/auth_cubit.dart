@@ -30,11 +30,11 @@ class AuthCubit extends Cubit<AuthState> implements CommonFun {
 
   String currentUid = "";
 
+  bool isOtpVerified = false;
+
   // OTP Controllers
   TextEditingController otpController = TextEditingController();
-  String? generatedOtp;
 
-  // Phone Number Controllers
 
   TextEditingController userPhoneNumber = TextEditingController();
 
@@ -110,15 +110,13 @@ class AuthCubit extends Cubit<AuthState> implements CommonFun {
   Future<void> sendOtp(String phoneNumber) async {
     try {
       emit(LoadingSendOtpState());
-      
-      final result = await authService.sendOtp(phoneNumber);
+      final result = await authService.sendOtp(formatToE164(phoneNumber));
       result.fold(
         (failure) {
           emit(ErrorOtpSentState());
           Fluttertoast.showToast(msg: failure.message, backgroundColor: Colors.red);
         },
         (otp) {
-          generatedOtp = otp;
           Fluttertoast.showToast(msg: "OTP sent to $phoneNumber", backgroundColor: AppColor.orange);
           emit(SuccessOtpSentState());
         },
@@ -130,12 +128,15 @@ class AuthCubit extends Cubit<AuthState> implements CommonFun {
     }
   }
 
-  // Verify OTP entered by the user
-  Future<void> verifyOtp() async {
+  Future<void> verifyOtp({required String otp}) async {
     emit(LoadingVerifyOtpState());
+    
+    final result = await authService.verifyOtp(otp: otp, phoneNumber: formatToE164(userPhoneNumber.text));
 
-    if (otpController.text == generatedOtp) {
-      // OTP is correct, proceed with finalizing registration/authentication
+     print(result);
+
+    if (result.isRight()) {
+      isOtpVerified = true;
       emit(SuccessOtpVerifiedState());
       Fluttertoast.showToast(msg: "OTP Verified Successfully", backgroundColor: AppColor.orange);
     } else {
@@ -196,6 +197,15 @@ class AuthCubit extends Cubit<AuthState> implements CommonFun {
     isAcceptTerms = !isAcceptTerms;
     emit(AcceptTermsIsOnOrOffState());
   }
+
+
+  String formatToE164(String rawPhone) {
+  if (rawPhone.startsWith('0')) {
+    return '+20${rawPhone.substring(1)}';
+  }
+  return rawPhone; // Already formatted
+}
+
 
   void clearControllers() {
     closeListeners();

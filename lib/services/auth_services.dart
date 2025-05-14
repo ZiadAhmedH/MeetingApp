@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
@@ -125,54 +126,33 @@ class AuthService {
   }
 
   // Send OTP to user's phone number
-  Future<Either<Failure, String>> sendOtp(String phoneNumber) async {
-    try {
-      final  res = await _supabase.auth.signInWithOtp(
-  phone: phoneNumber,
-  );
-    print("here is auth service ");
-      return right("otp is send"); // OTP sent successfully
-    } catch (e) {
-      print(e);
-      return left(Failure('Unexpected error during OTP sending: $e'));
-    }
+ Future<Either<Failure, String>> sendOtp(String phoneNumber) async {
+  try {
+    await _supabase.auth.signInWithOtp(phone: phoneNumber);
+    return right("OTP sent successfully");
+  } on AuthException catch (e) {
+    return left(Failure("Auth error: ${e.message}"));
+  } catch (e) {
+    return left(Failure("Unexpected error during OTP sending: $e"));
   }
-
-  // Verify OTP entered by the user
-  Future<Either<Failure, UserModel>> verifyOtp(String phoneNumber, String otp) async {
-    try {
-      final  AuthResponse res = await _supabase.auth.verifyOTP(
-        phone: phoneNumber,
-        token: otp,
-        type: OtpType.sms,
-      );
+}
 
 
+Future<Either<Failure, bool>> verifyOtp({required String phoneNumber,required String otp}) async {
+  try {
+    final AuthResponse res = await _supabase.auth.verifyOTP(
+      phone: phoneNumber,
+      token: otp,
+      type: OtpType.sms,
+    );
 
-      if (res.user != null) {
-        return left(Failure('Error verifying OTP: ${res.user.toString()}'));
-      }
-
-      // OTP verification succeeded, return the authenticated user
-      final user = await _supabase.auth.getUser();
-      if (user != null) {
-        final data = await _supabase
-            .from('users')
-            .select()
-            .eq('uid', user.user!.id)
-            .maybeSingle();
-
-        if (data == null) {
-          return left(Failure('User data not found.'));
-        }
-
-        final userModel = UserModel.fromJason(data);
-        return right(userModel);
-      } else {
-        return left(Failure('User verification failed.'));
-      }
-    } catch (e) {
-      return left(Failure('Unexpected error during OTP verification: $e'));
-    }
+   print(res);
+    return right(true);
+  } on AuthException catch (e) {
+    return left(Failure("Auth error: ${e.message}"));
+  } catch (e) {
+    return left(Failure("Unexpected error during OTP verification: $e"));
   }
+}
+
 }
