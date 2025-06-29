@@ -1,20 +1,21 @@
-import 'dart:ffi';
 import 'dart:io';
-
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:meeting_app/config/error/failure.dart';
 import 'package:meeting_app/model/Models/UserModel.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class AuthService {
   final SupabaseClient _supabase = Supabase.instance.client;
 
-  // Sign up method
-  Future<Either<Failure, UserModel>> signUp(
-    String email,
-    String password,
-    String name, {
-    String? phone,
+  // ✅ Step 1: Sign up with email/password after OTP verified
+  Future<Either<Failure, UserModel>> signUp({
+    required String email,
+    required String password,
+    required String name,
+    required String phone,
     String? location,
     String? jobTitle,
     String? profileImage,
@@ -25,9 +26,8 @@ class AuthService {
 
       if (user != null) {
         final uid = user.id;
-
-        // Optionally handle profile image upload to Supabase Storage
         String? uploadedImageUrl;
+
         if (profileImage != null) {
           uploadedImageUrl = await _uploadProfileImage(profileImage);
         }
@@ -36,24 +36,26 @@ class AuthService {
           userName: name,
           email: email,
           uid: uid,
-          phone: phone ?? '',
+          phone: phone,
           location: location ?? '',
           jobTitle: jobTitle ?? '',
           profileImage: uploadedImageUrl,
         );
 
-        final insertRes = await _supabase.from('users').insert({
-          'UserName': newUser.userName,
-          'Email': newUser.email,
-          'uid': newUser.uid,
-          'phone': newUser.phone,
-          'Location': newUser.location,
-          'JobTitle': newUser.jobTitle,
-          'profileImage': newUser.profileImage,
-        });
-
-        if (insertRes.error != null) {
-          return left(Failure('Error inserting user data: ${insertRes.error!.message}'));
+        try {
+          final res = await _supabase.from('users').insert({
+            'UserName': newUser.userName,
+            'Email': newUser.email,
+            'uid': newUser.uid,
+            'phone': newUser.phone,
+            'Location': newUser.location,
+            'JobTitle': newUser.jobTitle,
+            'profileImage': newUser.profileImage,
+          });
+          print("User inserted: $res");
+        } catch (e) {
+          print("Insert failed: $e");
+          return left(Failure("Insert error: $e"));
         }
 
         return right(newUser);
@@ -67,10 +69,12 @@ class AuthService {
     }
   }
 
-  // Sign in method
-  Future<Either<Failure, UserModel>> signIn(String email, String password) async {
+  // ✅ Step 2: Sign in
+  Future<Either<Failure, UserModel>> signIn(
+      String email, String password) async {
     try {
-      final res = await _supabase.auth.signInWithPassword(email: email, password: password);
+      final res = await _supabase.auth
+          .signInWithPassword(email: email, password: password);
       final user = res.user;
 
       if (user != null) {
@@ -80,9 +84,7 @@ class AuthService {
             .eq('uid', user.id)
             .maybeSingle();
 
-        if (data == null) {
-          return left(Failure('User data not found.'));
-        }
+        if (data == null) return left(Failure('User data not found.'));
 
         final userModel = UserModel.fromJason(data);
         return right(userModel);
@@ -96,63 +98,114 @@ class AuthService {
     }
   }
 
-  // Sign out method
+  // ✅ Step 3: Sign out
   Future<void> signOut() async {
     await _supabase.auth.signOut();
   }
 
-  // Upload profile image to Supabase Storage (example function)
+  // ✅ Upload profile image to Supabase Storage
   Future<String?> _uploadProfileImage(String profileImagePath) async {
     try {
-      final file = await _getFileFromPath(profileImagePath); // You need to implement this method
-      final fileName = 'profile_images/${DateTime.now().millisecondsSinceEpoch}.jpg';
-      final uploadRes = await _supabase.storage.from('avatars').upload(fileName, file);
+      final file = File(profileImagePath);
+      final fileName =
+          'profile_images/${DateTime.now().millisecondsSinceEpoch}.jpg';
+      final uploadRes =
+          await _supabase.storage.from('avatars').upload(fileName, file);
 
-      if (uploadRes != null) {
-        return null;
-      }
+      if (uploadRes.isEmpty) return null;
 
-      final fileUrl = await _supabase.storage.from('avatars').getPublicUrl(fileName);
+      final fileUrl = _supabase.storage.from('avatars').getPublicUrl(fileName);
       return fileUrl;
     } catch (e) {
+      print("Error uploading profile image: $e");
       return null;
     }
   }
 
-  // Helper method to convert a file path to a file
-  Future<File> _getFileFromPath(String path) async {
-    // Example method to get a file from path, customize based on how you store images
-    return File(path);
+  // ✅ Step 4: Send WhatsApp OTP via Edge Function
+  Future<Either<Failure, String>> sendOtpToWhatsApp(String phoneNumber) async {
+    try {
+      final response = await http.post(
+        Uri.parse(
+            'https://savwcqlrhixilqbryyff.functions.supabase.co/send-whatsapp-otp'),
+        headers: {
+          'Authorization':
+              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNhdndjcWxyaGl4aWxxYnJ5eWZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcxMTA4NDQsImV4cCI6MjA2MjY4Njg0NH0.R_AeeGUFazOsTRT7eR-3SHWCSCxecSM1Os66Gj9i0ag',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({'phone': phoneNumber}),
+      );
+
+      if (response.statusCode == 200) {
+        return right("OTP sent via WhatsApp successfully.");
+      } else {
+        print("Failed to send OTP: ${response.body}");
+        return left(Failure("Failed to send OTP: ${response.body}"));
+      }
+    } catch (e) {
+      return left(Failure("Unexpected error during OTP send: $e"));
+    }
   }
 
-  // Send OTP to user's phone number
- Future<Either<Failure, String>> sendOtp(String phoneNumber) async {
-  try {
-    await _supabase.auth.signInWithOtp(phone: phoneNumber);
-    return right("OTP sent successfully");
-  } on AuthException catch (e) {
-    return left(Failure("Auth error: ${e.message}"));
-  } catch (e) {
-    return left(Failure("Unexpected error during OTP sending: $e"));
+  // ✅ Step 5: Verify OTP from Supabase `phone_verification` table
+  Future<Either<Failure, bool>> verifyOtp({
+    required String phoneNumber,
+    required String inputOtp,
+  }) async {
+    try {
+      final nowUtc = DateTime.now().toUtc().toIso8601String();
+      print("Verifying OTP for $phoneNumber / $inputOtp at $nowUtc");
+
+      final result = await _supabase
+          .from('phone_verification')
+          .select()
+          .eq('phone', phoneNumber) // try .ilike if phone format might vary
+          .eq('otp', inputOtp)
+          .gte('expires_at', nowUtc)
+          .order('expires_at', ascending: false)
+          .limit(1)
+          .maybeSingle();
+
+      print("Result: $result");
+
+      if (result != null) {
+        return right(true);
+      } else {
+        return left(Failure("Invalid or expired OTP."));
+      }
+    } catch (e) {
+      return left(Failure("Unexpected error during OTP verification: $e"));
+    }
   }
+
+
+
+
+
+
+Failure handleError(String context, dynamic e, [StackTrace? stackTrace]) {
+  // Print debug info during development
+  debugPrint('❌ [$context] Error: $e');
+  if (stackTrace != null) {
+    debugPrintStack(label: '🔍 StackTrace', stackTrace: stackTrace);
+  }
+
+  // Map known error types
+  if (e is AuthException) {
+    return Failure('Auth error: ${e.message}');
+  } else if (e is PostgrestException) {
+    return Failure('Database error: ${e.message}');
+  } else if (e is StorageException) {
+    return Failure('Storage error: ${e.message}');
+  } else if (e is SocketException) {
+    return Failure('Network error. Please check your internet connection.');
+  }
+
+  return Failure('Unexpected error in $context: ${e.toString()}');
 }
 
 
-Future<Either<Failure, bool>> verifyOtp({required String phoneNumber,required String otp}) async {
-  try {
-    final AuthResponse res = await _supabase.auth.verifyOTP(
-      phone: phoneNumber,
-      token: otp,
-      type: OtpType.sms,
-    );
 
-   print(res);
-    return right(true);
-  } on AuthException catch (e) {
-    return left(Failure("Auth error: ${e.message}"));
-  } catch (e) {
-    return left(Failure("Unexpected error during OTP verification: $e"));
-  }
-}
+
 
 }

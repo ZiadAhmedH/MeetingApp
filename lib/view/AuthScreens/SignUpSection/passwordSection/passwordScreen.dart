@@ -23,10 +23,10 @@ class PasswordScreen extends StatelessWidget {
       backgroundColor: context.primaryBackgroundColor,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Expanded(
-              child:  Column(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
@@ -59,31 +59,31 @@ class PasswordScreen extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-            BlocBuilder<AuthCubit, AuthState>(
-              builder: (context, state) {
-                return CustomButton(
-                    borderColor: AppColor.lightGrey,
-                    backgroundColor: (authCubit.passwordStrength &&
-                        authCubit.passwordController.text ==
-                            authCubit.confirmPasswordController.text && authCubit.passwordController.text.isNotEmpty)
-                        ? AppColor.primaryBlue
-                        : AppColor.lightGrey,
-                    text: 'Next',
-                  onTap: () {
-                    if (authCubit.passwordStrength &&
-                        authCubit.passwordController.text ==
-                            authCubit.confirmPasswordController.text) {
-                      context.pushNamed(RouteConst.inputProfileInfo);
-                    }
-                  },
-                    isClickable: (authCubit.passwordStrength &&
-                        authCubit.passwordController.text ==
-                            authCubit.confirmPasswordController.text) ? 1 : 0,  textColor: context.thirdTextColor!,
-                  );
-              },
-            ),
-          ],
+              BlocBuilder<AuthCubit, AuthState>(
+                builder: (context, state) {
+                  return CustomButton(
+                      borderColor: AppColor.lightGrey,
+                      backgroundColor: (authCubit.passwordStrength &&
+                          authCubit.passwordController.text ==
+                              authCubit.confirmPasswordController.text && authCubit.passwordController.text.isNotEmpty)
+                          ? AppColor.primaryBlue
+                          : AppColor.lightGrey,
+                      text: 'Next',
+                    onTap: () {
+                      if (authCubit.passwordStrength &&
+                          authCubit.passwordController.text ==
+                              authCubit.confirmPasswordController.text) {
+                        context.pushNamed(RouteConst.inputProfileInfo);
+                      }
+                    },
+                      isClickable: (authCubit.passwordStrength &&
+                          authCubit.passwordController.text ==
+                              authCubit.confirmPasswordController.text) ? 1 : 0,  textColor: context.thirdTextColor!,
+                    );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -79,9 +79,10 @@ class AuthCubit extends Cubit<AuthState> implements CommonFun {
     emit(LoadingRegisterState());
 
     final result = await authService.signUp(
-      signUpEmail.text.trim(),
-      passwordController.text.trim(),
-      signUpUserName.text.trim(),
+
+     email:signUpEmail.text.trim(),
+      password: passwordController.text.trim(),
+      name: signUpUserName.text.trim(),
       phone: userPhoneNumber.text,
       location: ProfileCubit.userLocation.text,
       jobTitle: ProfileCubit.currentStatus,
@@ -110,7 +111,7 @@ class AuthCubit extends Cubit<AuthState> implements CommonFun {
   Future<void> sendOtp(String phoneNumber) async {
     try {
       emit(LoadingSendOtpState());
-      final result = await authService.sendOtp(formatToE164(phoneNumber));
+      final result = await authService.sendOtpToWhatsApp(phoneNumber);
       result.fold(
         (failure) {
           emit(ErrorOtpSentState());
@@ -131,7 +132,7 @@ class AuthCubit extends Cubit<AuthState> implements CommonFun {
   Future<void> verifyOtp({required String otp}) async {
     emit(LoadingVerifyOtpState());
     
-    final result = await authService.verifyOtp(otp: otp, phoneNumber: formatToE164(userPhoneNumber.text));
+    final result = await authService.verifyOtp(inputOtp: otp, phoneNumber: userPhoneNumber.text);
 
      print(result);
 
@@ -199,12 +200,7 @@ class AuthCubit extends Cubit<AuthState> implements CommonFun {
   }
 
 
-  String formatToE164(String rawPhone) {
-  if (rawPhone.startsWith('0')) {
-    return '+20${rawPhone.substring(1)}';
-  }
-  return rawPhone; // Already formatted
-}
+ 
 
 
   void clearControllers() {
