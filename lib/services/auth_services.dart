@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:dartz/dartz.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:meeting_app/config/error/failure.dart';
 import 'package:meeting_app/model/Models/UserModel.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -10,202 +10,185 @@ import 'dart:convert';
 class AuthService {
   final SupabaseClient _supabase = Supabase.instance.client;
 
-  // ✅ Step 1: Sign up with email/password after OTP verified
-  Future<Either<Failure, UserModel>> signUp({
-    required String email,
-    required String password,
-    required String name,
-    required String phone,
-    String? location,
-    String? jobTitle,
-    String? profileImage,
-  }) async {
-    try {
-      final res = await _supabase.auth.signUp(email: email, password: password);
-      final user = res.user;
+  /// Centralized error handler for consistent failure messages
+  Failure handleError(String context, dynamic e, [StackTrace? stackTrace]) {
+    debugPrint('❌ [$context] Error: $e');
+    if (stackTrace != null) debugPrintStack(stackTrace: stackTrace, label: '🔍 $context');
 
-      if (user != null) {
-        final uid = user.id;
-        String? uploadedImageUrl;
+    if (e is AuthException) {
+      return Failure('Auth error: ${e.message}');
+    } else if (e is PostgrestException) {
+      return Failure('Database error: ${e.message}');
+    } else if (e is StorageException) {
+      return Failure('Storage error: ${e.message}');
+    } else if (e is SocketException) {
+      return Failure('No Internet connection.');
+    }
 
-        if (profileImage != null) {
-          uploadedImageUrl = await _uploadProfileImage(profileImage);
-        }
+    return Failure('Unexpected error in $context: ${e.toString()}');
+  }
 
-        final newUser = UserModel(
-          userName: name,
-          email: email,
-          uid: uid,
-          phone: phone,
-          location: location ?? '',
-          jobTitle: jobTitle ?? '',
-          profileImage: uploadedImageUrl,
-        );
+  /// ✅ Step 1: Sign up with email/password and store user profile
+ Future<Either<Failure, UserModel>> signUp({
+  required String email,
+  required String password,
+  required String name,
+  required String phone,
+  String? location,
+  String? jobTitle,
+  String? profileImage,
+}) async {
+  try {
+    // Step 1: Sign up via Supabase Auth
+    final res = await _supabase.auth.signUp(
+      email: email.trim(),
+      password: password.trim(),
+    );
 
-        try {
-          final res = await _supabase.from('users').insert({
-            'UserName': newUser.userName,
-            'Email': newUser.email,
-            'uid': newUser.uid,
-            'phone': newUser.phone,
-            'Location': newUser.location,
-            'JobTitle': newUser.jobTitle,
-            'profileImage': newUser.profileImage,
-          });
-          print("User inserted: $res");
-        } catch (e) {
-          print("Insert failed: $e");
-          return left(Failure("Insert error: $e"));
-        }
+    final user = res.user;
 
-        return right(newUser);
+    // ✅ If signup fails
+    if (user == null) {
+      if (res.session == null && res.user == null) {
+        return left(Failure("Signup failed: Supabase returned null user/session."));
       } else {
-        return left(Failure('Sign up failed. User is null.'));
+        return left(Failure("Signup failed: Unknown error during signup."));
       }
-    } on AuthException catch (e) {
-      return left(Failure(e.message));
-    } catch (e) {
-      return left(Failure('Unexpected error during sign up: $e'));
+    }
+
+    final uid = user.id;
+    String? uploadedImageUrl;
+
+    // Step 2: Upload image if provided
+    if (profileImage != null) {
+      uploadedImageUrl = await _uploadProfileImage(profileImage);
+    }
+
+    // Step 3: Create user model
+    final newUser = UserModel(
+      userName: name,
+      email: email,
+      uid: uid,
+      phone: phone,
+      location: location ?? '',
+      jobTitle: jobTitle ?? '',
+      profileImage: uploadedImageUrl,
+    );
+
+    // // Step 4: Insert into custom 'users' table
+    // final insertRes = await _supabase.from('users').insert({
+    //   'uid': newUser.uid,
+    //   'userName': newUser.userName,
+    //   'email': newUser.email,
+    //   'phone': newUser.phone,
+    //   'location': newUser.location,
+    //   'job_title': newUser.jobTitle,
+    //   'profile_image': "dd",
+    // }).select();
+
+   // debugPrint("✅ User inserted: $insertRes");
+
+    return right(newUser);
+  } on AuthException catch (e, stack) {
+    debugPrint('❌ AuthException: ${e.message}');
+    debugPrintStack(stackTrace: stack, label: '[signUp]');
+    return left(Failure("Auth error: ${e.message}"));
+  } on PostgrestException catch (e, stack) {
+    debugPrint('❌ PostgrestException: ${e.message}');
+    debugPrintStack(stackTrace: stack, label: '[signUp]');
+    return left(Failure("Database insert error: ${e.message}"));
+  } catch (e, stack) {
+    debugPrint('❌ Unexpected error in signUp: $e');
+    debugPrintStack(stackTrace: stack, label: '[signUp]');
+    return left(Failure("Unexpected error: ${e.toString()}"));
+  }
+}
+
+
+  /// ✅ Step 2: Sign in and fetch user data
+  Future<Either<Failure, UserModel>> signIn(String email, String password) async {
+    try {
+      final res = await _supabase.auth.signInWithPassword(email: email, password: password);
+      final user = res.user;
+      if (user == null) return left(Failure('Login failed.'));
+
+      final data = await _supabase.from('users').select().eq('uid', user.id).maybeSingle();
+      if (data == null) return left(Failure('User data not found.'));
+
+      return right(UserModel.fromJson(data));
+    } catch (e, stack) {
+      return left(handleError('signIn', e, stack));
     }
   }
 
-  // ✅ Step 2: Sign in
-  Future<Either<Failure, UserModel>> signIn(
-      String email, String password) async {
-    try {
-      final res = await _supabase.auth
-          .signInWithPassword(email: email, password: password);
-      final user = res.user;
-
-      if (user != null) {
-        final data = await _supabase
-            .from('users')
-            .select()
-            .eq('uid', user.id)
-            .maybeSingle();
-
-        if (data == null) return left(Failure('User data not found.'));
-
-        final userModel = UserModel.fromJason(data);
-        return right(userModel);
-      } else {
-        return left(Failure('Login failed. User is null.'));
-      }
-    } on AuthException catch (e) {
-      return left(Failure(e.message));
-    } catch (e) {
-      return left(Failure('Unexpected error during login: $e'));
-    }
-  }
-
-  // ✅ Step 3: Sign out
+  /// ✅ Step 3: Sign out
   Future<void> signOut() async {
     await _supabase.auth.signOut();
   }
 
-  // ✅ Upload profile image to Supabase Storage
-  Future<String?> _uploadProfileImage(String profileImagePath) async {
+  /// ✅ Upload profile image to Supabase Storage
+  Future<String?> _uploadProfileImage(String path) async {
     try {
-      final file = File(profileImagePath);
-      final fileName =
-          'profile_images/${DateTime.now().millisecondsSinceEpoch}.jpg';
-      final uploadRes =
-          await _supabase.storage.from('avatars').upload(fileName, file);
-
-      if (uploadRes.isEmpty) return null;
-
-      final fileUrl = _supabase.storage.from('avatars').getPublicUrl(fileName);
-      return fileUrl;
-    } catch (e) {
-      print("Error uploading profile image: $e");
+      final file = File(path);
+      final fileName = 'profile_images/${DateTime.now().millisecondsSinceEpoch}.jpg';
+      final uploadPath = await _supabase.storage.from('avatars').upload(fileName, file);
+      return _supabase.storage.from('avatars').getPublicUrl(fileName);
+    } catch (e, stack) {
+      debugPrint("📷 Image Upload Error: $e");
       return null;
     }
   }
 
-  // ✅ Step 4: Send WhatsApp OTP via Edge Function
+  /// ✅ Step 4: Send WhatsApp OTP via Supabase Edge Function
   Future<Either<Failure, String>> sendOtpToWhatsApp(String phoneNumber) async {
     try {
       final response = await http.post(
-        Uri.parse(
-            'https://savwcqlrhixilqbryyff.functions.supabase.co/send-whatsapp-otp'),
+        Uri.parse('https://savwcqlrhixilqbryyff.functions.supabase.co/send-whatsapp-otp'),
         headers: {
-          'Authorization':
-              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNhdndjcWxyaGl4aWxxYnJ5eWZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcxMTA4NDQsImV4cCI6MjA2MjY4Njg0NH0.R_AeeGUFazOsTRT7eR-3SHWCSCxecSM1Os66Gj9i0ag',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNhdndjcWxyaGl4aWxxYnJ5eWZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcxMTA4NDQsImV4cCI6MjA2MjY4Njg0NH0.R_AeeGUFazOsTRT7eR-3SHWCSCxecSM1Os66Gj9i0ag',
           'Content-Type': 'application/json',
         },
         body: jsonEncode({'phone': phoneNumber}),
       );
 
       if (response.statusCode == 200) {
-        return right("OTP sent via WhatsApp successfully.");
+        return right("OTP sent successfully.");
       } else {
-        print("Failed to send OTP: ${response.body}");
-        return left(Failure("Failed to send OTP: ${response.body}"));
+        return left(Failure("OTP failed: ${response.body}"));
       }
-    } catch (e) {
-      return left(Failure("Unexpected error during OTP send: $e"));
+    } catch (e, stack) {
+      return left(handleError('sendOtpToWhatsApp', e, stack));
     }
   }
 
-  // ✅ Step 5: Verify OTP from Supabase `phone_verification` table
+  /// ✅ Step 5: Verify OTP from `phone_verification` table
   Future<Either<Failure, bool>> verifyOtp({
     required String phoneNumber,
     required String inputOtp,
   }) async {
     try {
       final nowUtc = DateTime.now().toUtc().toIso8601String();
-      print("Verifying OTP for $phoneNumber / $inputOtp at $nowUtc");
+      debugPrint("Verifying OTP for $phoneNumber / $inputOtp at $nowUtc");
 
       final result = await _supabase
           .from('phone_verification')
           .select()
-          .eq('phone', phoneNumber) // try .ilike if phone format might vary
+          .eq('phone', phoneNumber)
           .eq('otp', inputOtp)
           .gte('expires_at', nowUtc)
           .order('expires_at', ascending: false)
           .limit(1)
           .maybeSingle();
 
-      print("Result: $result");
+      debugPrint("OTP result: $result");
 
       if (result != null) {
         return right(true);
       } else {
         return left(Failure("Invalid or expired OTP."));
       }
-    } catch (e) {
-      return left(Failure("Unexpected error during OTP verification: $e"));
+    } catch (e, stack) {
+      return left(handleError('verifyOtp', e, stack));
     }
   }
-
-
-
-
-
-
-Failure handleError(String context, dynamic e, [StackTrace? stackTrace]) {
-  // Print debug info during development
-  debugPrint('❌ [$context] Error: $e');
-  if (stackTrace != null) {
-    debugPrintStack(label: '🔍 StackTrace', stackTrace: stackTrace);
-  }
-
-  // Map known error types
-  if (e is AuthException) {
-    return Failure('Auth error: ${e.message}');
-  } else if (e is PostgrestException) {
-    return Failure('Database error: ${e.message}');
-  } else if (e is StorageException) {
-    return Failure('Storage error: ${e.message}');
-  } else if (e is SocketException) {
-    return Failure('Network error. Please check your internet connection.');
-  }
-
-  return Failure('Unexpected error in $context: ${e.toString()}');
-}
-
-
-
-
-
 }

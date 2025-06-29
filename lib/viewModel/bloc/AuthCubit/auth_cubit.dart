@@ -74,38 +74,32 @@ class AuthCubit extends Cubit<AuthState> implements CommonFun {
       },
     );
   }
+Future<void> signUpWithFire() async {
+  emit(LoadingRegisterState());
 
-  Future<void> signUpWithFire() async {
-    emit(LoadingRegisterState());
+  final result = await authService.signUp(
+    email: signUpEmail.text.trim(),
+    password: passwordController.text.trim(),
+    name: signUpUserName.text.trim(),
+    phone: userPhoneNumber.text,
+    location: ProfileCubit.userLocation.text,
+    jobTitle: ProfileCubit.currentStatus,
+    profileImage: null,
+  );
 
-    final result = await authService.signUp(
-
-     email:signUpEmail.text.trim(),
-      password: passwordController.text.trim(),
-      name: signUpUserName.text.trim(),
-      phone: userPhoneNumber.text,
-      location: ProfileCubit.userLocation.text,
-      jobTitle: ProfileCubit.currentStatus,
-      profileImage: null,
-    );
-
-    result.fold(
-      (failure) {
-        emit(ErrorRegisterState());
-        Fluttertoast.showToast(msg: failure.message, backgroundColor: Colors.red);
-      },
-      (user) async {
-        currentUid = user.uid!;
-        await addUserToSupabase(user);
-        storeDataLocally(user);
-        emit(SuccessRegisterState());
-        Fluttertoast.showToast(msg: "SignUp Successful", backgroundColor: AppColor.orange);
-
-        // Send OTP after successful registration
-        await sendOtp(user.phone!);
-      },
-    );
-  }
+  result.fold(
+    (failure) {
+      emit(ErrorRegisterState());
+      Fluttertoast.showToast(msg: failure.message, backgroundColor: Colors.red);
+    },
+    (user) async {
+      currentUid = user.uid;
+      storeDataLocally(user); // ✅ This is enough
+      emit(SuccessRegisterState());
+      Fluttertoast.showToast(msg: "SignUp Successful", backgroundColor: AppColor.orange);
+    },
+  );
+}
 
   // Method to send OTP to the phone number
   Future<void> sendOtp(String phoneNumber) async {
@@ -146,21 +140,6 @@ class AuthCubit extends Cubit<AuthState> implements CommonFun {
     }
   }
 
-  Future<void> addUserToSupabase(UserModel user) async {
-    try {
-      await Supabase.instance.client.from(Collections.users).insert({
-        "UserName": "${ProfileCubit.firstName.text} ${ProfileCubit.lastName.text}",
-        "Email": signUpEmail.text,
-        "Location": ProfileCubit.userLocation.text,
-        "JobTitle": ProfileCubit.currentStatus,
-        "phone": userPhoneNumber.text,
-        "uid": user.uid,
-      });
-      log("User added to Supabase: ${user.uid}");
-    } catch (e) {
-      log("Error adding user to Supabase: $e");
-    }
-  }
 
   void storeDataLocally(UserModel user) {
     LocalData.setData(key: SharedKey.uid, value: user.uid);

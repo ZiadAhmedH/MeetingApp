@@ -1,6 +1,6 @@
 class Collections{
 
-  static String users = "Users";
+  static String users = "users";
   static String meetings = "Meetings";
   static String messages = "Messages";
   static String notifications = "Notifications";

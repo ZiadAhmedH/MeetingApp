@@ -17,14 +17,15 @@ final  String jobTitle;
   required  this.jobTitle,
   });
   
-  UserModel.fromJason(Map<String, dynamic> json)
-      : userName = json["UserName"],
-        email = json["Email"],
-        profileImage = json["profileImage"],
-        uid = json["uid"],
-        phone = json["phone"],
-        location = json["Location"],
-        jobTitle = json["JobTitle"];
+ UserModel.fromJson(Map<String, dynamic> json)
+    : userName = json["username"],
+      email = json["email"],
+      profileImage = json["profile_image"],
+      uid = json["uid"],
+      phone = json["phone"],
+      location = json["location"],
+      jobTitle = json["job_title"];
+
 
 
 }
