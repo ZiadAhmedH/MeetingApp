@@ -35,7 +35,6 @@ class AuthCubit extends Cubit<AuthState> implements CommonFun {
   // OTP Controllers
   TextEditingController otpController = TextEditingController();
 
-
   TextEditingController userPhoneNumber = TextEditingController();
 
   // Login Controllers
@@ -64,42 +63,48 @@ class AuthCubit extends Cubit<AuthState> implements CommonFun {
     result.fold(
       (failure) {
         emit(ErrorLoginState());
-        Fluttertoast.showToast(msg: failure.message, backgroundColor: Colors.red);
+        Fluttertoast.showToast(
+            msg: failure.message, backgroundColor: Colors.red);
       },
       (user) {
         currentUid = user.uid!;
         storeDataLocally(user);
         emit(SuccessLoginState());
-        Fluttertoast.showToast(msg: "Login Successful", backgroundColor: AppColor.orange);
+        Fluttertoast.showToast(
+            msg: "Login Successful", backgroundColor: AppColor.orange);
       },
     );
   }
-Future<void> signUpWithFire() async {
-  emit(LoadingRegisterState());
 
-  final result = await authService.signUp(
-    email: signUpEmail.text.trim(),
-    password: passwordController.text.trim(),
-    name: signUpUserName.text.trim(),
-    phone: userPhoneNumber.text,
-    location: ProfileCubit.userLocation.text,
-    jobTitle: ProfileCubit.currentStatus,
-    profileImage: null,
-  );
+  Future<void> signUpWithFire() async {
+    emit(LoadingRegisterState());
 
-  result.fold(
-    (failure) {
-      emit(ErrorRegisterState());
-      Fluttertoast.showToast(msg: failure.message, backgroundColor: Colors.red);
-    },
-    (user) async {
-      currentUid = user.uid;
-      storeDataLocally(user); // ✅ This is enough
-      emit(SuccessRegisterState());
-      Fluttertoast.showToast(msg: "SignUp Successful", backgroundColor: AppColor.orange);
-    },
-  );
-}
+    final result = await authService.signUp(
+      email: signUpEmail.text.trim(),
+      password: passwordController.text.trim(),
+      name: signUpUserName.text.trim(),
+      phone: userPhoneNumber.text,
+      location: ProfileCubit.userLocation.text,
+      jobTitle: ProfileCubit.currentStatus,
+      profileImage: null,
+    );
+
+    result.fold(
+      (failure) {
+        emit(ErrorRegisterState());
+        Fluttertoast.showToast(
+            msg: failure.message, backgroundColor: Colors.red);
+      },
+      (user) {
+        currentUid = user.uid;
+        storeDataLocally(user);
+        print("uhhhhhhhhhhhhhhhhhhhhhhhhhhhh${user.uid}"); // ✅ This is enough
+        emit(SuccessRegisterState());
+        Fluttertoast.showToast(
+            msg: "SignUp Successful", backgroundColor: AppColor.orange);
+      },
+    );
+  }
 
   // Method to send OTP to the phone number
   Future<void> sendOtp(String phoneNumber) async {
@@ -109,37 +114,42 @@ Future<void> signUpWithFire() async {
       result.fold(
         (failure) {
           emit(ErrorOtpSentState());
-          Fluttertoast.showToast(msg: failure.message, backgroundColor: Colors.red);
+          Fluttertoast.showToast(
+              msg: failure.message, backgroundColor: Colors.red);
         },
         (otp) {
-          Fluttertoast.showToast(msg: "OTP sent to $phoneNumber", backgroundColor: AppColor.orange);
+          Fluttertoast.showToast(
+              msg: "OTP sent to $phoneNumber",
+              backgroundColor: AppColor.orange);
           emit(SuccessOtpSentState());
         },
       );
     } catch (e) {
       log("Error sending OTP: $e");
       emit(ErrorOtpSentState());
-      Fluttertoast.showToast(msg: "Failed to send OTP", backgroundColor: Colors.red);
+      Fluttertoast.showToast(
+          msg: "Failed to send OTP", backgroundColor: Colors.red);
     }
   }
 
   Future<void> verifyOtp({required String otp}) async {
     emit(LoadingVerifyOtpState());
-    
-    final result = await authService.verifyOtp(inputOtp: otp, phoneNumber: userPhoneNumber.text);
 
-     print(result);
+    final result = await authService.verifyOtp(
+        inputOtp: otp, phoneNumber: userPhoneNumber.text);
+
+    print(result);
 
     if (result.isRight()) {
       isOtpVerified = true;
       emit(SuccessOtpVerifiedState());
-      Fluttertoast.showToast(msg: "OTP Verified Successfully", backgroundColor: AppColor.orange);
+      Fluttertoast.showToast(
+          msg: "OTP Verified Successfully", backgroundColor: AppColor.orange);
     } else {
       emit(ErrorOtpVerifiedState());
       Fluttertoast.showToast(msg: "Invalid OTP", backgroundColor: Colors.red);
     }
   }
-
 
   void storeDataLocally(UserModel user) {
     LocalData.setData(key: SharedKey.uid, value: user.uid);
@@ -177,10 +187,6 @@ Future<void> signUpWithFire() async {
     isAcceptTerms = !isAcceptTerms;
     emit(AcceptTermsIsOnOrOffState());
   }
-
-
- 
-
 
   void clearControllers() {
     closeListeners();

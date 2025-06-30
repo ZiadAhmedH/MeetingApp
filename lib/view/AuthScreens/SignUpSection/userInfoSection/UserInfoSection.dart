@@ -69,8 +69,8 @@ class UserInfoSection extends StatelessWidget {
                     onTap: () {
                       if(profileCubit.profileKey.currentState!.validate()) {
                          authCubit.signUpWithFire().then((value) {
-                           context.pushReplacement(RouteConst.signMain);
-                           profileCubit.uploadImage(image: profileCubit.image!, email: authCubit.signUpEmail.text, uid: authCubit.currentUid);
+                           //context.pushReplacement(RouteConst.signMain);
+                           //profileCubit.uploadImage(image: profileCubit.image!, email: authCubit.signUpEmail.text, uid: authCubit.currentUid);
                            authCubit.clearControllers();
                            profileCubit.disposeController();
                          });
@@ -85,5 +85,6 @@ class UserInfoSection extends StatelessWidget {
         );
       },
     );
+  
   }
 }

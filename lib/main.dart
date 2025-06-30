@@ -17,10 +17,11 @@ Future<void> main() async {
  
  await SupabaseHelper.init();
   
-  LocalData.init();
-  //LocalData.clearData();
+  //LocalData.init();
+  LocalData.clearData();
   runApp(const MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

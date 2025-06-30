@@ -75,18 +75,18 @@ class AuthService {
       profileImage: uploadedImageUrl,
     );
 
-    // // Step 4: Insert into custom 'users' table
-    // final insertRes = await _supabase.from('users').insert({
-    //   'uid': newUser.uid,
-    //   'userName': newUser.userName,
-    //   'email': newUser.email,
-    //   'phone': newUser.phone,
-    //   'location': newUser.location,
-    //   'job_title': newUser.jobTitle,
-    //   'profile_image': "dd",
-    // }).select();
+    // Step 4: Insert into custom 'users' table
+    final insertRes = await _supabase.from('users').insert({
+      'id': newUser.uid,
+      'username': newUser.userName,
+      'email': newUser.email,
+      'phone': newUser.phone,
+      'location': newUser.location,
+      'job_title': newUser.jobTitle,
+      'profile_image': "dd",
+    }).select();
 
-   // debugPrint("✅ User inserted: $insertRes");
+   debugPrint("✅ User inserted: $insertRes");
 
     return right(newUser);
   } on AuthException catch (e, stack) {
