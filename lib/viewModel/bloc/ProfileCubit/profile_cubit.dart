@@ -44,30 +44,34 @@ class ProfileCubit extends Cubit<ProfileState>  implements CommonFun {
 
 
 // Image Picker
-  Future<void> pickImageFromGallery({required uid , required email}) async {
-    emit(ImagePickerLoading());
-    var permissionStatus = await Permission.storage.request();
+  Future<void> pickImageFromGallery({required String uid, required String email}) async {
+  emit(ImagePickerLoading());
+
+  try {
+    final permissionStatus = await Permission.photos.request();
+
     if (permissionStatus.isGranted) {
-      try {
-        XFile? pickedFile = await _picker.pickImage(
-            source: ImageSource.gallery);
-        if (pickedFile != null) {
-          image = pickedFile;
-          emit(ImagePickerSuccess(pickedFile));
-        } else {
-          emit(ImagePickerError('No image selected.'));
-        }
-      } catch (e) {
-        emit(ImagePickerError('Failed to pick image: $e'));
+      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+      if (pickedFile != null) {
+        image = pickedFile;
+        emit(ImagePickerSuccess(pickedFile));
+      } else {
+        emit(ImagePickerError('No image selected.'));
       }
-    } else if (permissionStatus.isDenied) {
-      emit(ImagePickerError('Gallery permission is required to pick images'));
+
     } else if (permissionStatus.isPermanentlyDenied) {
       await openAppSettings();
-      emit(ImagePickerError(
-          'Permission permanently denied. Please enable it in settings.'));
+      emit(ImagePickerError('Permission permanently denied. Please enable it in app settings.'));
+
+    } else {
+      emit(ImagePickerError('Gallery permission is required to pick images.'));
     }
+  } catch (e) {
+    emit(ImagePickerError('Failed to pick image: $e'));
   }
+}
+
   Future<void>getUserInfoFire()async {
     emit(LoadingUserInfoState());
     // await FirebaseFirestore.instance.collection(Collections.users).snapshots().listen((value) {
@@ -104,6 +108,9 @@ class ProfileCubit extends Cubit<ProfileState>  implements CommonFun {
   //       });
   //     });
   //   });
+
+  // for supabase upload an image
+
     emit(UploadImageSuccess(image.path));
 
   }

@@ -16,6 +16,18 @@ class ImageSection extends StatelessWidget {
     var authCubit = AuthCubit.get(context);
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
+            
+   if (state is ImagePickerError) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(state.message)),
+      );
+    });
+  }
+
+
+
+
         return SizedBox(
           child: InkWell(
             onTap: () {
