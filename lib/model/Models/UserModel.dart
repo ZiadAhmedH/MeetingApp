@@ -21,7 +21,7 @@ final  String jobTitle;
     : userName = json["username"],
       email = json["email"],
       profileImage = json["profile_image"],
-      uid = json["uid"],
+      uid = json["id"],
       phone = json["phone"],
       location = json["location"],
       jobTitle = json["job_title"];

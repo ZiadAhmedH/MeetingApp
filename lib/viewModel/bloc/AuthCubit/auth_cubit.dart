@@ -62,7 +62,11 @@ class AuthCubit extends Cubit<AuthState> implements CommonFun {
 
     result.fold(
       (failure) {
-        emit(ErrorLoginState());
+        emit(ErrorLoginState(
+          message: failure.message
+        ));
+
+        print("Login Error: ${failure.message}");
         Fluttertoast.showToast(
             msg: failure.message, backgroundColor: Colors.red);
       },

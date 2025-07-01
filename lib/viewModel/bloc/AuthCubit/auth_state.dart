@@ -22,7 +22,11 @@ class PasswordNotMatchState extends AuthState {}
 // Login States
 class LoadingLoginState extends AuthState {}
 class SuccessLoginState extends AuthState {}
-class ErrorLoginState extends AuthState {}
+class ErrorLoginState extends AuthState {
+  final String message;
+
+  ErrorLoginState({this.message = "An error occurred during login."});
+}
 
 // Sign Up States
 class LoadingRegisterState extends AuthState {}

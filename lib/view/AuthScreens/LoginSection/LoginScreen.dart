@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -23,6 +22,27 @@ class LoginScreen extends StatelessWidget {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {},
       builder: (context, state) {
+        if (state is ErrorLoginState) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+              ),
+            );
+          });
+        }
+
+        if (state is SuccessLoginState) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              RouteConst.home,
+              (route) => false,
+            );
+          });
+        }
+
         return Scaffold(
           backgroundColor: context.primaryBackgroundColor,
           body: Padding(
@@ -36,7 +56,7 @@ class LoginScreen extends StatelessWidget {
                       const SizedBox(
                         height: 50,
                       ),
-                       CustomText(
+                      CustomText(
                         text: 'Welcome Back !',
                         fontFamily: 'Gilroy',
                         fontWeight: FontWeight.bold,
@@ -46,7 +66,7 @@ class LoginScreen extends StatelessWidget {
                       const SizedBox(
                         height: 10,
                       ),
-                       CustomText(
+                      CustomText(
                         text: 'Plearse log in to join the meeting hub',
                         fontFamily: 'Gilroy',
                         fontWeight: FontWeight.w200,
@@ -76,13 +96,10 @@ class LoginScreen extends StatelessWidget {
                         ? AppColor.primaryBlue
                         : AppColor.darkGrey,
                     textColor: AppColor.white,
-                    isClickable: authCubit.isAcceptTerms? 1 : 0,
+                    isClickable: authCubit.isAcceptTerms ? 1 : 0,
                     onTap: () {
                       if (authCubit.loginKey.currentState!.validate()) {
-                        authCubit.fireAuthLogin().then((value) {
-                          // ignore: use_build_context_synchronously
-                          Navigator.pushReplacementNamed(context, RouteConst.home);
-                        });
+                        authCubit.fireAuthLogin();
                       }
                     },
                     text: "Next")

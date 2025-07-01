@@ -61,28 +61,48 @@ class UserInfoSection extends StatelessWidget {
                 SizedBox(height: screenHeight * 0.3),
                 Padding(
                   padding: EdgeInsets.only(bottom: screenHeight * 0.02),
-                  child: CustomButton(
-                    borderColor: AppColor.grey,
-                    backgroundColor: profileCubit.isAcceptTerms ? AppColor.primaryBlue : AppColor.grey,
-                    text: "Create Account",
-                    isClickable: profileCubit.isAcceptTerms ? 1 : 0,
-                    onTap: () {
-                      if(profileCubit.profileKey.currentState!.validate()) {
-                         authCubit.signUpWithFire().then((value) {
-                           //context.pushReplacement(RouteConst.signMain);
-                           if (profileCubit.image != null) {
-                             profileCubit.uploadPImage(
-                               image: profileCubit.image!,
-                               email: authCubit.signUpEmail.text,
-                               uid: authCubit.currentUid,
-                             );
-                           }
-                           authCubit.clearControllers();
-                           profileCubit.disposeController();
-                         });
-                      }
+
+                  // add loading animation
+
+                  child: BlocBuilder<AuthCubit, AuthState>(
+                    builder: (context, state) {
+                      return state is LoadingRegisterState ?
+                      CircularProgressIndicator() :
+                      
+                       CustomButton(
+                        borderColor: AppColor.grey,
+                        backgroundColor: profileCubit.isAcceptTerms
+                            ? AppColor.primaryBlue
+                            : AppColor.grey,
+                        text: "Create Account",
+                        isClickable: profileCubit.isAcceptTerms ? 1 : 0,
+                        onTap: () {
+                          if (profileCubit.profileKey.currentState!
+                              .validate()) {
+                            authCubit.signUpWithFire().then((value) {
+                              //context.pushReplacement(RouteConst.signMain);
+                              if (profileCubit.image != null) {
+                                profileCubit.uploadPImage(
+                                  image: profileCubit.image!,
+                                  email: authCubit.signUpEmail.text,
+                                  uid: authCubit.currentUid,
+                                );
+                              }
+                              authCubit.clearControllers();
+                              profileCubit.disposeController();
+                            });
+
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, RouteConst.signMain
+                                 
+                              , (route) => false
+                                );
+                              
+                          }
+                        },
+                        textColor: AppColor.white,
+                      );
                     },
-                    textColor: AppColor.white,
                   ),
                 ),
               ],
@@ -91,6 +111,5 @@ class UserInfoSection extends StatelessWidget {
         );
       },
     );
-  
   }
 }

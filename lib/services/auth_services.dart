@@ -105,7 +105,7 @@ class AuthService {
       final user = res.user;
       if (user == null) return left(Failure('Login failed.'));
 
-      final data = await _supabase.from('users').select().eq('uid', user.id).maybeSingle();
+      final data = await _supabase.from('users').select().eq('id', user.id).maybeSingle();
       if (data == null) return left(Failure('User data not found.'));
 
       return right(UserModel.fromJson(data));
