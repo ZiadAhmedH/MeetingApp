@@ -78,7 +78,7 @@ class SignUpScreen extends StatelessWidget {
                   onTap: (){
                     if(authCubit.signKey.currentState!.validate()){
                        authCubit.sendOtp( authCubit.userPhoneNumber.text);
-                       context.pushNamed(RouteConst.verify);
+                        Navigator.pushNamed(context, RouteConst.verify);
                     }
                   },
                     textColor: AppColor.white,

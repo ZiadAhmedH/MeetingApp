@@ -1,10 +1,10 @@
-class RouteConst{
-    static  String splash = '/';
-    static  String signMain = '/signMain';
-    static  String login = '/login';
-    static  String signUp = '/signUp';
-    static  String home = '/home';
-    static  String verify = '/verify';
-    static  String password = '/password';
-    static  String inputProfileInfo  = '/inputProfileInfo';
+class RouteConst {
+  static const splash = '/';
+  static const signMain = '/signMain';
+  static const signUp = '/signUp';
+  static const login = '/login';
+  static const verify = '/verify';
+  static const password = '/password';
+  static const inputProfileInfo = '/inputProfileInfo';
+  static const home = '/home';
 }

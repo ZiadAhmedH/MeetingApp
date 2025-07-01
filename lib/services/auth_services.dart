@@ -36,7 +36,6 @@ class AuthService {
   required String phone,
   String? location,
   String? jobTitle,
-  String? profileImage,
 }) async {
   try {
     // Step 1: Sign up via Supabase Auth
@@ -57,13 +56,8 @@ class AuthService {
     }
 
     final uid = user.id;
-    String? uploadedImageUrl;
 
-    // Step 2: Upload image if provided
-    if (profileImage != null) {
-      uploadedImageUrl = await _uploadProfileImage(profileImage);
-    }
-
+  
     // Step 3: Create user model
     final newUser = UserModel(
       userName: name,
@@ -72,7 +66,7 @@ class AuthService {
       phone: phone,
       location: location ?? '',
       jobTitle: jobTitle ?? '',
-      profileImage: uploadedImageUrl,
+      profileImage: "awaiting", 
     );
 
     // Step 4: Insert into custom 'users' table
@@ -83,7 +77,6 @@ class AuthService {
       'phone': newUser.phone,
       'location': newUser.location,
       'job_title': newUser.jobTitle,
-      'profile_image': "dd",
     }).select();
 
    debugPrint("✅ User inserted: $insertRes");
@@ -126,18 +119,7 @@ class AuthService {
     await _supabase.auth.signOut();
   }
 
-  /// ✅ Upload profile image to Supabase Storage
-  Future<String?> _uploadProfileImage(String path) async {
-    try {
-      final file = File(path);
-      final fileName = 'profile_images/${DateTime.now().millisecondsSinceEpoch}.jpg';
-      final uploadPath = await _supabase.storage.from('avatars').upload(fileName, file);
-      return _supabase.storage.from('avatars').getPublicUrl(fileName);
-    } catch (e, stack) {
-      debugPrint("📷 Image Upload Error: $e");
-      return null;
-    }
-  }
+  
 
   /// ✅ Step 4: Send WhatsApp OTP via Supabase Edge Function
   Future<Either<Failure, String>> sendOtpToWhatsApp(String phoneNumber) async {

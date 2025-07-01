@@ -82,11 +82,10 @@ class AuthCubit extends Cubit<AuthState> implements CommonFun {
     final result = await authService.signUp(
       email: signUpEmail.text.trim(),
       password: passwordController.text.trim(),
-      name: signUpUserName.text.trim(),
+      name: "${ProfileCubit.firstName.text.trim()} ${ProfileCubit.lastName.text.trim()}",
       phone: userPhoneNumber.text,
       location: ProfileCubit.userLocation.text,
       jobTitle: ProfileCubit.currentStatus,
-      profileImage: null,
     );
 
     result.fold(

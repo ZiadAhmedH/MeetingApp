@@ -56,7 +56,7 @@ class SignMainScreen extends StatelessWidget {
                     backgroundColor: AppColor.primaryBlue,
                     borderColor: AppColor.primaryBlue,
                     onTap: () {
-                      context.pushNamed(RouteConst.signUp);
+                      Navigator.pushNamed(context, RouteConst.signUp);
                     }, isClickable: 1,
                   ),
                   const SizedBox(
@@ -68,7 +68,7 @@ class SignMainScreen extends StatelessWidget {
                     backgroundColor: context.primaryBackgroundColor,
                     borderColor: AppColor.primaryBlue,
                     onTap: () {
-                      context.pushNamed(RouteConst.login);
+                      Navigator.pushNamed(context, RouteConst.login);
                     }, isClickable: 1,
                  ),
                   const SizedBox(

@@ -26,9 +26,8 @@ class _SplashScreenState extends State<SplashScreen> {
   void _navigateToNextScreen() async {
     await Future.delayed(const Duration(seconds: 3));
     if (mounted) {
-      LocalData.getData(key: SharedKey.isLogin) != null
-          ? GoRouter.of(context).go(RouteConst.home)
-          : GoRouter.of(context).go(RouteConst.signMain);
+      
+          Navigator.pushNamed(context, RouteConst.signMain);
     }
   }
 
@@ -40,7 +39,8 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset("assets/logos/mainLogo.svg", width: 50, height: 50),
+            SvgPicture.asset("assets/logos/mainLogo.svg",
+                width: 50, height: 50),
             const SizedBox(width: 10),
             CustomText(
               text: "MeetSpace",

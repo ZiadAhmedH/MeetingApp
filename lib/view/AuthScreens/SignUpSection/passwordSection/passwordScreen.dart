@@ -73,7 +73,7 @@ class PasswordScreen extends StatelessWidget {
                       if (authCubit.passwordStrength &&
                           authCubit.passwordController.text ==
                               authCubit.confirmPasswordController.text) {
-                        context.pushNamed(RouteConst.inputProfileInfo);
+                          Navigator.pushNamed(context, RouteConst.inputProfileInfo);
                       }
                     },
                       isClickable: (authCubit.passwordStrength &&

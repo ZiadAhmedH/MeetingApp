@@ -4,10 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../model/Models/UserModel.dart';
-import '../../../utils/CollectionConst.dart';
-import '../../data/SharedKeys.dart';
-import '../../data/SharedPrefrences.dart';
+
 import '../CommonFunction.dart';
 part 'profile_state.dart';
 
@@ -95,25 +94,58 @@ class ProfileCubit extends Cubit<ProfileState>  implements CommonFun {
     // });
   }
 
-    Future<void> uploadImage(
-      {required XFile image , required String email,required uid})  async {
-    print(image.name);
-    print("The UUUUUUSSSSSEEERRRR Email IS $email");
-  //  await FirebaseStorage.instance.ref()
-  //       .child("ProfileImage/${email.toString()}/${image.name}")
-  //       .putFile(File(image.path)).then((value){
-  //     value.ref.getDownloadURL().then((value) {
-  //       FirebaseFirestore.instance.collection(Collections.users).doc(uid).update({
-  //         "profileImage": value
-  //       });
-  //     });
-  //   });
 
-  // for supabase upload an image
+final supabase = Supabase.instance.client;
 
-    emit(UploadImageSuccess(image.path));
+Future<void> uploadPImage({
+  required XFile image,
+  required String email,
+  required String uid,
+}) async {
+  final imagePath = 'ProfileImage/$email/${image.path.split('/').last}';
 
+
+  print("""
+
+  📸 Uploading profile image:   
+$imagePath
+  User ID: $uid
+  Email: $email 
+
+""");
+
+  try {
+
+    final file = File(image.path);
+
+    // Upload image
+     await supabase.storage
+        .from('avatars') // Replace with your bucket name
+        .upload(imagePath, file, fileOptions: FileOptions(cacheControl: '3600', upsert: true));
+
+    // Get public URL
+    final publicUrl =  supabase.storage
+        .from('avatars') // Replace with your bucket name
+        .getPublicUrl(imagePath);
+
+    print('✅ Profile image uploaded successfully: $publicUrl');
+    // Update user profile
+     final updateRes = await supabase
+    .from('users')
+    .update({'profile_image': publicUrl})
+    .eq('id', uid);
+
+print("🛠️ Update result: $updateRes");
+
+
+
+
+    print('✅ Profile image uploaded and user updated.');
+  } catch (e) {
+    print('❌ Error uploading profile image: $e');
   }
+}
+
 
   // Changing Job Title
   void changingJobTitle(String value) {

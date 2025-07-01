@@ -22,7 +22,7 @@ class VerifyScreen extends StatelessWidget {
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is SuccessOtpVerifiedState) {
-            context.pushNamed(RouteConst.password);
+            Navigator.pushReplacementNamed(context, RouteConst.password);
           }
         },
         builder: (context, state) {

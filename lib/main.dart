@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:meeting_app/Routeres/RouterContstants.dart';
 import 'package:meeting_app/Routeres/go_Router.dart';
 import 'package:meeting_app/services/auth_services.dart';
 import 'package:meeting_app/supabase_helper.dart';
@@ -17,8 +18,8 @@ Future<void> main() async {
  
  await SupabaseHelper.init();
   
-  //LocalData.init();
-  LocalData.clearData();
+  LocalData.init();
+  //LocalData.clearData();
   runApp(const MyApp());
 }
 
@@ -29,23 +30,25 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (context) => AuthCubit(AuthService())),
-        BlocProvider(create: (context) => ProfileCubit()),
-        BlocProvider(create: (context) => ThemesCubit()),
-        BlocProvider(create: (context) => NavigationCubit()),
-        BlocProvider(create: (context) => MeetingCubit()),
-      ],
-      child: BlocBuilder<ThemesCubit, ThemeData>(
-        builder: (context, themeState) {
-          return MaterialApp.router(
-            debugShowCheckedModeBanner: false,
-            title: 'Meeting App',
-            theme: themeState,
-            routerConfig: AppRouter().router,
-          );
-        },
-      ),
-    );
+  providers: [
+    BlocProvider(create: (context) => AuthCubit(AuthService())),
+    BlocProvider(create: (context) => ProfileCubit()),
+    BlocProvider(create: (context) => ThemesCubit()),
+    BlocProvider(create: (context) => NavigationCubit()),
+    BlocProvider(create: (context) => MeetingCubit()),
+  ],
+  child: BlocBuilder<ThemesCubit, ThemeData>(
+    builder: (context, themeState) {
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Meeting App',
+        theme: themeState,
+        initialRoute: RouteConst.splash,
+        onGenerateRoute: onGenerateRoute,
+      );
+    },
+  ),
+);
+
   }
 }
