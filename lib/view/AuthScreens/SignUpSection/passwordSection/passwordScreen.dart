@@ -1,8 +1,5 @@
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:meeting_app/Routeres/RouterContstants.dart';
 import 'package:meeting_app/model/components/CustomBtn.dart';
@@ -11,7 +8,6 @@ import 'package:meeting_app/view/AuthScreens/SignUpSection/passwordSection/passw
 import '../../../../model/components/CustomText.dart';
 import '../../../../utils/AppColor.dart';
 import '../../../../viewModel/bloc/AuthCubit/auth_cubit.dart';
-
 
 class PasswordScreen extends StatelessWidget {
   const PasswordScreen({super.key});
@@ -63,35 +59,40 @@ class PasswordScreen extends StatelessWidget {
               BlocBuilder<AuthCubit, AuthState>(
                 builder: (context, state) {
                   return CustomButton(
-                      borderColor: AppColor.lightGrey,
-                      backgroundColor: (authCubit.passwordStrength &&
-                          authCubit.passwordController.text ==
-                              authCubit.confirmPasswordController.text && authCubit.passwordController.text.isNotEmpty)
-                          ? AppColor.primaryBlue
-                          : AppColor.lightGrey,
-                      text: 'Next',
+                    borderColor: AppColor.lightGrey,
+                    backgroundColor: (authCubit.passwordStrength &&
+                            authCubit.passwordController.text ==
+                                authCubit.confirmPasswordController.text &&
+                            authCubit.passwordController.text.isNotEmpty)
+                        ? AppColor.primaryBlue
+                        : AppColor.lightGrey,
+                    text: 'Next',
                     onTap: () async {
-  if (authCubit.passwordStrength &&
-      authCubit.passwordController.text ==
-          authCubit.confirmPasswordController.text) {
-
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) =>  Center(child: LoadingAnimationWidget.hexagonDots(color: AppColor.blueAccent, size: 50)),
-    );
-
-    await Future.delayed(const Duration(milliseconds: 500));
-    
-    Navigator.pop(context); // remove loading
-    Navigator.pushNamed(context, RouteConst.inputProfileInfo);
-  }
-},
-
-                      isClickable: (authCubit.passwordStrength &&
+                      if (authCubit.passwordStrength &&
                           authCubit.passwordController.text ==
-                              authCubit.confirmPasswordController.text) ? 1 : 0,  textColor: context.thirdTextColor!,
-                    );
+                              authCubit.confirmPasswordController.text) {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (_) => Center(
+                              child: LoadingAnimationWidget.hexagonDots(
+                                  color: AppColor.blueAccent, size: 50)),
+                        );
+
+                        await Future.delayed(const Duration(milliseconds: 500));
+
+                        Navigator.pop(context); 
+                        Navigator.pushNamed(
+                            context, RouteConst.inputProfileInfo);
+                      }
+                    },
+                    isClickable: (authCubit.passwordStrength &&
+                            authCubit.passwordController.text ==
+                                authCubit.confirmPasswordController.text)
+                        ? 1
+                        : 0,
+                    textColor: context.thirdTextColor!,
+                  );
                 },
               ),
             ],

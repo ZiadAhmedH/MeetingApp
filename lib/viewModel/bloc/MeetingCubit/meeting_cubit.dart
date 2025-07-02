@@ -1,12 +1,7 @@
 import 'dart:math';
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meeting_app/model/Models/meetingModel.dart';
-import 'package:meeting_app/utils/CollectionConst.dart';
-import 'package:meeting_app/viewModel/data/SharedKeys.dart';
-import 'package:meeting_app/viewModel/data/SharedPrefrences.dart';
-import 'package:meta/meta.dart';
 
 part 'meeting_state.dart';
 

@@ -55,7 +55,7 @@ class MeetingSettings extends StatelessWidget {
                   onChanged: (value) {
                     meetingCubit.toggleCamera();
                   },
-                  activeColor: AppColor.primaryBlue,
+                  activeTrackColor: AppColor.primaryBlue,
                 ),
               ],
             ),
@@ -72,7 +72,7 @@ class MeetingSettings extends StatelessWidget {
                   onChanged: (value) {
                     meetingCubit.toggleMicrophone();
                   } ,
-                  activeColor: AppColor.primaryBlue,
+                  activeTrackColor: AppColor.primaryBlue,
                 ),
               ],
             ),
@@ -89,7 +89,7 @@ class MeetingSettings extends StatelessWidget {
                   onChanged: (value) {
                     meetingCubit.toggleSpeaker();
                   },
-                  activeColor: AppColor.primaryBlue,
+                  activeTrackColor: AppColor.primaryBlue,
                 ),
               ],
             ),

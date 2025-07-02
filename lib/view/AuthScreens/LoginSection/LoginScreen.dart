@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meeting_app/Routeres/RouterContstants.dart';
 import 'package:meeting_app/model/components/CustomBtn.dart';
@@ -8,6 +6,8 @@ import 'package:meeting_app/model/components/CustomText.dart';
 import 'package:meeting_app/utils/AppColor.dart';
 import 'package:meeting_app/utils/ThemeExtension.dart';
 import 'package:meeting_app/viewModel/bloc/AuthCubit/auth_cubit.dart';
+import 'package:meeting_app/viewModel/data/SharedKeys.dart';
+import 'package:meeting_app/viewModel/data/SharedPrefrences.dart';
 
 import '../SignUpSection/userInfoSection/AcceptTermsSection.dart';
 import 'loginSection.dart';
@@ -19,8 +19,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var authCubit = AuthCubit.get(context);
 
-    return BlocConsumer<AuthCubit, AuthState>(
-      listener: (context, state) {},
+    return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
         if (state is ErrorLoginState) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -33,15 +32,25 @@ class LoginScreen extends StatelessWidget {
           });
         }
 
-        if (state is SuccessLoginState) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            Navigator.pushNamedAndRemoveUntil(
-              context,
-              RouteConst.home,
-              (route) => false,
-            );
-          });
-        }
+       if (state is SuccessLoginState) {
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text("Login Successful"),
+        backgroundColor: AppColor.green,
+      ),
+    );
+
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      RouteConst.home,
+      (route) => false,
+    );
+    LocalData.setData(key: SharedKey.isLogin, value: true);
+  });
+}
+
+        
 
         return Scaffold(
           backgroundColor: context.primaryBackgroundColor,
@@ -83,24 +92,22 @@ class LoginScreen extends StatelessWidget {
                       AcceptTerms(
                         cubit: authCubit,
                         onTap: () {
-                          authCubit.acceptTerms();
+                          authCubit.acceptTermsLogin();
                         },
-                        isAcceptTerms: authCubit.isAcceptTerms,
+                        isAcceptTerms: authCubit.isAcceptTermsLogin,
                       ),
                     ],
                   ),
                 ),
                 CustomButton(
                     borderColor: AppColor.lightGrey,
-                    backgroundColor: authCubit.isAcceptTerms
+                    backgroundColor: authCubit.isAcceptTermsLogin
                         ? AppColor.primaryBlue
                         : AppColor.darkGrey,
                     textColor: AppColor.white,
-                    isClickable: authCubit.isAcceptTerms ? 1 : 0,
+                    isClickable: authCubit.isAcceptTermsLogin ? 1 : 0,
                     onTap: () {
-                      if (authCubit.loginKey.currentState!.validate()) {
-                        authCubit.fireAuthLogin();
-                      }
+                      if (authCubit.loginKey.currentState!.validate()) {authCubit.fireAuthLogin(); }
                     },
                     text: "Next")
               ],

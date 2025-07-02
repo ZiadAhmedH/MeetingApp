@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:meeting_app/Routeres/RouterContstants.dart';
 import 'package:meeting_app/model/components/CustomBtn.dart';
-import 'package:meeting_app/model/components/TextFormFeild.dart';
 import 'package:meeting_app/utils/ThemeExtension.dart';
 import 'package:meeting_app/view/AuthScreens/SignUpSection/userInfoSection/profileSection.dart';
 
@@ -11,8 +9,6 @@ import '../../../../model/components/CustomText.dart';
 import '../../../../utils/AppColor.dart';
 import '../../../../viewModel/bloc/AuthCubit/auth_cubit.dart';
 import '../../../../viewModel/bloc/ProfileCubit/profile_cubit.dart';
-import 'AcceptTermsSection.dart';
-import 'dropDownSection.dart';
 import 'imageSection.dart';
 
 class UserInfoSection extends StatelessWidget {
@@ -31,6 +27,10 @@ class UserInfoSection extends StatelessWidget {
     return BlocBuilder<ProfileCubit, ProfileState>(
       bloc: profileCubit..getCountry(),
       builder: (context, state) {
+           
+           
+
+
         return Scaffold(
           backgroundColor: context.primaryBackgroundColor,
           body: Padding(
@@ -66,8 +66,38 @@ class UserInfoSection extends StatelessWidget {
 
                   child: BlocBuilder<AuthCubit, AuthState>(
                     builder: (context, state) {
+                           
+                      if (state is ErrorRegisterState) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(state.message),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        });
+                      }
+
+                      if (state is SuccessRegisterState) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, RouteConst.signMain, (route) => false);
+                        });
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: const Text("Registration Successful"),
+                            backgroundColor: AppColor.green,
+                          ),
+                        );
+                      }
+
+
+
                       return state is LoadingRegisterState ?
                       CircularProgressIndicator() :
+
+                       
                       
                        CustomButton(
                         borderColor: AppColor.grey,
@@ -80,7 +110,6 @@ class UserInfoSection extends StatelessWidget {
                           if (profileCubit.profileKey.currentState!
                               .validate()) {
                             authCubit.signUpWithFire().then((value) {
-                              //context.pushReplacement(RouteConst.signMain);
                               if (profileCubit.image != null) {
                                 profileCubit.uploadPImage(
                                   image: profileCubit.image!,
@@ -91,12 +120,6 @@ class UserInfoSection extends StatelessWidget {
                               authCubit.clearControllers();
                               profileCubit.disposeController();
                             });
-
-                            Navigator.pushNamedAndRemoveUntil(
-                                context, RouteConst.signMain
-                                 
-                              , (route) => false
-                                );
                               
                           }
                         },

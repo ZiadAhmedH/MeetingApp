@@ -5,7 +5,7 @@ import '../../../../utils/AppColor.dart';
 import '../../../../viewModel/bloc/ProfileCubit/profile_cubit.dart';
 
 class UserImageCircular extends StatelessWidget {
-   UserImageCircular({super.key});
+   const UserImageCircular({super.key});
 
   @override
   Widget build(BuildContext context) {

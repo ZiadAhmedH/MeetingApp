@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:go_router/go_router.dart';
 import 'package:meeting_app/utils/ThemeExtension.dart';
+import 'package:meeting_app/viewModel/data/SharedKeys.dart';
+import 'package:meeting_app/viewModel/data/SharedPrefrences.dart';
 import '../Routeres/RouterContstants.dart';
 import '../model/components/CustomText.dart';
-import '../viewModel/data/SharedKeys.dart';
-import '../viewModel/data/SharedPrefrences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -26,8 +25,14 @@ class _SplashScreenState extends State<SplashScreen> {
   void _navigateToNextScreen() async {
     await Future.delayed(const Duration(seconds: 3));
     if (mounted) {
+       
+       final isLogin = LocalData.getData(key: SharedKey.isLogin) ?? false;
       
-          Navigator.pushNamed(context, RouteConst.signMain);
+      if (isLogin) {      
+          Navigator.pushNamedAndRemoveUntil(context, RouteConst.home ,( route) => false);
+      } else {
+          Navigator.pushNamedAndRemoveUntil(context, RouteConst.signUp , (route) => false);
+      }
     }
   }
 

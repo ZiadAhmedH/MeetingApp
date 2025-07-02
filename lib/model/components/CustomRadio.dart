@@ -7,7 +7,7 @@ class CustomRadioButton extends StatelessWidget {
   final ValueChanged<int?> onChanged;
   final String labelText;
 
-  CustomRadioButton({
+  const CustomRadioButton({super.key, 
     required this.groupValue,
     required this.onChanged,
     required this.labelText,

@@ -101,13 +101,16 @@ class AuthService {
   /// ✅ Step 2: Sign in and fetch user data
   Future<Either<Failure, UserModel>> signIn(String email, String password) async {
     try {
+      debugPrint("Signing in with email: $email");
       final res = await _supabase.auth.signInWithPassword(email: email, password: password);
       final user = res.user;
+
+      debugPrint("Sign in result: $user");
       if (user == null) return left(Failure('Login failed.'));
 
       final data = await _supabase.from('users').select().eq('id', user.id).maybeSingle();
       if (data == null) return left(Failure('User data not found.'));
-
+    
       return right(UserModel.fromJson(data));
     } catch (e, stack) {
       return left(handleError('signIn', e, stack));

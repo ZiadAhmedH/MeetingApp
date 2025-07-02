@@ -1,6 +1,6 @@
 class Failure {
   final String message;
-  final String? source; // Add source
+  final String? source;
 
   Failure(this.message, {this.source});
 

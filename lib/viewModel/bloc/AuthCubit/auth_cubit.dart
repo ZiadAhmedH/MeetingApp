@@ -1,7 +1,4 @@
 import 'dart:developer';
-import 'package:bloc/bloc.dart';
-import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -9,23 +6,20 @@ import 'package:meeting_app/model/Models/UserModel.dart';
 import 'package:meeting_app/services/auth_services.dart';
 import 'package:meeting_app/viewModel/data/SharedKeys.dart';
 import 'package:meeting_app/viewModel/data/SharedPrefrences.dart';
-import 'package:meta/meta.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:meeting_app/utils/AppColor.dart';
-import 'package:meeting_app/utils/CollectionConst.dart';
 import 'package:meeting_app/viewModel/bloc/CommonFunction.dart';
 import 'package:meeting_app/viewModel/bloc/ProfileCubit/profile_cubit.dart';
 
 part 'auth_state.dart';
 
-class AuthCubit extends Cubit<AuthState> implements CommonFun {
+class AuthCubit extends Cubit<AuthState>  {
   AuthCubit(this.authService) : super(AuthInitial());
   static AuthCubit get(context) => BlocProvider.of(context);
 
   final AuthService authService;
 
-  @override
-  bool isAcceptTerms = false;
+  bool isAcceptTermsRegister = false;
+  bool isAcceptTermsLogin = false;
   bool isPassWordShowed = false;
 
   String currentUid = "";
@@ -65,17 +59,11 @@ class AuthCubit extends Cubit<AuthState> implements CommonFun {
         emit(ErrorLoginState(
           message: failure.message
         ));
-
-        print("Login Error: ${failure.message}");
-        Fluttertoast.showToast(
-            msg: failure.message, backgroundColor: Colors.red);
       },
       (user) {
-        currentUid = user.uid!;
+        currentUid = user.uid;
         storeDataLocally(user);
         emit(SuccessLoginState());
-        Fluttertoast.showToast(
-            msg: "Login Successful", backgroundColor: AppColor.orange);
       },
     );
   }
@@ -94,17 +82,13 @@ class AuthCubit extends Cubit<AuthState> implements CommonFun {
 
     result.fold(
       (failure) {
-        emit(ErrorRegisterState());
-        Fluttertoast.showToast(
-            msg: failure.message, backgroundColor: Colors.red);
+        emit(ErrorRegisterState(message: failure.message));
       },
       (user) {
         currentUid = user.uid;
         storeDataLocally(user);
-        print("uhhhhhhhhhhhhhhhhhhhhhhhhhhhh${user.uid}"); // ✅ This is enough
-        emit(SuccessRegisterState());
-        Fluttertoast.showToast(
-            msg: "SignUp Successful", backgroundColor: AppColor.orange);
+        print("uhhhhhhhhhhhhhhhhhhhhhhhhhhhh${user.uid}"); 
+         emit(SuccessRegisterState());
       },
     );
   }
@@ -185,10 +169,14 @@ class AuthCubit extends Cubit<AuthState> implements CommonFun {
     confirmPasswordController.removeListener(passwordConfirmation);
   }
 
-  @override
-  void acceptTerms() {
-    isAcceptTerms = !isAcceptTerms;
-    emit(AcceptTermsIsOnOrOffState());
+  void acceptTermsRigster() {
+    isAcceptTermsRegister = !isAcceptTermsRegister;
+    emit(AcceptTermsRigsterIsOnOrOffState());
+  }
+
+  void acceptTermsLogin() {
+    isAcceptTermsLogin = !isAcceptTermsLogin;
+    emit(AcceptTermsLoginIsOnOrOffState());
   }
 
   void clearControllers() {

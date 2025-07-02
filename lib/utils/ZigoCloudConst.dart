@@ -1,5 +1,5 @@
 class ZigoCloud {
-  static int ZEGO_APP_ID = 2089174421;
-  static String ZEGO_APP_SIGN = "caa6960ec88657658c6ff131e97f1c897570f00b1b3c8769d44369f51f2ffeaa";
+  static int ZEGO_APP_ID = 1384147875;
+  static String ZEGO_APP_SIGN = "8bd8273f4bbf936ef3fe4d18945b6679c67f051ef9b54e1a3260e0ae24ecd9e2";
 
 }

@@ -25,7 +25,4 @@ final  String jobTitle;
       phone = json["phone"],
       location = json["location"],
       jobTitle = json["job_title"];
-
-
-
 }

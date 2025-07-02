@@ -23,11 +23,11 @@ class JoinScreen extends StatelessWidget {
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {},
-                child: CustomText(text: 'Join Meeting', fontSize: 20.0, fontWeight: FontWeight.bold, color: context.primaryBackgroundColor),
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(context.thirdTextColor),
-                  padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
+                  backgroundColor: WidgetStateProperty.all(context.thirdTextColor),
+                  padding: WidgetStateProperty.all(EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
                 ),
+                child: CustomText(text: 'Join Meeting', fontSize: 20.0, fontWeight: FontWeight.bold, color: context.primaryBackgroundColor),
               ),
             ],
           )

@@ -1,12 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:go_router/go_router.dart';
 import 'package:meeting_app/Routeres/RouterContstants.dart';
-import 'package:meeting_app/model/components/CustomBtnRouter.dart';
 import 'package:meeting_app/model/components/CustomText.dart';
-import 'package:meeting_app/model/components/TextFormFeild.dart';
 import 'package:meeting_app/utils/AppColor.dart';
 import 'package:meeting_app/utils/ThemeExtension.dart';
 import 'package:meeting_app/view/AuthScreens/SignUpSection/userInfoSection/AcceptTermsSection.dart';
@@ -65,9 +60,9 @@ class SignUpScreen extends StatelessWidget {
                       AcceptTerms(
                         cubit: authCubit,
                         onTap: () {
-                          authCubit.acceptTerms();
+                          authCubit.acceptTermsRigster();
                         },
-                        isAcceptTerms: authCubit.isAcceptTerms,
+                        isAcceptTerms: authCubit.isAcceptTermsRegister,
                       ),
 
                     ],
@@ -83,10 +78,10 @@ class SignUpScreen extends StatelessWidget {
                   },
                     textColor: AppColor.white,
                     borderColor: AppColor.lightGrey,
-                    backgroundColor: authCubit.isAcceptTerms
+                    backgroundColor: authCubit.isAcceptTermsRegister
                         ? AppColor.primaryBlue
                         : AppColor.darkGrey,
-                    isClickable: authCubit.isAcceptTerms ? 1 : 0,
+                    isClickable: authCubit.isAcceptTermsRegister ? 1 : 0,
                     text: "Next"),
               ],
             ),
