@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:meeting_app/model/components/CustomText.dart';
 import 'package:meeting_app/model/components/TextFormFeild.dart';
 import 'package:meeting_app/utils/ThemeExtension.dart';
+
 class JoinScreen extends StatelessWidget {
   const JoinScreen({super.key});
 
@@ -10,29 +11,51 @@ class JoinScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: context.primaryBackgroundColor,
-        title: CustomText(text: 'Join Meeting', fontSize: 20.0, fontWeight: FontWeight.bold, color: context.thirdTextColor),
+        title: CustomText(
+          text: 'Join Meeting',
+          fontSize: 20.0,
+          fontWeight: FontWeight.bold,
+          color: context.thirdTextColor,
+        ),
       ),
-      body:Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Expanded(
-          child: Column(
-            children: [
-              CustomText(text: 'Enter Meeting ID', fontSize: 20.0, fontWeight: FontWeight.bold, color: context.thirdTextColor),
-              SizedBox(height: 20),
-               CustomTextFormField(hintText: "Meeting Id", icon: Icon(Icons.video_call),),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {},
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomText(
+              text: 'Enter Meeting ID',
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+              color: context.thirdTextColor,
+            ),
+            const SizedBox(height: 20),
+            CustomTextFormField(
+              hintText: "Meeting Id",
+              icon: const Icon(Icons.video_call),
+            ),
+            const SizedBox(height: 20),
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                },
                 style: ButtonStyle(
                   backgroundColor: WidgetStateProperty.all(context.thirdTextColor),
-                  padding: WidgetStateProperty.all(EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
+                  padding: WidgetStateProperty.all(
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  ),
                 ),
-                child: CustomText(text: 'Join Meeting', fontSize: 20.0, fontWeight: FontWeight.bold, color: context.primaryBackgroundColor),
+                child: CustomText(
+                  text: 'Join Meeting',
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                  color: context.primaryBackgroundColor,
+                ),
               ),
-            ],
-          )
+            ),
+          ],
         ),
-      )
+      ),
     );
   }
 }

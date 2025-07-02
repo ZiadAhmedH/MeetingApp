@@ -26,9 +26,9 @@ dependencies:
   font_awesome_flutter: ^10.7.0
   flutter_expandable_fab: ^2.2.0
   intl: ^0.20.2
-  zego_uikit_prebuilt_video_conference: ^2.8.3
+  zego_uikit_prebuilt_video_conference: ^2.10.0
   zego_uikit_prebuilt_call: ^4.12.11
-  file_picker: ^8.3.7
+  file_picker: ^10.1.2
   win32: ^5.5.1
   ffi: ^2.1.0
   supabase_flutter: ^2.9.0
