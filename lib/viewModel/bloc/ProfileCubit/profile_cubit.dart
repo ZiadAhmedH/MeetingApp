@@ -42,14 +42,16 @@ class ProfileCubit extends Cubit<ProfileState>  implements CommonFun {
   ];
 
 
-// Image Picker
-  Future<void> pickImageFromGallery({required String uid, required String email}) async {
+Future<void> pickImageFromGallery({required String uid, required String email}) async {
   emit(ImagePickerLoading());
 
   try {
-    final permissionStatus = await Permission.photos.request();
+    // Request multiple permissions for compatibility
+    final photosPermission = await Permission.photos.request();
+    final storagePermission = await Permission.storage.request();
 
-    if (permissionStatus.isGranted) {
+    // Check if either permission is granted
+    if (photosPermission.isGranted || storagePermission.isGranted) {
       final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
 
       if (pickedFile != null) {
@@ -59,7 +61,7 @@ class ProfileCubit extends Cubit<ProfileState>  implements CommonFun {
         emit(ImagePickerError('No image selected.'));
       }
 
-    } else if (permissionStatus.isPermanentlyDenied) {
+    } else if (photosPermission.isPermanentlyDenied || storagePermission.isPermanentlyDenied) {
       await openAppSettings();
       emit(ImagePickerError('Permission permanently denied. Please enable it in app settings.'));
 
@@ -70,6 +72,7 @@ class ProfileCubit extends Cubit<ProfileState>  implements CommonFun {
     emit(ImagePickerError('Failed to pick image: $e'));
   }
 }
+
 
   Future<void>getUserInfoFire()async {
     emit(LoadingUserInfoState());

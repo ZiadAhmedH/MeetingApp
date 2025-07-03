@@ -33,4 +33,13 @@ class MeetingCreateSuccessState extends MeetingState {
   MeetingCreateSuccessState(this.meetingId);
 }
 
-class MeetingCreateFailedState extends MeetingState {}
+class MeetingCreateFailedState extends MeetingState {
+  final String? errorMessage;
+  MeetingCreateFailedState({this.errorMessage});
+}
+
+
+
+
+class MeetingSavedSuccess extends MeetingState {}
+class MeetingSavedError extends MeetingState {}

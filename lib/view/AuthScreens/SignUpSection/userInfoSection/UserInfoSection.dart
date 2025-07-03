@@ -64,70 +64,65 @@ class UserInfoSection extends StatelessWidget {
 
                   // add loading animation
 
-                  child: BlocBuilder<AuthCubit, AuthState>(
-                    builder: (context, state) {
-                           
-                      if (state is ErrorRegisterState) {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(state.message),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
-                        });
-                      }
+                  child: BlocConsumer<AuthCubit, AuthState>(
+  listener: (context, state) {
+    if (state is SuccessRegisterState) {
+      // Navigate safely
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        RouteConst.signMain,
+        (route) => false,
+      );
 
-                      if (state is SuccessRegisterState) {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, RouteConst.signMain, (route) => false);
-                        });
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Registration Successful"),
+          backgroundColor: AppColor.green,
+        ),
+      );
+    }
 
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: const Text("Registration Successful"),
-                            backgroundColor: AppColor.green,
-                          ),
-                        );
-                      }
+    if (state is ErrorRegisterState) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(state.message),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  },
+  builder: (context, state) {
+    if (state is LoadingRegisterState) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
-
-
-                      return state is LoadingRegisterState ?
-                      CircularProgressIndicator() :
-
-                       
-                      
-                       CustomButton(
-                        borderColor: AppColor.grey,
-                        backgroundColor: profileCubit.isAcceptTerms
-                            ? AppColor.primaryBlue
-                            : AppColor.grey,
-                        text: "Create Account",
-                        isClickable: profileCubit.isAcceptTerms ? 1 : 0,
-                        onTap: () {
-                          if (profileCubit.profileKey.currentState!
-                              .validate()) {
-                            authCubit.signUpWithFire().then((value) {
-                              if (profileCubit.image != null) {
-                                profileCubit.uploadPImage(
-                                  image: profileCubit.image!,
-                                  email: authCubit.signUpEmail.text,
-                                  uid: authCubit.currentUid,
-                                );
-                              }
-                              authCubit.clearControllers();
-                              profileCubit.disposeController();
-                            });
-                              
-                          }
-                        },
-                        textColor: AppColor.white,
-                      );
-                    },
-                  ),
-                ),
+    return CustomButton(
+      borderColor: AppColor.grey,
+      backgroundColor: profileCubit.isAcceptTerms
+          ? AppColor.primaryBlue
+          : AppColor.grey,
+      text: "Create Account",
+      isClickable: profileCubit.isAcceptTerms ? 1 : 0,
+      textColor: AppColor.white,
+      onTap: () async {
+        if (profileCubit.profileKey.currentState!.validate()) {
+          await authCubit.signUpWithFire();
+          if (profileCubit.image != null) {
+            await profileCubit.uploadPImage(
+              image: profileCubit.image!,
+              email: authCubit.signUpEmail.text,
+              uid: authCubit.currentUid,
+            );
+          }
+          authCubit.clearControllers();
+          profileCubit.disposeController();
+        }
+      },
+    );
+  },
+)
+),
               ],
             ),
           ),

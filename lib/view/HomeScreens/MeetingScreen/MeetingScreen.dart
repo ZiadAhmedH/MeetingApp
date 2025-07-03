@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:zego_uikit_prebuilt_video_conference/zego_uikit_prebuilt_video_conference.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:meeting_app/utils/AppColor.dart';
+import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../utils/ZigoCloudConst.dart';
@@ -9,8 +12,15 @@ import '../../../viewModel/data/SharedPrefrences.dart';
 
 class MeetingScreen extends StatefulWidget {
   final String meetingId;
+  final bool isCameraOn;
+  final bool isMicOn;
 
-  const MeetingScreen({super.key, required this.meetingId});
+  const MeetingScreen({
+    super.key,
+    required this.meetingId,
+    required this.isCameraOn,
+    required this.isMicOn,
+  });
 
   @override
   State<MeetingScreen> createState() => _MeetingScreenState();
@@ -30,7 +40,6 @@ class _MeetingScreenState extends State<MeetingScreen> {
     try {
       final response = await Supabase.instance.client.functions.invoke(
         'generate-zego-token',
-        // ❌ DO NOT send user_id manually; token function reads from JWT
       );
 
       if (response.status == 200 && response.data['token'] != null) {
@@ -55,52 +64,53 @@ class _MeetingScreenState extends State<MeetingScreen> {
   Widget build(BuildContext context) {
     final userID = LocalData.getData(key: SharedKey.uid);
     final userName = LocalData.getData(key: SharedKey.email) ?? "User";
-    final meetingCubit = MeetingCubit.get(context);
 
-    // 🔍 Print debug values
-    print('🧾 userID: $userID');
-    print('🧾 conferenceID: ${widget.meetingId}');
-    print('🧾 zegoToken: $zegoKitToken');
-
-    // Token or userID not ready
     if (_isError) {
       return const Scaffold(
-        body: Center(
-          child: Text("Failed to join the meeting. Please try again."),
-        ),
+        body: Center(child: Text("Failed to join the meeting. Please try again.")),
       );
     }
 
     if (zegoKitToken == null || userID == null || userID.isEmpty) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
+      return Scaffold(
+        body: Center(
+          child: LoadingAnimationWidget.dotsTriangle(
+            color: AppColor.blueAccent,
+            size: 50,
+          ),
+        ),
       );
     }
 
     return SafeArea(
-      child: ZegoUIKitPrebuiltVideoConference(
-    appSign: "",
-  appID: ZigoCloud.ZEGO_APP_ID,
-  userID: userID,
-  userName: userName,
-  conferenceID: widget.meetingId,
-  config: ZegoUIKitPrebuiltVideoConferenceConfig(
-    turnOnCameraWhenJoining: meetingCubit.isCameraOn,
-    turnOnMicrophoneWhenJoining: meetingCubit.isMicrophoneOn,
-    useSpeakerWhenJoining: meetingCubit.isSpeakerOn,
-    leaveConfirmDialogInfo: ZegoLeaveConfirmDialogInfo(
-      title: "Leave the Meeting?",
-      message: "Are you sure to leave the meeting?",
-      cancelButtonName: "Cancel",
-      confirmButtonName: "Confirm",
+  child: ZegoUIKitPrebuiltCall(
+    appID: ZigoCloud.ZEGO_APP_ID,
+    appSign: ZigoCloud.ZEGO_APP_SIGN,
+    userID: userID,
+    userName: userName,
+    callID: widget.meetingId,
+    token: zegoKitToken!,
+    // use your meetingCubit instance, passed via constructor or context
+    config: ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+      ..turnOnCameraWhenJoining = widget.isCameraOn
+      ..turnOnMicrophoneWhenJoining = widget.isMicOn,
+    events: ZegoUIKitPrebuiltCallEvents(
+      onCallEnd: (event, defaultAction) {
+        // 🎯 When the call ends, dispatch a Cubit event:
+        BlocProvider.of<MeetingCubit>(context).onMeetingEnded(
+          meetingId: widget.meetingId,
+          durationMin: BlocProvider.of<MeetingCubit>(context).selectedDuration,
+          cameraOn: widget.isCameraOn,
+          micOn: widget.isMicOn,
+        );
+        defaultAction(); 
+      },
+         
+
     ),
   ),
-)
+);
 
-    );
+
   }
 }
-
-
-
-

@@ -37,7 +37,7 @@ android {
 
     defaultConfig {
         applicationId "com.meetingapp.ziadahmed.meeting_app"
-        minSdkVersion 23
+        minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

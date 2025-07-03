@@ -2,6 +2,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meeting_app/model/Models/meetingModel.dart';
+import 'package:meeting_app/viewModel/data/SharedKeys.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../../data/SharedPrefrences.dart';
 
 part 'meeting_state.dart';
 
@@ -44,23 +48,42 @@ class MeetingCubit extends Cubit<MeetingState> {
 
 
 
-
-
-  Future<void> createMeeting({required duration}) async {
+  Future<void> onMeetingEnded({
+    required String meetingId,
+    required int durationMin,
+    required bool cameraOn,
+    required bool micOn,
+  }) async {
+    // Emits loading state
     emit(MeetingCreateLoadingState());
-    var meetingInfo=  MeetingModel(createdAt: DateTime.timestamp(), duration:"$duration min" , isCameraOn: isCameraOn, isMicrophoneOn: isMicrophoneOn, isSpeakerOn: isSpeakerOn, meetingId: meetingId);
-    // await FirebaseFirestore.instance.collection(Collections.users).doc(LocalData.getData(key: SharedKey.uid)).collection(Collections.meetings).add(
-    //     meetingInfo.toMap()
-    // ).then((value) {
-    //   emit(MeetingCreateSuccessState(meetingId));
-    // }).catchError((error) {
-    //   emit(MeetingCreateFailedState());
-    // });
+    try {
+      // Save to Supabase
+      final res = await Supabase.instance.client
+        .from('meetings')
+        .insert({
+          'id': meetingId,
+          'host_id': Supabase.instance.client.auth.currentUser!.id,
+          'title': 'Call $meetingId',
+          'description': '',
+          'scheduled_at': new DateTime.now().toIso8601String(),
+        });
+      if (res.error != null) throw res.error!;
+      emit(MeetingCreateSuccessState(meetingId));
+        
+        print('Meeting created successfully: $meetingId');
 
+    } catch (e) {
+      print('Error creating meeting: $e');
+      emit(MeetingCreateFailedState(
+        errorMessage: e.toString()
+      ));
+    }
   }
 
 
-  void generateRandomId() {
+
+
+   void generateRandomId() {
     final random = Random();
     meetingId =  '${random.nextInt(10)}'
         '${random.nextInt(10)}'
@@ -71,11 +94,25 @@ class MeetingCubit extends Cubit<MeetingState> {
 
     emit(MeetingGeneratedIdState(meetingId));
   }
-
-
-
-
-
-
-
 }
+
+
+
+
+
+  
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+

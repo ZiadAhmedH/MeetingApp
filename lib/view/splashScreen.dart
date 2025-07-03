@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (isLogin) {      
           Navigator.pushNamedAndRemoveUntil(context, RouteConst.home ,( route) => false);
       } else {
-          Navigator.pushNamedAndRemoveUntil(context, RouteConst.signUp , (route) => false);
+          Navigator.pushNamedAndRemoveUntil(context, RouteConst.signMain , (route) => false);
       }
     }
   }

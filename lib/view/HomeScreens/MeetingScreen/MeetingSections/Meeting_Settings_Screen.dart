@@ -32,7 +32,7 @@ class MeetingSettings extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: SingleChildScrollView(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   CustomText(
                     text: "Meeting ID",
@@ -133,6 +133,8 @@ class MeetingSettings extends StatelessWidget {
                         MaterialPageRoute(
                           builder: (_) => MeetingScreen(
                             meetingId: meetingCubit.meetingId,
+                            isCameraOn: meetingCubit.isCameraOn,
+                            isMicOn: meetingCubit.isMicrophoneOn,
                           ),
                         ),
                       );
