@@ -10,22 +10,27 @@ import '../../../model/Models/UserModel.dart';
 import '../CommonFunction.dart';
 part 'profile_state.dart';
 
-class ProfileCubit extends Cubit<ProfileState>  implements CommonFun {
+class ProfileCubit extends Cubit<ProfileState> implements CommonFun {
   ProfileCubit() : super(ProfileInitial());
 
   static ProfileCubit get(context) => BlocProvider.of(context);
   final Dio dio = Dio();
 
 // user Profile
-   XFile? image;
+  XFile? image;
   final ImagePicker _picker = ImagePicker();
   static String countryName = '';
+  // ignore: non_constant_identifier_names
   UserModel? User;
 
   GlobalKey<FormState> profileKey = GlobalKey<FormState>();
   static TextEditingController userLocation = TextEditingController();
   static TextEditingController firstName = TextEditingController();
   static TextEditingController lastName = TextEditingController();
+
+
+  final supabase = Supabase.instance.client;
+
 
   @override
   bool isAcceptTerms = false;
@@ -41,40 +46,40 @@ class ProfileCubit extends Cubit<ProfileState>  implements CommonFun {
     'Others'
   ];
 
+  Future<void> pickImageFromGallery(
+      {required String uid, required String email}) async {
+    emit(ImagePickerLoading());
 
-Future<void> pickImageFromGallery({required String uid, required String email}) async {
-  emit(ImagePickerLoading());
+    try {
+      // Request multiple permissions for compatibility
+      final photosPermission = await Permission.photos.request();
+      final storagePermission = await Permission.storage.request();
 
-  try {
-    // Request multiple permissions for compatibility
-    final photosPermission = await Permission.photos.request();
-    final storagePermission = await Permission.storage.request();
+      // Check if either permission is granted
+      if (photosPermission.isGranted || storagePermission.isGranted) {
+        final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
 
-    // Check if either permission is granted
-    if (photosPermission.isGranted || storagePermission.isGranted) {
-      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-
-      if (pickedFile != null) {
-        image = pickedFile;
-        emit(ImagePickerSuccess(pickedFile));
+        if (pickedFile != null) {
+          image = pickedFile;
+          emit(ImagePickerSuccess(pickedFile));
+        } else {
+          emit(ImagePickerError('No image selected.'));
+        }
+      } else if (photosPermission.isPermanentlyDenied ||
+          storagePermission.isPermanentlyDenied) {
+        await openAppSettings();
+        emit(ImagePickerError(
+            'Permission permanently denied. Please enable it in app settings.'));
       } else {
-        emit(ImagePickerError('No image selected.'));
+        emit(
+            ImagePickerError('Gallery permission is required to pick images.'));
       }
-
-    } else if (photosPermission.isPermanentlyDenied || storagePermission.isPermanentlyDenied) {
-      await openAppSettings();
-      emit(ImagePickerError('Permission permanently denied. Please enable it in app settings.'));
-
-    } else {
-      emit(ImagePickerError('Gallery permission is required to pick images.'));
+    } catch (e) {
+      emit(ImagePickerError('Failed to pick image: $e'));
     }
-  } catch (e) {
-    emit(ImagePickerError('Failed to pick image: $e'));
   }
-}
 
-
-  Future<void>getUserInfoFire()async {
+  Future<void> getUserInfoFire() async {
     emit(LoadingUserInfoState());
     // await FirebaseFirestore.instance.collection(Collections.users).snapshots().listen((value) {
     //   for (var doc in value.docs) {
@@ -98,17 +103,14 @@ Future<void> pickImageFromGallery({required String uid, required String email}) 
   }
 
 
-final supabase = Supabase.instance.client;
+  Future<void> uploadPImage({
+    required XFile image,
+    required String email,
+    required String uid,
+  }) async {
+    final imagePath = 'ProfileImage/$email/${image.path.split('/').last}';
 
-Future<void> uploadPImage({
-  required XFile image,
-  required String email,
-  required String uid,
-}) async {
-  final imagePath = 'ProfileImage/$email/${image.path.split('/').last}';
-
-
-  print("""
+    print("""
 
   📸 Uploading profile image:   
 $imagePath
@@ -117,38 +119,33 @@ $imagePath
 
 """);
 
-  try {
+    try {
+      final file = File(image.path);
 
-    final file = File(image.path);
+      // Upload image
+      await supabase.storage
+          .from('avatars') // Replace with your bucket name
+          .upload(imagePath, file,
+              fileOptions: FileOptions(cacheControl: '3600', upsert: true));
 
-    // Upload image
-     await supabase.storage
-        .from('avatars') // Replace with your bucket name
-        .upload(imagePath, file, fileOptions: FileOptions(cacheControl: '3600', upsert: true));
+      // Get public URL
+      final publicUrl = supabase.storage
+          .from('avatars') // Replace with your bucket name
+          .getPublicUrl(imagePath);
 
-    // Get public URL
-    final publicUrl =  supabase.storage
-        .from('avatars') // Replace with your bucket name
-        .getPublicUrl(imagePath);
+      print('✅ Profile image uploaded successfully: $publicUrl');
+      // Update user profile
+      final updateRes = await supabase
+          .from('users')
+          .update({'profile_image': publicUrl}).eq('id', uid);
 
-    print('✅ Profile image uploaded successfully: $publicUrl');
-    // Update user profile
-     final updateRes = await supabase
-    .from('users')
-    .update({'profile_image': publicUrl})
-    .eq('id', uid);
+      print("🛠️ Update result: $updateRes");
 
-print("🛠️ Update result: $updateRes");
-
-
-
-
-    print('✅ Profile image uploaded and user updated.');
-  } catch (e) {
-    print('❌ Error uploading profile image: $e');
+      print('✅ Profile image uploaded and user updated.');
+    } catch (e) {
+      print('❌ Error uploading profile image: $e');
+    }
   }
-}
-
 
   // Changing Job Title
   void changingJobTitle(String value) {
@@ -174,19 +171,15 @@ print("🛠️ Update result: $updateRes");
     }
   }
 
-
   @override
   void acceptTerms() {
     isAcceptTerms = !isAcceptTerms;
     emit(AcceptTermsState(isAcceptTerms));
   }
 
-
-  void disposeController(){
+  void disposeController() {
     userLocation.dispose();
     firstName.dispose();
     lastName.dispose();
   }
-
-
 }

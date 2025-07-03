@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:meeting_app/utils/AppColor.dart';
-import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 
-import '../../../utils/ZigoCloudConst.dart';
+import '../../../utils/AppColor.dart';
 import '../../../viewModel/bloc/MeetingCubit/meeting_cubit.dart';
-import '../../../viewModel/data/SharedKeys.dart';
 import '../../../viewModel/data/SharedPrefrences.dart';
+import '../../../viewModel/data/SharedKeys.dart';
+import '../../../utils/ZigoCloudConst.dart';
 
 class MeetingScreen extends StatefulWidget {
   final String meetingId;
@@ -29,11 +29,26 @@ class MeetingScreen extends StatefulWidget {
 class _MeetingScreenState extends State<MeetingScreen> {
   String? zegoKitToken;
   bool _isError = false;
+  DateTime? _meetingStartTime;
 
   @override
   void initState() {
     super.initState();
     fetchZegoKitToken();
+
+    // Record meeting start time
+    _meetingStartTime = DateTime.now();
+
+    // Create meeting record in DB on screen open
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final meetingCubit = BlocProvider.of<MeetingCubit>(context);
+      meetingCubit.createMeeting(
+        meetingId: widget.meetingId,
+        durationMin: 0,
+        cameraOn: widget.isCameraOn,
+        micOn: widget.isMicOn,
+      );
+    });
   }
 
   Future<void> fetchZegoKitToken() async {
@@ -83,34 +98,33 @@ class _MeetingScreenState extends State<MeetingScreen> {
     }
 
     return SafeArea(
-  child: ZegoUIKitPrebuiltCall(
-    appID: ZigoCloud.ZEGO_APP_ID,
-    appSign: ZigoCloud.ZEGO_APP_SIGN,
-    userID: userID,
-    userName: userName,
-    callID: widget.meetingId,
-    token: zegoKitToken!,
-    // use your meetingCubit instance, passed via constructor or context
-    config: ZegoUIKitPrebuiltCallConfig.groupVideoCall()
-      ..turnOnCameraWhenJoining = widget.isCameraOn
-      ..turnOnMicrophoneWhenJoining = widget.isMicOn,
-    events: ZegoUIKitPrebuiltCallEvents(
-      onCallEnd: (event, defaultAction) {
-        // 🎯 When the call ends, dispatch a Cubit event:
-        BlocProvider.of<MeetingCubit>(context).onMeetingEnded(
-          meetingId: widget.meetingId,
-          durationMin: BlocProvider.of<MeetingCubit>(context).selectedDuration,
-          cameraOn: widget.isCameraOn,
-          micOn: widget.isMicOn,
-        );
-        defaultAction(); 
-      },
-         
+      child: ZegoUIKitPrebuiltCall(
+        appID: ZigoCloud.ZEGO_APP_ID,
+        appSign: ZigoCloud.ZEGO_APP_SIGN,
+        userID: userID,
+        userName: userName,
+        callID: widget.meetingId,
+        token: zegoKitToken!,
+        config: ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+          ..turnOnCameraWhenJoining = widget.isCameraOn
+          ..turnOnMicrophoneWhenJoining = widget.isMicOn,
+        events: ZegoUIKitPrebuiltCallEvents(
+          onCallEnd: (event, defaultAction) async {
+            final meetingCubit = BlocProvider.of<MeetingCubit>(context);
 
-    ),
-  ),
-);
+            // Calculate meeting duration in minutes
+            final meetingEndTime = DateTime.now();
+            final durationMin = _meetingStartTime == null
+                ? 0
+                : meetingEndTime.difference(_meetingStartTime!).inMinutes;
 
+            // Update duration in Supabase
+            await meetingCubit.updateMeetingDuration(widget.meetingId, durationMin);
 
+            defaultAction(); // continue default onCallEnd behavior (pop screen)
+          },
+        ),
+      ),
+    );
   }
 }

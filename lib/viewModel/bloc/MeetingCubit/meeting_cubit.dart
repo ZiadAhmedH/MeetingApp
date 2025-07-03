@@ -48,37 +48,61 @@ class MeetingCubit extends Cubit<MeetingState> {
 
 
 
-  Future<void> onMeetingEnded({
-    required String meetingId,
-    required int durationMin,
-    required bool cameraOn,
-    required bool micOn,
-  }) async {
-    // Emits loading state
-    emit(MeetingCreateLoadingState());
-    try {
-      // Save to Supabase
-      final res = await Supabase.instance.client
+ Future<void> createMeeting({
+  required String meetingId,
+  required int durationMin,
+  required bool cameraOn,
+  required bool micOn,
+}) async {
+  emit(MeetingCreateLoadingState());
+
+  try {
+    await Supabase.instance.client
         .from('meetings')
         .insert({
           'id': meetingId,
           'host_id': Supabase.instance.client.auth.currentUser!.id,
           'title': 'Call $meetingId',
           'description': '',
-          'scheduled_at': new DateTime.now().toIso8601String(),
+          'scheduled_at': DateTime.now().toIso8601String(),
         });
-      if (res.error != null) throw res.error!;
-      emit(MeetingCreateSuccessState(meetingId));
-        
-        print('Meeting created successfully: $meetingId');
 
+    emit(MeetingCreateSuccessState(meetingId));
+    print('Meeting created successfully: $meetingId');
+
+  } catch (e) {
+    print('Error creating meeting: $e');
+    emit(MeetingCreateFailedState(errorMessage: e.toString()));
+  }
+}
+
+ Future<void> updateMeetingDuration(String meetingId, int durationMin) async {
+    try {
+      await Supabase.instance.client
+          .from('meetings')
+          .update({'duration_min': durationMin})
+          .eq('id', meetingId);
+      print('Meeting duration updated: $durationMin minutes');
     } catch (e) {
-      print('Error creating meeting: $e');
-      emit(MeetingCreateFailedState(
-        errorMessage: e.toString()
-      ));
+      print('Failed to update meeting duration: $e');
     }
   }
+
+
+Future<void> logJoinEvent({ required String meetingId}) async {
+  try {
+    final user = Supabase.instance.client.auth.currentUser!;
+    await Supabase.instance.client.from('participants').insert({
+      'meeting_id': meetingId,
+      'participant_id': user.id,
+      'joined_at': DateTime.now().toIso8601String(),
+    });
+  } catch (e) {
+    print('Error logging join event: $e');
+  }
+}
+
+
 
 
 
