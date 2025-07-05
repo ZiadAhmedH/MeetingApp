@@ -54,8 +54,13 @@ class AcceptTermsState extends ProfileState {
 
 // Profile
 class LoadingUserInfoState extends ProfileState {}
-class SuccessUserInfoState extends ProfileState {}
+class SuccessUserInfoState extends ProfileState {
+  final UserModel user;
+  SuccessUserInfoState(this.user);
+}
 class ProfileError extends ProfileState {
+  final String message;
+  ProfileError(this.message);
 
 }
 

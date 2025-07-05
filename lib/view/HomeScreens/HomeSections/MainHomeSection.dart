@@ -13,7 +13,7 @@ class MainHomeSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
-      bloc: ProfileCubit.get(context)..getUserInfoFire(),
+      bloc: ProfileCubit.get(context)..getUserInfo(),
       builder: (context, state) {
         return Column(
           children: [

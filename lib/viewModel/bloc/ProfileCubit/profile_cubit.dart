@@ -79,27 +79,33 @@ class ProfileCubit extends Cubit<ProfileState> implements CommonFun {
     }
   }
 
-  Future<void> getUserInfoFire() async {
+  Future<void> getUserInfo() async {
     emit(LoadingUserInfoState());
-    // await FirebaseFirestore.instance.collection(Collections.users).snapshots().listen((value) {
-    //   for (var doc in value.docs) {
-    //     String docUid = doc.get('uid');
-    //     if (LocalData.getData(key: SharedKey.uid) == docUid) {
-    //       print(doc.id);
-    //       print(LocalData.getData(key: SharedKey.uid));
-    //       User = UserModel(
-    //         email: doc.get('Email'),
-    //         userName: doc.get("UserName"),
-    //         profileImage: doc.get("profileImage"),
-    //         phone: doc.get("phone"),
-    //         location: doc.get("Location"),
-    //         jobTitle: doc.get("JobTitle"),
-    //       );
-    //       print(User?.email);
-    //     }
-    //   }
-    //   emit(SuccessUserInfoState());
-    // });
+
+    try {
+
+      final data = await supabase.from("users").select()
+          .eq('id', supabase.auth.currentUser!.id)
+          .single();
+
+      User = UserModel.fromJson(data);
+      firstName.text = User!.userName.split(' ')[0];
+      lastName.text = User!.userName.split(' ')[1];
+      userLocation.text = User!.location;
+      currentStatus = User!.jobTitle;
+      
+      // full profile data in print
+
+      print('User Info: ${User!.toJson()}');
+
+
+      emit(SuccessUserInfoState(User!));
+    } catch (e) {
+      print('Error fetching user info: $e');
+      emit(ProfileError('Failed to fetch user info: $e'));
+      return;
+    }
+      
   }
 
 

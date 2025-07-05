@@ -26,7 +26,6 @@ Future<void> main() async {
     appSign: ZigoCloud.ZEGO_APP_SIGN, 
   );
   
-
   LocalData.init();
   //LocalData.clearData();
   runApp(const MyApp());

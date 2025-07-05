@@ -25,4 +25,17 @@ final  String jobTitle;
       phone = json["phone"],
       location = json["location"],
       jobTitle = json["job_title"];
+
+      
+  Map<String, dynamic> toJson() {
+    return {
+      "username": userName,
+      "email": email,
+      "profile_image": profileImage,
+      "id": uid,
+      "phone": phone,
+      "location": location,
+      "job_title": jobTitle,
+    };
+  }
 }

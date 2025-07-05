@@ -1,12 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meeting_app/model/Models/meetingModel.dart';
-import 'package:meeting_app/viewModel/data/SharedKeys.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import '../../data/SharedPrefrences.dart';
-
 part 'meeting_state.dart';
 
 class MeetingCubit extends Cubit<MeetingState> {
@@ -19,12 +14,10 @@ class MeetingCubit extends Cubit<MeetingState> {
   String meetingId = '';
 
 
-  // meeting Setting Section
   bool isCameraOn = true;
   bool isMicrophoneOn = true;
   bool isSpeakerOn = true;
 
-  //List<String> durationList = ['15 min', '30 min', '45 min', '60 min'];
   int selectedDuration = 60;
   void toggleCamera() {
     isCameraOn = !isCameraOn;

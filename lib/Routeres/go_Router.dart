@@ -34,6 +34,13 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
 
     case RouteConst.home:
       return MaterialPageRoute(builder: (_) => const HomeScreen());
+    
+    case RouteConst.profile:
+      return MaterialPageRoute(
+        builder: (_) => const Scaffold(
+          body: Center(child: Text('Profile Screen')),
+        ),
+      );
 
     default:
       return MaterialPageRoute(

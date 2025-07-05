@@ -32,6 +32,7 @@ class NavigationSection extends StatelessWidget {
       ],
       selectedItemColor: AppColor.primaryBlue,
       unselectedItemColor: context.thirdTextColor,
+       
       onTap: (index) {
         navigationCubit.changeIndex(index);
       },

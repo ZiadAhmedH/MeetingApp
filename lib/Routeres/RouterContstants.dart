@@ -7,4 +7,6 @@ class RouteConst {
   static const password = '/password';
   static const inputProfileInfo = '/inputProfileInfo';
   static const home = '/home';
+
+  static const profile = '/profile';
 }
