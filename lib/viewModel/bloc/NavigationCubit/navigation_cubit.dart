@@ -14,13 +14,14 @@ class NavigationCubit extends Cubit<NavigationState> {
 
   int currentIndex = 0;
 
-  List pages = [const MainHomeSection(), const ChatScreen(), const ProfileScreen()];
+  List pages = [const MainHomeSection(), const ChatScreen(), ];
 
 
   void changeIndex(int index) {
     currentIndex = index;
     emit(NavigationChangeIndexState());
   }
+  
   void changeNavigation(){
     emit(NavigationChanged());
   }

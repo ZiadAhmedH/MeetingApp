@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:meeting_app/Routeres/RouterContstants.dart';
+import 'package:meeting_app/Routers/RouterContstants.dart';
+import 'package:meeting_app/model/Models/UserModel.dart';
 import 'package:meeting_app/view/AuthScreens/LoginSection/LoginScreen.dart';
 import 'package:meeting_app/view/AuthScreens/SignUpSection/VerifyScreen.dart';
 import 'package:meeting_app/view/AuthScreens/SignUpSection/passwordSection/passwordScreen.dart';
@@ -7,6 +8,8 @@ import 'package:meeting_app/view/AuthScreens/SignUpSection/signUpScreen.dart';
 import 'package:meeting_app/view/AuthScreens/SignUpSection/userInfoSection/UserInfoSection.dart';
 import 'package:meeting_app/view/AuthScreens/signMainScreen.dart';
 import 'package:meeting_app/view/HomeScreens/HomeScreen.dart';
+import 'package:meeting_app/view/HomeScreens/JoinScreen/JoinScreen.dart';
+import 'package:meeting_app/view/HomeScreens/ProfileScreen/ProfileScreen.dart';
 import 'package:meeting_app/view/splashScreen.dart';
 
 Route<dynamic> onGenerateRoute(RouteSettings settings) {
@@ -34,13 +37,12 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
 
     case RouteConst.home:
       return MaterialPageRoute(builder: (_) => const HomeScreen());
-    
+
     case RouteConst.profile:
-      return MaterialPageRoute(
-        builder: (_) => const Scaffold(
-          body: Center(child: Text('Profile Screen')),
-        ),
-      );
+        final user = settings.arguments as UserModel;
+        return MaterialPageRoute(
+            builder: (context) => ProfileScreen(user: user));
+      
 
     default:
       return MaterialPageRoute(

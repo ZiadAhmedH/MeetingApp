@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:meeting_app/Routeres/RouterContstants.dart';
+import 'package:meeting_app/Routers/RouterContstants.dart';
 import 'package:meeting_app/model/components/CustomBtn.dart';
 import 'package:meeting_app/utils/ThemeExtension.dart';
 import 'package:meeting_app/view/AuthScreens/SignUpSection/passwordSection/passwordValidationScetion.dart';

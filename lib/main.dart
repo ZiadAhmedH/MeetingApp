@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meeting_app/Routeres/RouterContstants.dart';
-import 'package:meeting_app/Routeres/go_Router.dart';
+import 'package:meeting_app/Routers/RouterContstants.dart';
+import 'package:meeting_app/Routers/go_Router.dart';
 import 'package:meeting_app/services/auth_services.dart';
 import 'package:meeting_app/supabase_helper.dart';
 import 'package:meeting_app/utils/ZigoCloudConst.dart';

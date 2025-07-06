@@ -25,10 +25,7 @@ class NavigationSection extends StatelessWidget {
           icon: Icon(FontAwesomeIcons.comments),
           label: 'Chats',
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'Profile',
-        ),
+       
       ],
       selectedItemColor: AppColor.primaryBlue,
       unselectedItemColor: context.thirdTextColor,

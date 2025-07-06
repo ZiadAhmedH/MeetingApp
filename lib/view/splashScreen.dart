@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:meeting_app/utils/ThemeExtension.dart';
 import 'package:meeting_app/viewModel/data/SharedKeys.dart';
 import 'package:meeting_app/viewModel/data/SharedPrefrences.dart';
-import '../Routeres/RouterContstants.dart';
+import '../Routers/RouterContstants.dart';
 import '../model/components/CustomText.dart';
 
 class SplashScreen extends StatefulWidget {

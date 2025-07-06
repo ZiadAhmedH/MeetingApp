@@ -94,7 +94,6 @@ class ProfileCubit extends Cubit<ProfileState> implements CommonFun {
       userLocation.text = User!.location;
       currentStatus = User!.jobTitle;
       
-      // full profile data in print
 
       print('User Info: ${User!.toJson()}');
 
