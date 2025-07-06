@@ -15,8 +15,7 @@ class UserImageCircular extends StatelessWidget {
     return InkWell(
       borderRadius: BorderRadius.circular(50),
       onTap: () {
-        Navigator.pushNamed(context, RouteConst.profile ,
-            arguments: profileCubit.User);
+        Navigator.pushNamed(context, RouteConst.profile,arguments: profileCubit.User);
       },
       child: Container(
         margin: const EdgeInsets.all(10),

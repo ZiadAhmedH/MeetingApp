@@ -15,8 +15,9 @@ part 'profile_state.dart';
 class ProfileCubit extends Cubit<ProfileState> implements CommonFun {
   ProfileCubit() : super(ProfileInitial());
 
-  static ProfileCubit get(context) => BlocProvider.of(context);
   final Dio dio = Dio();
+
+  static ProfileCubit get(context) => BlocProvider.of(context);
 
 // user Profile
   XFile? image;
