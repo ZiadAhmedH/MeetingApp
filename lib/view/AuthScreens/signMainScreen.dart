@@ -48,7 +48,13 @@ class SignMainScreen extends StatelessWidget {
                 children: [
                   CustomButton(
                     textColor: context.thirdTextColor!,
-                    text: "Sign up",
+                    text: CustomText(
+                      text: "Sign Up",
+                      fontFamily: "Gilroy",
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: context.primaryTextColor,
+                    ),
                     backgroundColor: AppColor.primaryBlue,
                     borderColor: AppColor.primaryBlue,
                     onTap: () {
@@ -60,7 +66,13 @@ class SignMainScreen extends StatelessWidget {
                   ),
                  CustomButton(
                    textColor: context.secondaryTextColor!,
-                    text: "Log in",
+                    text: CustomText(
+                      text: "Login",
+                      fontFamily: "Gilroy",
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: context.primaryTextColor,
+                    ),
                     backgroundColor: context.primaryBackgroundColor,
                     borderColor: AppColor.primaryBlue,
                     onTap: () {

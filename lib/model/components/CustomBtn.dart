@@ -5,7 +5,7 @@ class CustomButton extends StatelessWidget {
 
   final Color borderColor;
   final Color backgroundColor;
-  final String text;
+  final Widget text;
   final int isClickable;
   final Color textColor;
   final void Function() onTap;
@@ -28,7 +28,7 @@ class CustomButton extends StatelessWidget {
             border: Border.all(color: borderColor , width: 1)
         ),
         child: Center(
-            child: CustomText(text:text , fontFamily: "Gilroy",fontWeight: FontWeight.normal,fontSize: 16,color: textColor,)
+            child: text
         ),
       ),
     );

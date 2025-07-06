@@ -66,7 +66,13 @@ class PasswordScreen extends StatelessWidget {
                             authCubit.passwordController.text.isNotEmpty)
                         ? AppColor.primaryBlue
                         : AppColor.lightGrey,
-                    text: 'Next',
+                    text: CustomText(
+                      text: "Next",
+                      fontFamily: "Gilroy",
+                      fontWeight: FontWeight.bold,
+                      fontSize: MediaQuery.of(context).size.width * 0.04,
+                      color: AppColor.white,
+                    ),
                     onTap: () async {
                       if (authCubit.passwordStrength &&
                           authCubit.passwordController.text ==

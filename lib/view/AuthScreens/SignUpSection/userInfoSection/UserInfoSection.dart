@@ -102,7 +102,13 @@ class UserInfoSection extends StatelessWidget {
       backgroundColor: profileCubit.isAcceptTerms
           ? AppColor.primaryBlue
           : AppColor.grey,
-      text: "Create Account",
+      text: CustomText(
+        text: 'Create Account',
+        fontFamily: 'Gilroy',
+        fontWeight: FontWeight.bold,
+        color: AppColor.white,
+        fontSize: screenWidth * 0.04,
+      ),
       isClickable: profileCubit.isAcceptTerms ? 1 : 0,
       textColor: AppColor.white,
       onTap: () async {

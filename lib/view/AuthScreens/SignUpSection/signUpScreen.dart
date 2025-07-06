@@ -82,7 +82,14 @@ class SignUpScreen extends StatelessWidget {
                         ? AppColor.primaryBlue
                         : AppColor.darkGrey,
                     isClickable: authCubit.isAcceptTermsRegister ? 1 : 0,
-                    text: "Next"),
+                    text: CustomText(
+                      text: 'Next',
+                      fontFamily: 'Gilroy',
+                      fontWeight: FontWeight.bold,
+                      color: AppColor.white,
+                      fontSize: MediaQuery.of(context).size.width * 0.04,
+                    ),
+                ),
               ],
             ),
           ),

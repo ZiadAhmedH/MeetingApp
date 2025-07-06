@@ -74,7 +74,13 @@ class VerifyScreen extends StatelessWidget {
                         CustomButton(
                           borderColor: AppColor.white,
                           backgroundColor: context.filledColor2!,
-                          text: 'Verify',
+                          text: CustomText(
+                            text: 'Verify',
+                            fontFamily: 'Gilroy',
+                            fontWeight: FontWeight.bold,
+                            color: context.primaryTextColor!,
+                            fontSize: MediaQuery.of(context).size.width * 0.04,
+                          ),
                           textColor: context.primaryTextColor!,
                           isClickable: 1,
                           onTap: () {

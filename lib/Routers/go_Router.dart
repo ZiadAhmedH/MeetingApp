@@ -41,7 +41,7 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
     case RouteConst.profile:
         final user = settings.arguments as UserModel;
         return MaterialPageRoute(
-            builder: (context) => ProfileScreen(user: user));
+            builder: (context) => ProfileView(user: user));
       
 
     default:

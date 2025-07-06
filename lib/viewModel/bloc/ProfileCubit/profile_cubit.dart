@@ -3,6 +3,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:meeting_app/viewModel/data/SharedKeys.dart';
+import 'package:meeting_app/viewModel/data/SharedPrefrences.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../model/Models/UserModel.dart';
@@ -27,7 +29,7 @@ class ProfileCubit extends Cubit<ProfileState> implements CommonFun {
   static TextEditingController userLocation = TextEditingController();
   static TextEditingController firstName = TextEditingController();
   static TextEditingController lastName = TextEditingController();
-
+  static TextEditingController jobtitle = TextEditingController();
 
   final supabase = Supabase.instance.client;
 
@@ -85,7 +87,7 @@ class ProfileCubit extends Cubit<ProfileState> implements CommonFun {
     try {
 
       final data = await supabase.from("users").select()
-          .eq('id', supabase.auth.currentUser!.id)
+          .eq('id', LocalData.getData(key: SharedKey.uid))
           .single();
 
       User = UserModel.fromJson(data);
@@ -93,7 +95,8 @@ class ProfileCubit extends Cubit<ProfileState> implements CommonFun {
       lastName.text = User!.userName.split(' ')[1];
       userLocation.text = User!.location;
       currentStatus = User!.jobTitle;
-      
+      jobtitle.text = User!.jobTitle; 
+
 
       print('User Info: ${User!.toJson()}');
 
@@ -175,6 +178,52 @@ $imagePath
       emit(CountryError('Failed to get country: $e'));
     }
   }
+
+  
+  Future<void> updateUserInfo(
+      {required String username, required String uid , required String location}) async {
+    emit(LoadingUserInfoState());
+    try {
+      final updateRes = await supabase
+      .from('users')
+      .update({
+        'username': username,
+        'profile_image': User!.profileImage,
+        'location': location,
+       }).eq('id', uid);
+      
+      
+      await uploadPImage(
+        image: image!,
+        email: LocalData.getData(key: SharedKey.email),
+        uid: uid,
+      );
+
+
+      emit(UserInfoUpdatedSuccessfully());
+      print('User info updated successfully: $updateRes');
+    } catch (e) {
+      emit(UserInfoUpdateError('Failed to update user info: $e'));
+      print('Error updating user info: $e');
+
+      return;
+      }
+  }
+  
+  bool hasChanges() {
+  final currentFullName = "${firstName.text.trim()} ${lastName.text.trim()}";
+  final storedFullName = User?.userName.trim();
+  final currentLocation = userLocation.text.trim();
+  final storedLocation = User?.location.trim();
+
+  final isImageChanged = image != null;
+
+  return currentFullName != storedFullName ||
+         currentLocation != storedLocation ||
+         isImageChanged;
+}
+
+
 
   @override
   void acceptTerms() {

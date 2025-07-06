@@ -109,7 +109,13 @@ class LoginScreen extends StatelessWidget {
                     onTap: () {
                       if (authCubit.loginKey.currentState!.validate()) {authCubit.fireAuthLogin(); }
                     },
-                    text: "Next")
+                    text: CustomText(
+                      text: 'Next',
+                      fontFamily: 'Gilroy',
+                      fontWeight: FontWeight.bold,
+                      color: AppColor.white,
+                      fontSize: MediaQuery.of(context).size.width * 0.04,
+                    )),
               ],
             ),
           ),

@@ -139,7 +139,12 @@ class MeetingSettings extends StatelessWidget {
                         ),
                       );
                     },
-                    text: "GO TO MEETING",
+                    text: CustomText(
+                      text: "GO TO MEETING",
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                      color: AppColor.white,
+                    ),
                   )
                 ],
               ),

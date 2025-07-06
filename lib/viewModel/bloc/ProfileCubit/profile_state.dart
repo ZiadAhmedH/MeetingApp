@@ -64,3 +64,16 @@ class ProfileError extends ProfileState {
 
 }
 
+class ProfileImageUpdated extends ProfileState {
+  final String imageUrl;
+  ProfileImageUpdated(this.imageUrl);
+}
+
+class UpdatingUserInfoState extends ProfileState {}
+
+class UserInfoUpdatedSuccessfully extends ProfileState {}
+class UserInfoUpdateError extends ProfileState {
+  final String message;
+  UserInfoUpdateError(this.message);
+}
+
