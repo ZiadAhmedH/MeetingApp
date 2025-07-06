@@ -21,7 +21,7 @@ Future<void> main() async {
   Bloc.observer = MyBlocObserver();
 
   await SupabaseHelper.init();
-    await NotificationService.init();
+    await NotificationService.initialize();
 
   ZegoUIKit().init(
     appID: ZigoCloud.ZEGO_APP_ID, 
