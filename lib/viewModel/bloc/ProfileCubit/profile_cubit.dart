@@ -156,6 +156,25 @@ $imagePath
     }
   }
 
+  // get user his own meetings
+  Future<List<Map<String, dynamic>>> getUserMeetings() async {
+    try {
+      final response = await supabase
+          .from('meetings')
+          .select()
+          .eq('host_id', LocalData.getData(key: SharedKey.uid));
+
+      if (response == null || (response is List && response.isEmpty)) {
+        throw Exception('No meetings found for this user.');
+      }
+
+      return List<Map<String, dynamic>>.from(response);
+    } catch (e) {
+      print('Error fetching user meetings: $e');
+      return [];
+    }
+  }
+
   // Changing Job Title
   void changingJobTitle(String value) {
     currentStatus = value;
