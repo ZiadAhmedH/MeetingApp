@@ -14,32 +14,41 @@ class ChatCubit extends Cubit<ChatState> {
 
   Future<void> loadMessages(String me, String other) async {
     emit(ChatLoading());
-    final res = await _supabase.from('messages')
-      .select()
-      .or('sender_id.eq.$me,receiver_id.eq.$me')
-      .order('created_at');
+    final res = await _supabase
+        .from('messages')
+        .select()
+        .or('sender_id.eq.$me,receiver_id.eq.$me')
+        .order('created_at');
 
     _messages.clear();
     _messages.addAll((res as List)
-      .map((e) => Message.fromJson(e as Map<String, dynamic>))
-      .where((m) => (m.senderId==me && m.receiverId==other)||(m.senderId==other && m.receiverId==me)));
-      _messages.reversed.toList();
+        .map((e) => Message.fromJson(e as Map<String, dynamic>))
+        .where((m) =>
+            (m.senderId == me && m.receiverId == other) ||
+            (m.senderId == other && m.receiverId == me)));
+    _messages.reversed.toList();
     emit(ChatLoaded(List.from(_messages)));
   }
 
   Future<void> sendMessage(String me, String other, String text) async {
-    await _supabase.from('messages').insert({
-      'sender_id': me, 'receiver_id': other, 'content': text
-    });
+    await _supabase
+        .from('messages')
+        .insert({'sender_id': me, 'receiver_id': other, 'content': text});
     _messages.add(Message(
-      id: '', senderId: me, receiverId: other,
-      content: text, createdAt: DateTime.now()));
+        id: '',
+        senderId: me,
+        receiverId: other,
+        content: text,
+        createdAt: DateTime.now()));
     emit(ChatLoaded(List.from(_messages)));
   }
 
-  void subscribe(String me) {
-    _supabase
-      .channel('public:messages')
+ RealtimeChannel? _channel;
+
+void subscribe(String myUid) {
+  _channel = _supabase.channel('public:messages');
+
+  _channel!
       .onPostgresChanges(
         event: PostgresChangeEvent.insert,
         schema: 'public',
@@ -47,14 +56,49 @@ class ChatCubit extends Cubit<ChatState> {
         filter: PostgresChangeFilter(
           type: PostgresChangeFilterType.eq,
           column: 'receiver_id',
-          value: me,
+          value: myUid,
         ),
-        callback: (p) {
-          final m = Message.fromJson(p.newRecord);
-          _messages.add(m);
-          NotificationService.show('New message', m.content);
-          emit(ChatLoaded(List.from(_messages)));
-        })
+        
+        
+
+
+        callback: (payload) async {
+          final msg = Message.fromJson(payload.newRecord);
+            
+            final sender = await _supabase
+                .from('users')
+                .select('username')
+                .eq('id', msg.senderId)
+                .single();
+
+            final senderName = sender['username'] ?? 'Someone';
+
+            // Show notification
+            NotificationService.show(
+               senderName,
+               msg.content,
+            );
+
+   
+
+          if (!isClosed) {
+            _messages.add(msg);
+            emit(ChatLoaded(List.from(_messages)));
+          }
+        },
+      )
       .subscribe();
+}
+
+@override
+Future<void> close() async {
+  if (_channel != null) {
+    await _supabase.removeChannel(_channel!);
   }
+  return super.close();
+}
+
+
+
+
 }

@@ -12,6 +12,8 @@ import 'package:meeting_app/viewModel/bloc/NavigationCubit/navigation_cubit.dart
 import 'package:meeting_app/viewModel/bloc/ProfileCubit/profile_cubit.dart';
 import 'package:meeting_app/viewModel/bloc/ThemeCubit/theme_cubit.dart';
 import 'package:meeting_app/viewModel/bloc/blocObserver.dart';
+import 'package:meeting_app/viewModel/bloc/chatCubit/chat_cubit.dart';
+import 'package:meeting_app/viewModel/data/SharedKeys.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 import 'viewModel/data/SharedPrefrences.dart';
@@ -45,6 +47,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => ThemesCubit()),
         BlocProvider(create: (context) => NavigationCubit()),
         BlocProvider(create: (context) => MeetingCubit()),
+
+          BlocProvider(create: (context) => ChatCubit()..subscribe(LocalData.getData(key: SharedKey.uid) ?? '')),      
       ],
       child: BlocBuilder<ThemesCubit, ThemeData>(
         builder: (context, themeState) {
