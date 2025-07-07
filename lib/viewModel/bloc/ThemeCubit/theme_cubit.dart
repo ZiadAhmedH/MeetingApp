@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../utils/AppThemes.dart';
+import '../../../core/utils/AppThemes.dart';
 
 class ThemesCubit extends Cubit<ThemeData> {
   ThemesCubit() : super(AppThemes.darkTheme) {

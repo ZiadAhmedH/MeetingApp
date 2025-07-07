@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:meeting_app/model/components/CustomText.dart';
+import 'package:meeting_app/core/components/CustomText.dart';
 
-import '../../utils/AppColor.dart';
+import '../utils/AppColor.dart';
 import '../../viewModel/bloc/MeetingCubit/meeting_cubit.dart';
 class TextSelectable extends StatelessWidget {
   final String text;

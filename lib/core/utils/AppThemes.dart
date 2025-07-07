@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:meeting_app/utils/AppColor.dart';
+import 'package:meeting_app/core/utils/AppColor.dart';
 
 class AppThemes {
 

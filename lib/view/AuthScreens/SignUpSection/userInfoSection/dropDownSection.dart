@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meeting_app/utils/ThemeExtension.dart';
+import 'package:meeting_app/core/utils/ThemeExtension.dart';
 
-import '../../../../utils/AppColor.dart';
+import '../../../../core/utils/AppColor.dart';
 import '../../../../viewModel/bloc/ProfileCubit/profile_cubit.dart';
 class DropDownSection extends StatelessWidget {
 

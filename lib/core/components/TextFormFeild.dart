@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:meeting_app/utils/AppColor.dart';
-import 'package:meeting_app/utils/ThemeExtension.dart';
+import 'package:meeting_app/core/utils/AppColor.dart';
+import 'package:meeting_app/core/utils/ThemeExtension.dart';
 
 class CustomTextFormField extends StatelessWidget {
   final String? hintText;

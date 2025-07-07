@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:meeting_app/model/widget/meetingFuteareBtm.dart';
+import 'package:meeting_app/core/widget/meetingFuteareBtm.dart';
 
 import '../../JoinScreen/JoinScreen.dart';
 

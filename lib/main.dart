@@ -1,37 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meeting_app/Routers/RouterContstants.dart';
-import 'package:meeting_app/Routers/go_Router.dart';
-import 'package:meeting_app/services/auth_services.dart';
-import 'package:meeting_app/services/notifcation_service.dart';
-import 'package:meeting_app/supabase_helper.dart';
-import 'package:meeting_app/utils/ZigoCloudConst.dart';
+import 'package:meeting_app/core/services/app_startup_service.dart';
+import 'package:meeting_app/viewModel/bloc/blocObserver.dart';
 import 'package:meeting_app/viewModel/bloc/AuthCubit/auth_cubit.dart';
 import 'package:meeting_app/viewModel/bloc/MeetingCubit/meeting_cubit.dart';
 import 'package:meeting_app/viewModel/bloc/NavigationCubit/navigation_cubit.dart';
 import 'package:meeting_app/viewModel/bloc/ProfileCubit/profile_cubit.dart';
 import 'package:meeting_app/viewModel/bloc/ThemeCubit/theme_cubit.dart';
-import 'package:meeting_app/viewModel/bloc/blocObserver.dart';
-import 'package:meeting_app/viewModel/bloc/chatCubit/chat_cubit.dart';
-import 'package:meeting_app/viewModel/data/SharedKeys.dart';
-import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
-import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
-import 'viewModel/data/SharedPrefrences.dart';
+import 'package:meeting_app/core/Routers/RouterContstants.dart';
+import 'package:meeting_app/core/Routers/go_Router.dart';
+import 'package:meeting_app/global_navigator.dart';
 
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = MyBlocObserver();
 
-  await SupabaseHelper.init();
-    await NotificationService.initialize();
+  await AppStartupService.initializeApp();
 
-  ZegoUIKit().init(
-    appID: ZigoCloud.ZEGO_APP_ID, 
-    appSign: ZigoCloud.ZEGO_APP_SIGN, 
-  );
-  
-  LocalData.init();
-  //LocalData.clearData();
   runApp(const MyApp());
 }
 
@@ -42,20 +27,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => AuthCubit(AuthService())),
-        BlocProvider(create: (context) => ProfileCubit()),
-        BlocProvider(create: (context) => ThemesCubit()),
-        BlocProvider(create: (context) => NavigationCubit()),
-        BlocProvider(create: (context) => MeetingCubit()),
-
-          BlocProvider(create: (context) => ChatCubit()..subscribe(LocalData.getData(key: SharedKey.uid) ?? '')),      
+        BlocProvider(create: (_) => AuthCubit(AppStartupService.authService)),
+        BlocProvider(create: (_) => ProfileCubit()),
+        BlocProvider(create: (_) => ThemesCubit()),
+        BlocProvider(create: (_) => NavigationCubit()),
+        BlocProvider(create: (_) => MeetingCubit()),
       ],
       child: BlocBuilder<ThemesCubit, ThemeData>(
-        builder: (context, themeState) {
+        builder: (_, theme) {
           return MaterialApp(
+            navigatorKey: navigatorKey,
             debugShowCheckedModeBanner: false,
             title: 'Meeting App',
-            theme: themeState,
+            theme: theme,
             initialRoute: RouteConst.splash,
             onGenerateRoute: onGenerateRoute,
           );

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../utils/AppColor.dart';
+import '../../../../core/utils/AppColor.dart';
 import '../../../../viewModel/bloc/AuthCubit/auth_cubit.dart';
 import '../../../../viewModel/bloc/ProfileCubit/profile_cubit.dart';
 

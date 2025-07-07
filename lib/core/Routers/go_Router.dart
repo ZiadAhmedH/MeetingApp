@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:meeting_app/Routers/RouterContstants.dart';
+import 'package:meeting_app/core/Routers/RouterContstants.dart';
 import 'package:meeting_app/model/Models/UserModel.dart';
 import 'package:meeting_app/view/AuthScreens/LoginSection/LoginScreen.dart';
 import 'package:meeting_app/view/AuthScreens/SignUpSection/VerifyScreen.dart';
@@ -7,6 +7,7 @@ import 'package:meeting_app/view/AuthScreens/SignUpSection/passwordSection/passw
 import 'package:meeting_app/view/AuthScreens/SignUpSection/signUpScreen.dart';
 import 'package:meeting_app/view/AuthScreens/SignUpSection/userInfoSection/UserInfoSection.dart';
 import 'package:meeting_app/view/AuthScreens/signMainScreen.dart';
+import 'package:meeting_app/view/HomeScreens/ChatScreen/ChatScreen.dart';
 import 'package:meeting_app/view/HomeScreens/HomeScreen.dart';
 import 'package:meeting_app/view/HomeScreens/JoinScreen/JoinScreen.dart';
 import 'package:meeting_app/view/HomeScreens/ProfileScreen/ProfileScreen.dart';
@@ -42,7 +43,14 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
         final user = settings.arguments as UserModel;
         return MaterialPageRoute(
             builder: (context) => ProfileView(user: user));
-      
+
+   case RouteConst.chat:
+    final args = settings.arguments as Map<String, dynamic>;
+    final myUid = args['myUid'] as String;
+    final otherUser = args['otherUser'] as UserModel;
+     return MaterialPageRoute(
+      builder: (_) => ChatView(myUid: myUid, otherUser: otherUser),
+      );
 
     default:
       return MaterialPageRoute(

@@ -1,8 +1,8 @@
 import 'package:fancy_password_field/fancy_password_field.dart';
 import 'package:flutter/material.dart';
-import 'package:meeting_app/utils/ThemeExtension.dart';
-import '../../../../model/components/TextFormFeild.dart';
-import '../../../../utils/AppColor.dart';
+import 'package:meeting_app/core/utils/ThemeExtension.dart';
+import '../../../../core/components/TextFormFeild.dart';
+import '../../../../core/utils/AppColor.dart';
 import '../../../../viewModel/bloc/AuthCubit/auth_cubit.dart';
 class PasswordValidationSection extends StatelessWidget {
   const PasswordValidationSection({super.key});

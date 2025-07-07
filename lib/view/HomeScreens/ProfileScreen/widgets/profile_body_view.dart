@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:meeting_app/model/Models/UserModel.dart';
-import 'package:meeting_app/model/components/CustomBtn.dart';
-import 'package:meeting_app/model/components/CustomText.dart';
-import 'package:meeting_app/model/components/TextFormFeild.dart';
-import 'package:meeting_app/utils/AppColor.dart';
-import 'package:meeting_app/utils/ThemeExtension.dart';
+import 'package:meeting_app/core/components/CustomBtn.dart';
+import 'package:meeting_app/core/components/CustomText.dart';
+import 'package:meeting_app/core/components/TextFormFeild.dart';
+import 'package:meeting_app/core/utils/AppColor.dart';
+import 'package:meeting_app/core/utils/ThemeExtension.dart';
 import 'package:meeting_app/viewModel/bloc/ProfileCubit/profile_cubit.dart';
 
 class ProfileBodyView extends StatelessWidget {

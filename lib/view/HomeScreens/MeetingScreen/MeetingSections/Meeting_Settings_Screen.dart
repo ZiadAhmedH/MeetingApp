@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meeting_app/model/components/CustomBtn.dart';
-import 'package:meeting_app/model/components/CustomText.dart';
-import 'package:meeting_app/utils/ThemeExtension.dart';
+import 'package:meeting_app/core/components/CustomBtn.dart';
+import 'package:meeting_app/core/components/CustomText.dart';
+import 'package:meeting_app/core/utils/ThemeExtension.dart';
 import 'package:meeting_app/view/HomeScreens/MeetingScreen/MeetingScreen.dart';
 import 'package:meeting_app/viewModel/bloc/MeetingCubit/meeting_cubit.dart';
-import '../../../../utils/AppColor.dart';
+import '../../../../core/utils/AppColor.dart';
 
 class MeetingSettings extends StatelessWidget {
   const MeetingSettings({super.key});

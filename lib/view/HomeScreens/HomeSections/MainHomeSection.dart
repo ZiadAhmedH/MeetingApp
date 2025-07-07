@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meeting_app/utils/ThemeExtension.dart';
+import 'package:meeting_app/core/utils/ThemeExtension.dart';
 import 'package:meeting_app/viewModel/bloc/ProfileCubit/profile_cubit.dart';
-import '../../../model/components/CustomText.dart';
-import '../../../utils/AppColor.dart';
+import '../../../core/components/CustomText.dart';
+import '../../../core/utils/AppColor.dart';
 import 'AppBar_Section/AppBarHomeSection.dart';
 import 'AppBar_Section/NavBar.dart';
 

@@ -1,12 +1,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:meeting_app/Routers/RouterContstants.dart';
-import 'package:meeting_app/model/components/CustomText.dart';
-import 'package:meeting_app/utils/AppColor.dart';
-import 'package:meeting_app/utils/ThemeExtension.dart';
+import 'package:meeting_app/core/Routers/RouterContstants.dart';
+import 'package:meeting_app/core/components/CustomText.dart';
+import 'package:meeting_app/core/utils/AppColor.dart';
+import 'package:meeting_app/core/utils/ThemeExtension.dart';
 
-import '../../model/components/CustomBtn.dart';
+import '../../core/components/CustomBtn.dart';
 
 class SignMainScreen extends StatelessWidget {
   const SignMainScreen({super.key});

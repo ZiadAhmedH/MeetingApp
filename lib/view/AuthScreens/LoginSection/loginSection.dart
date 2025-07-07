@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meeting_app/model/components/TextFormFeild.dart';
-import 'package:meeting_app/utils/AppColor.dart';
-import 'package:meeting_app/utils/RegexConst.dart';
-import 'package:meeting_app/utils/ThemeExtension.dart';
+import 'package:meeting_app/core/components/TextFormFeild.dart';
+import 'package:meeting_app/core/utils/AppColor.dart';
+import 'package:meeting_app/core/utils/RegexConst.dart';
+import 'package:meeting_app/core/utils/ThemeExtension.dart';
 import 'package:meeting_app/viewModel/bloc/AuthCubit/auth_cubit.dart';
 
 class LoginSection extends StatelessWidget {

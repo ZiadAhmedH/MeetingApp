@@ -1,11 +1,11 @@
-class Message {
+class MessageModel {
   final String id;
   final String senderId;
   final String receiverId;
   final String content;
   final DateTime createdAt;
 
-  Message({
+  MessageModel({
     required this.id,
     required this.senderId,
     required this.receiverId,
@@ -13,8 +13,8 @@ class Message {
     required this.createdAt,
   });
 
-  factory Message.fromJson(Map<String, dynamic> json) {
-    return Message(
+  factory MessageModel.fromJson(Map<String, dynamic> json) {
+    return MessageModel(
       id: json['id'],
       senderId: json['sender_id'],
       receiverId: json['receiver_id'],

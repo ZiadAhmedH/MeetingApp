@@ -1,9 +1,9 @@
 
 import 'package:flutter/material.dart';
-import 'package:meeting_app/utils/ThemeExtension.dart';
-import '../../../../model/components/CustomText.dart';
-import '../../../../model/components/TextFormFeild.dart';
-import '../../../../utils/AppColor.dart';
+import 'package:meeting_app/core/utils/ThemeExtension.dart';
+import '../../../../core/components/CustomText.dart';
+import '../../../../core/components/TextFormFeild.dart';
+import '../../../../core/utils/AppColor.dart';
 import '../../../../viewModel/bloc/ProfileCubit/profile_cubit.dart';
 import 'AcceptTermsSection.dart';
 import 'dropDownSection.dart';

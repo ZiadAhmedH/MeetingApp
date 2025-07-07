@@ -4,11 +4,11 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 
-import '../../../utils/AppColor.dart';
+import '../../../core/utils/AppColor.dart';
 import '../../../viewModel/bloc/MeetingCubit/meeting_cubit.dart';
 import '../../../viewModel/data/SharedPrefrences.dart';
 import '../../../viewModel/data/SharedKeys.dart';
-import '../../../utils/ZigoCloudConst.dart';
+import '../../../core/utils/ZigoCloudConst.dart';
 
 class MeetingScreen extends StatefulWidget {
   final String meetingId;

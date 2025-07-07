@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meeting_app/utils/ThemeExtension.dart';
+import 'package:meeting_app/core/utils/ThemeExtension.dart';
 import 'package:meeting_app/view/HomeScreens/HomeSections/AppBar_Section/userImageCircular.dart';
 
-import '../../../../model/components/CustomText.dart';
+import '../../../../core/components/CustomText.dart';
 import '../../../../viewModel/bloc/ProfileCubit/profile_cubit.dart';
 import '../../../../viewModel/bloc/ThemeCubit/theme_cubit.dart';
 class AppBarHomeSection extends StatelessWidget {

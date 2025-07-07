@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:meeting_app/Routers/RouterContstants.dart';
-import 'package:meeting_app/model/components/CustomBtn.dart';
-import 'package:meeting_app/utils/ThemeExtension.dart';
+import 'package:meeting_app/core/Routers/RouterContstants.dart';
+import 'package:meeting_app/core/components/CustomBtn.dart';
+import 'package:meeting_app/core/utils/ThemeExtension.dart';
 import 'package:meeting_app/view/AuthScreens/SignUpSection/passwordSection/passwordValidationScetion.dart';
-import '../../../../model/components/CustomText.dart';
-import '../../../../utils/AppColor.dart';
+import '../../../../core/components/CustomText.dart';
+import '../../../../core/utils/AppColor.dart';
 import '../../../../viewModel/bloc/AuthCubit/auth_cubit.dart';
 
 class PasswordScreen extends StatelessWidget {

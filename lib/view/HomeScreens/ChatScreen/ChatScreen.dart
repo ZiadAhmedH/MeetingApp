@@ -14,10 +14,11 @@ class ChatView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => ChatCubit()
-        ..loadMessages(myUid, otherUser.uid!)..subscribe(myUid),
+        ..loadMessages(myUid, otherUser.uid)..subscribe(myUid),
       child: Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(title: Text(otherUser.userName)),
-        body: ChatBodyView(me: myUid, other: otherUser.uid!),
+        body: ChatBodyView(me: myUid, other: otherUser.uid ,otherName:otherUser.userName ,),
       ),
     );
   }

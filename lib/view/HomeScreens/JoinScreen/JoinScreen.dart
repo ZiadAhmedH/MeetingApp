@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meeting_app/model/components/CustomText.dart';
-import 'package:meeting_app/model/components/TextFormFeild.dart';
-import 'package:meeting_app/utils/ThemeExtension.dart';
-import 'package:meeting_app/utils/ZigoCloudConst.dart';
+import 'package:meeting_app/core/components/CustomText.dart';
+import 'package:meeting_app/core/components/TextFormFeild.dart';
+import 'package:meeting_app/core/utils/ThemeExtension.dart';
+import 'package:meeting_app/core/utils/ZigoCloudConst.dart';
 import 'package:meeting_app/viewModel/bloc/MeetingCubit/meeting_cubit.dart';
 import 'package:meeting_app/viewModel/data/SharedKeys.dart';
 import 'package:meeting_app/viewModel/data/SharedPrefrences.dart';

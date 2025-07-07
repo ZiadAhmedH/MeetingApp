@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:meeting_app/utils/AppColor.dart';
-import 'package:meeting_app/utils/ThemeExtension.dart';
+import 'package:meeting_app/core/utils/AppColor.dart';
+import 'package:meeting_app/core/utils/ThemeExtension.dart';
 
 import '../../../../viewModel/bloc/NavigationCubit/navigation_cubit.dart';
 

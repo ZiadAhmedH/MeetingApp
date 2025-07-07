@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meeting_app/Routers/RouterContstants.dart';
-import 'package:meeting_app/model/components/CustomText.dart';
-import 'package:meeting_app/utils/AppColor.dart';
-import 'package:meeting_app/utils/ThemeExtension.dart';
+import 'package:meeting_app/core/Routers/RouterContstants.dart';
+import 'package:meeting_app/core/components/CustomText.dart';
+import 'package:meeting_app/core/utils/AppColor.dart';
+import 'package:meeting_app/core/utils/ThemeExtension.dart';
 import 'package:meeting_app/view/AuthScreens/SignUpSection/userInfoSection/AcceptTermsSection.dart';
 import 'package:meeting_app/viewModel/bloc/AuthCubit/auth_cubit.dart';
 
-import '../../../model/components/CustomBtn.dart';
+import '../../../core/components/CustomBtn.dart';
 import 'signUpSection/SignUpSection.dart';
 
 class SignUpScreen extends StatelessWidget {

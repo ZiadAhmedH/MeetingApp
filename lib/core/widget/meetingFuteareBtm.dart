@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:meeting_app/model/components/CustomText.dart';
-import 'package:meeting_app/utils/ThemeExtension.dart';
+import 'package:meeting_app/core/components/CustomText.dart';
+import 'package:meeting_app/core/utils/ThemeExtension.dart';
 
-import '../../utils/AppColor.dart';
+import '../utils/AppColor.dart';
 class MeetingFBtn extends StatelessWidget {
 
 

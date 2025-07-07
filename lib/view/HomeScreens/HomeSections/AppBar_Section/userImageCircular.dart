@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:meeting_app/Routers/RouterContstants.dart';
+import 'package:meeting_app/core/Routers/RouterContstants.dart';
 
-import '../../../../utils/AppColor.dart';
+import '../../../../core/utils/AppColor.dart';
 import '../../../../viewModel/bloc/ProfileCubit/profile_cubit.dart';
 
 class UserImageCircular extends StatelessWidget {
