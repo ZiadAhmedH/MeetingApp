@@ -9,7 +9,6 @@ import 'package:meeting_app/view/AuthScreens/SignUpSection/userInfoSection/UserI
 import 'package:meeting_app/view/AuthScreens/signMainScreen.dart';
 import 'package:meeting_app/view/HomeScreens/ChatScreen/ChatScreen.dart';
 import 'package:meeting_app/view/HomeScreens/HomeScreen.dart';
-import 'package:meeting_app/view/HomeScreens/JoinScreen/JoinScreen.dart';
 import 'package:meeting_app/view/HomeScreens/ProfileScreen/ProfileScreen.dart';
 import 'package:meeting_app/view/splashScreen.dart';
 

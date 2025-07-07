@@ -164,7 +164,7 @@ $imagePath
           .select()
           .eq('host_id', LocalData.getData(key: SharedKey.uid));
 
-      if (response == null || (response is List && response.isEmpty)) {
+      if ((response.isEmpty)) {
         throw Exception('No meetings found for this user.');
       }
 

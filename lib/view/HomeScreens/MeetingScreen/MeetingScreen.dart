@@ -30,16 +30,61 @@ class _MeetingScreenState extends State<MeetingScreen> {
   String? zegoKitToken;
   bool _isError = false;
   DateTime? _meetingStartTime;
+  RealtimeChannel? _subscription;
+
+  late final String userID;
+  late final String userName;
 
   @override
   void initState() {
     super.initState();
-    fetchZegoKitToken();
-
-    // Record meeting start time
+    userID = LocalData.getData(key: SharedKey.uid)!;
+    userName = LocalData.getData(key: SharedKey.email) ?? "User";
     _meetingStartTime = DateTime.now();
+    fetchZegoKitToken();
+    _createMeetingLog();
+  }
 
-    // Create meeting record in DB on screen open
+  Future<void> fetchZegoKitToken() async {
+    try {
+      final response = await Supabase.instance.client.functions.invoke('generate-zego-token');
+      if (response.status == 200 && response.data['token'] != null) {
+        setState(() {
+          zegoKitToken = response.data['token'] as String;
+        });
+      } else {
+        debugPrint("❌ Token fetch failed: ${response.data}");
+        setState(() => _isError = true);
+      }
+    } catch (e) {
+      debugPrint("❌ Token fetch exception: $e");
+      setState(() => _isError = true);
+    }
+  }
+
+
+  void _onKickedFromMeeting() {
+    if (!mounted) return;
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => AlertDialog(
+        title: const Text("You were removed from the meeting"),
+        content: const Text("Another participant has joined this session."),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close dialog
+              Navigator.of(context).pop(); // Exit screen
+            },
+            child: const Text("OK"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _createMeetingLog() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final meetingCubit = BlocProvider.of<MeetingCubit>(context);
       meetingCubit.createMeeting(
@@ -51,42 +96,21 @@ class _MeetingScreenState extends State<MeetingScreen> {
     });
   }
 
-  Future<void> fetchZegoKitToken() async {
-    try {
-      final response = await Supabase.instance.client.functions.invoke(
-        'generate-zego-token',
-      );
-
-      if (response.status == 200 && response.data['token'] != null) {
-        setState(() {
-          zegoKitToken = response.data['token'] as String;
-        });
-      } else {
-        debugPrint("❌ Token fetch failed: ${response.data}");
-        setState(() {
-          _isError = true;
-        });
-      }
-    } catch (e) {
-      debugPrint("❌ Token fetch exception: $e");
-      setState(() {
-        _isError = true;
-      });
-    }
+  @override
+  void dispose() {
+    _subscription?.unsubscribe();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final userID = LocalData.getData(key: SharedKey.uid);
-    final userName = LocalData.getData(key: SharedKey.email) ?? "User";
-
     if (_isError) {
       return const Scaffold(
         body: Center(child: Text("Failed to join the meeting. Please try again.")),
       );
     }
 
-    if (zegoKitToken == null || userID == null || userID.isEmpty) {
+    if (zegoKitToken == null) {
       return Scaffold(
         body: Center(
           child: LoadingAnimationWidget.dotsTriangle(
@@ -111,17 +135,14 @@ class _MeetingScreenState extends State<MeetingScreen> {
         events: ZegoUIKitPrebuiltCallEvents(
           onCallEnd: (event, defaultAction) async {
             final meetingCubit = BlocProvider.of<MeetingCubit>(context);
-
-            // Calculate meeting duration in minutes
-            final meetingEndTime = DateTime.now();
             final durationMin = _meetingStartTime == null
                 ? 0
-                : meetingEndTime.difference(_meetingStartTime!).inMinutes;
+                : DateTime.now().difference(_meetingStartTime!).inMinutes;
 
-            // Update duration in Supabase
             await meetingCubit.updateMeetingDuration(widget.meetingId, durationMin);
 
-            defaultAction(); // continue default onCallEnd behavior (pop screen)
+
+            defaultAction();
           },
         ),
       ),

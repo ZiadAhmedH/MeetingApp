@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:meeting_app/core/components/CustomText.dart';
 
 class CustomButton extends StatelessWidget {
 

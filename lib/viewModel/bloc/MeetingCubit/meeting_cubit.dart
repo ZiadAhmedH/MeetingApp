@@ -57,14 +57,16 @@ class MeetingCubit extends Cubit<MeetingState> {
           'host_id': Supabase.instance.client.auth.currentUser!.id,
           'title': 'Call $meetingId',
           'description': '',
-          'scheduled_at': DateTime.now().toIso8601String(),
+          'created_at': DateTime.now().toIso8601String(),
+           'ended_at': DateTime.now().toIso8601String(), // <-- required
+
         });
 
     emit(MeetingCreateSuccessState(meetingId));
     print('Meeting created successfully: $meetingId');
 
   } catch (e) {
-    print('Error creating meeting: $e');
+    print('Error creating meetingggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg: $e');
     emit(MeetingCreateFailedState(errorMessage: e.toString()));
   }
 }
@@ -73,7 +75,7 @@ class MeetingCubit extends Cubit<MeetingState> {
     try {
       await Supabase.instance.client
           .from('meetings')
-          .update({'duration_min': durationMin})
+          .update({'ended_at': durationMin})
           .eq('id', meetingId);
       print('Meeting duration updated: $durationMin minutes');
     } catch (e) {
@@ -91,7 +93,7 @@ Future<void> logJoinEvent({ required String meetingId}) async {
       'joined_at': DateTime.now().toIso8601String(),
     });
   } catch (e) {
-    print('Error logging join event: $e');
+    print('Error logging join evenddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddt: $e');
   }
 }
 
@@ -111,6 +113,7 @@ Future<void> logJoinEvent({ required String meetingId}) async {
 
     emit(MeetingGeneratedIdState(meetingId));
   }
+
 }
 
 

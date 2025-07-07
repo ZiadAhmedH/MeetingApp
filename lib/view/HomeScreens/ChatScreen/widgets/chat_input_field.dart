@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:meeting_app/core/utils/ThemeExtension.dart';
 
 class ChatInputField extends StatelessWidget {
   final void Function(String) onSend;

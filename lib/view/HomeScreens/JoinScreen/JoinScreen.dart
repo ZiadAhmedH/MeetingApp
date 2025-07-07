@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meeting_app/core/components/CustomText.dart';
 import 'package:meeting_app/core/components/TextFormFeild.dart';
 import 'package:meeting_app/core/utils/ThemeExtension.dart';
@@ -33,20 +32,25 @@ class _JoinScreenState extends State<JoinScreen> {
       final callId = _meetingIdController.text.trim();
       final userId = LocalData.getData(key: SharedKey.uid);
 
-      // Check if meeting exists in Supabase
-    final response = await Supabase.instance.client
+      try{
+         await Supabase.instance.client
         .from('meetings')
         .select('id')
         .eq('id', callId)
-        .maybeSingle();
+         .maybeSingle();
+          
+          _meetingIdController.clear();
+      
+      } catch (e) {
+        print("❌ Error fetching meeting: $e");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error joining meeting: $e')),
+        );
+        return;
+      }
+   
 
-    if (response == null) {
-      // Meeting not found
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Meeting ID not found')),
-      );
-      return;
-    }
+    
 
 
       Navigator.push(

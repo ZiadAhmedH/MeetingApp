@@ -7,7 +7,6 @@ import 'package:meeting_app/core/services/auth_services.dart';
 import 'package:meeting_app/viewModel/data/SharedKeys.dart';
 import 'package:meeting_app/viewModel/data/SharedPrefrences.dart';
 import 'package:meeting_app/core/utils/AppColor.dart';
-import 'package:meeting_app/viewModel/bloc/CommonFunction.dart';
 import 'package:meeting_app/viewModel/bloc/ProfileCubit/profile_cubit.dart';
 
 part 'auth_state.dart';

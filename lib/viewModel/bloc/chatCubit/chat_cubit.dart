@@ -1,7 +1,6 @@
 // chat_cubit.dart
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meeting_app/model/Models/message_model.dart';
-import 'package:meeting_app/core/services/notifcation_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'chat_state.dart';

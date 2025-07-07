@@ -62,7 +62,7 @@ class MeetingSettings extends StatelessWidget {
                       CupertinoSwitch(
                         value: meetingCubit.isCameraOn,
                         onChanged: (_) => meetingCubit.toggleCamera(),
-                        activeColor: AppColor.primaryBlue,
+                        activeTrackColor: AppColor.primaryBlue,
                       ),
                     ],
                   ),
@@ -81,7 +81,7 @@ class MeetingSettings extends StatelessWidget {
                       CupertinoSwitch(
                         value: meetingCubit.isMicrophoneOn,
                         onChanged: (_) => meetingCubit.toggleMicrophone(),
-                        activeColor: AppColor.primaryBlue,
+                        activeTrackColor: AppColor.primaryBlue,
                       ),
                     ],
                   ),
@@ -100,7 +100,7 @@ class MeetingSettings extends StatelessWidget {
                       CupertinoSwitch(
                         value: meetingCubit.isSpeakerOn,
                         onChanged: (_) => meetingCubit.toggleSpeaker(),
-                        activeColor: AppColor.primaryBlue,
+                        activeTrackColor: AppColor.primaryBlue,
                       ),
                     ],
                   ),

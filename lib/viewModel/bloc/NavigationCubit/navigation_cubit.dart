@@ -1,9 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meeting_app/view/HomeScreens/ChatScreen/users_view.dart';
 import 'package:meta/meta.dart';
-import '../../../view/HomeScreens/ChatScreen/ChatScreen.dart';
 import '../../../view/HomeScreens/HomeSections/MainHomeSection.dart';
-import '../../../view/HomeScreens/ProfileScreen/ProfileScreen.dart';
 
 
 part 'navigation_state.dart';
