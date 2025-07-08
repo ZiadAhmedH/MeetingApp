@@ -65,7 +65,7 @@ class MeetingCubit extends Cubit<MeetingState> {
     emit(MeetingCreateSuccessState(meetingId));
     print('Meeting created successfully: $meetingId');
 
-  } catch (e) {
+  } catch (e)  {
     print('Error creating meetingggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg: $e');
     emit(MeetingCreateFailedState(errorMessage: e.toString()));
   }
