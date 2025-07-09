@@ -34,7 +34,6 @@ class ProfileCubit extends Cubit<ProfileState> implements CommonFun {
 
   final supabase = Supabase.instance.client;
 
-
   @override
   bool isAcceptTerms = false;
 
@@ -86,8 +85,9 @@ class ProfileCubit extends Cubit<ProfileState> implements CommonFun {
     emit(LoadingUserInfoState());
 
     try {
-
-      final data = await supabase.from("users").select()
+      final data = await supabase
+          .from("users")
+          .select()
           .eq('id', LocalData.getData(key: SharedKey.uid))
           .single();
 
@@ -96,11 +96,9 @@ class ProfileCubit extends Cubit<ProfileState> implements CommonFun {
       lastName.text = User!.userName.split(' ')[1];
       userLocation.text = User!.location;
       currentStatus = User!.jobTitle;
-      jobtitle.text = User!.jobTitle; 
-
+      jobtitle.text = User!.jobTitle;
 
       print('User Info: ${User!.toJson()}');
-
 
       emit(SuccessUserInfoState(User!));
     } catch (e) {
@@ -108,9 +106,7 @@ class ProfileCubit extends Cubit<ProfileState> implements CommonFun {
       emit(ProfileError('Failed to fetch user info: $e'));
       return;
     }
-      
   }
-
 
   Future<void> uploadPImage({
     required XFile image,
@@ -156,7 +152,6 @@ $imagePath
     }
   }
 
-  // get user his own meetings
   Future<List<Map<String, dynamic>>> getUserMeetings() async {
     try {
       final response = await supabase
@@ -199,26 +194,23 @@ $imagePath
     }
   }
 
-  
   Future<void> updateUserInfo(
-      {required String username, required String uid , required String location}) async {
+      {required String username,
+      required String uid,
+      required String location}) async {
     emit(LoadingUserInfoState());
     try {
-      final updateRes = await supabase
-      .from('users')
-      .update({
+      final updateRes = await supabase.from('users').update({
         'username': username,
         'profile_image': User!.profileImage,
         'location': location,
-       }).eq('id', uid);
-      
-      
+      }).eq('id', uid);
+
       await uploadPImage(
         image: image!,
         email: LocalData.getData(key: SharedKey.email),
         uid: uid,
       );
-
 
       emit(UserInfoUpdatedSuccessfully());
       print('User info updated successfully: $updateRes');
@@ -227,23 +219,45 @@ $imagePath
       print('Error updating user info: $e');
 
       return;
-      }
+    }
   }
-  
+
   bool hasChanges() {
-  final currentFullName = "${firstName.text.trim()} ${lastName.text.trim()}";
-  final storedFullName = User?.userName.trim();
-  final currentLocation = userLocation.text.trim();
-  final storedLocation = User?.location.trim();
+    final currentFullName = "${firstName.text.trim()} ${lastName.text.trim()}";
+    final storedFullName = User?.userName.trim();
+    final currentLocation = userLocation.text.trim();
+    final storedLocation = User?.location.trim();
 
-  final isImageChanged = image != null;
+    final isImageChanged = image != null;
 
-  return currentFullName != storedFullName ||
-         currentLocation != storedLocation ||
-         isImageChanged;
-}
+    return currentFullName != storedFullName ||
+        currentLocation != storedLocation ||
+        isImageChanged;
+  }
 
+  Future<void> searchUser(String query) async {
+    emit(SearchLoading());
+    try {
+      final response = await supabase
+          .from('users')
+          .select()
+          .ilike('username', '%$query%')
+          .not('id', 'eq', LocalData.getData(key: SharedKey.uid));
 
+      if (response.isEmpty) {
+        emit(SearchError("No users found matching your search."));
+        return;
+      }
+
+      final users = (response as List)
+          .map((e) => UserModel.fromJson(e as Map<String, dynamic>))
+          .toList();
+
+      emit(SearchSuccess(users));
+    } catch (e) {
+      emit(SearchError('Failed to search users: $e'));
+    }
+  }
 
   @override
   void acceptTerms() {

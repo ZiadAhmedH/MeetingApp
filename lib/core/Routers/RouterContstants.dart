@@ -11,4 +11,6 @@ class RouteConst {
   static const profile = '/profile';
 
   static const chat = '/chat';
+
+  static const search = '/search';
 }

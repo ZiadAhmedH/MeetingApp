@@ -17,7 +17,7 @@ class ChatCubit extends Cubit<ChatState> {
         .from('messages')
         .select()
         .or('sender_id.eq.$me,receiver_id.eq.$me')
-        .order('created_at');
+        .order('created_at' , ascending: true);
 
     _messages.clear();
     _messages.addAll((res as List)

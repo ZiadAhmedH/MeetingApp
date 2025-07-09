@@ -10,12 +10,13 @@ import 'package:meeting_app/view/AuthScreens/signMainScreen.dart';
 import 'package:meeting_app/view/HomeScreens/ChatScreen/ChatScreen.dart';
 import 'package:meeting_app/view/HomeScreens/HomeScreen.dart';
 import 'package:meeting_app/view/HomeScreens/ProfileScreen/ProfileScreen.dart';
+import 'package:meeting_app/view/searchView/search_view.dart';
 import 'package:meeting_app/view/splashScreen.dart';
 
 Route<dynamic> onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
     case RouteConst.splash:
-      return MaterialPageRoute(builder: (_) => const SplashScreen());
+      return MaterialPageRoute(builder: (_) => const SearchView());
 
     case RouteConst.signMain:
       return MaterialPageRoute(builder: (_) => const SignMainScreen());
@@ -50,6 +51,10 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
      return MaterialPageRoute(
       builder: (_) => ChatView(myUid: myUid, otherUser: otherUser),
       );
+
+
+    case RouteConst.search:
+      return MaterialPageRoute(builder: (_) => const SearchView());  
 
     default:
       return MaterialPageRoute(

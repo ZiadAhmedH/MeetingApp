@@ -77,3 +77,15 @@ class UserInfoUpdateError extends ProfileState {
   UserInfoUpdateError(this.message);
 }
 
+
+// search
+class SearchLoading extends ProfileState {}
+class SearchSuccess extends ProfileState {
+  final List<UserModel> users;
+  SearchSuccess(this.users);
+}
+class SearchError extends ProfileState {
+  final String message;
+  SearchError(this.message);
+}
+
