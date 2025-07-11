@@ -16,7 +16,7 @@ import 'package:meeting_app/view/splashScreen.dart';
 Route<dynamic> onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
     case RouteConst.splash:
-      return MaterialPageRoute(builder: (_) => const SearchView());
+      return MaterialPageRoute(builder: (_) => const SplashScreen());
 
     case RouteConst.signMain:
       return MaterialPageRoute(builder: (_) => const SignMainScreen());

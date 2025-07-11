@@ -22,6 +22,10 @@ class NavigationSection extends StatelessWidget {
           label: 'Meeting',
         ),
         BottomNavigationBarItem(
+          icon: Icon(FontAwesomeIcons.search),
+          label: 'Search',
+        ),
+        BottomNavigationBarItem(
           icon: Icon(FontAwesomeIcons.comments),
           label: 'Chats',
         ),

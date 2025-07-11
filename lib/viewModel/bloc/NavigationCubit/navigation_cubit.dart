@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meeting_app/view/HomeScreens/ChatScreen/users_view.dart';
+import 'package:meeting_app/view/searchView/search_view.dart';
 import 'package:meta/meta.dart';
 import '../../../view/HomeScreens/HomeSections/MainHomeSection.dart';
 
@@ -13,7 +14,7 @@ class NavigationCubit extends Cubit<NavigationState> {
 
   int currentIndex = 0;
 
-  List pages = [const MainHomeSection(),  AllUsersView(), ];
+  List pages = [const MainHomeSection(),const SearchView() , AllUsersView(), ];
 
 
   void changeIndex(int index) {
