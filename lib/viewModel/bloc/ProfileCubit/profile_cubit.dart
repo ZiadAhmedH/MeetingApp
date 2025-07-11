@@ -259,6 +259,30 @@ $imagePath
     }
   }
 
+
+  Future<void> loadAllUsers() async {
+  emit(UsersLoading());
+  try {
+    final myUid = LocalData.getData(key: SharedKey.uid);
+    final res = await supabase
+        .from('users')
+        .select('*')
+        .not('id', 'eq', myUid);
+
+    final fetchedUsers = (res as List)
+        .map((e) => UserModel.fromJson(e))
+        .toList();
+
+    emit(UsersLoaded(fetchedUsers));
+  } catch (e) {
+    emit(UsersLoadError('Failed to load users: $e'));
+  }
+}
+
+
+
+
+
   @override
   void acceptTerms() {
     isAcceptTerms = !isAcceptTerms;

@@ -17,14 +17,10 @@ class MainHomeSection extends StatelessWidget {
       builder: (context, state) {
         return Column(
           children: [
-
-
-            const AppBarHomeSection(),
             const MeetingSection(),
 
             const Divider(color: AppColor.darkGrey, thickness: 1),
 
-            // Add any additional content here
             Expanded(
               child: Container(
                   color: context.primaryBackgroundColor,

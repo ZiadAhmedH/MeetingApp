@@ -6,8 +6,8 @@ class LoadingUserShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: Colors.grey[850]!,
-      highlightColor: Colors.grey[700]!,
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[500]!,
       period: const Duration(seconds: 3),
       child: Container(
         decoration: BoxDecoration(
@@ -21,7 +21,7 @@ class LoadingUserShimmer extends StatelessWidget {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Colors.grey[500]!,
                 shape: BoxShape.circle,
               ),
             ),
@@ -33,7 +33,7 @@ class LoadingUserShimmer extends StatelessWidget {
                   Container(
                     width: double.infinity,
                     height: 12,
-                    color: Colors.white,
+                    color: Colors.grey[500]!,
                     margin: const EdgeInsets.only(bottom: 10),
                   ),
                   Container(

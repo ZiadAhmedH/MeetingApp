@@ -1,29 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meeting_app/model/Models/UserModel.dart';
 import 'package:meeting_app/viewModel/bloc/ProfileCubit/profile_cubit.dart';
 import 'Loading_user_shimmer.dart';
+import 'package:meeting_app/view/HomeScreens/ChatScreen/ChatScreen.dart';
+import 'package:meeting_app/viewModel/data/SharedKeys.dart';
+import 'package:meeting_app/viewModel/data/SharedPrefrences.dart';
 
 class SearchBodyView extends StatelessWidget {
   const SearchBodyView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+
     return Container(
-      color: const Color(0xFF121212), // خلفية داكنة
+      color: theme.scaffoldBackgroundColor,
       child: Column(
         children: [
           const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: TextField(
-              style: const TextStyle(color: Colors.white),
+              style: textTheme.bodyLarge?.copyWith(color: theme.primaryColorLight),
               decoration: InputDecoration(
                 hintText: 'Search',
-                hintStyle: const TextStyle(color: Colors.white54),
+                hintStyle: textTheme.bodyMedium?.copyWith(color: theme.hintColor),
                 filled: true,
-                fillColor: const Color(0xFF1F2937),
-                prefixIcon: const Icon(Icons.search, color: Colors.white54),
+                fillColor: theme.cardColor,
+                prefixIcon: Icon(Icons.search, color: theme.iconTheme.color?.withOpacity(0.6)),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
@@ -40,7 +45,6 @@ class SearchBodyView extends StatelessWidget {
             child: BlocBuilder<ProfileCubit, ProfileState>(
               builder: (context, state) {
                 if (state is SearchLoading) {
-                  // شيمر تحميل يشبه نتائج البحث في إنستجرام
                   return ListView.separated(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     itemCount: 10,
@@ -53,20 +57,20 @@ class SearchBodyView extends StatelessWidget {
                   return Center(
                     child: Text(
                       state.message,
-                      style: const TextStyle(color: Colors.red),
+                      style: textTheme.bodyMedium?.copyWith(color: Colors.red),
                     ),
                   );
                 } else if (state is SearchSuccess) {
                   final users = state.users;
                   if (users.isEmpty) {
-                    return const Center(
+                    return Center(
                       child: Text(
                         "No users found.",
-                        style: TextStyle(color: Colors.white54),
+                        style: textTheme.bodyMedium?.copyWith(color: theme.disabledColor),
                       ),
                     );
                   }
-                  // عرض النتائج بنفس شكل الشيمر
+
                   return ListView.separated(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     itemCount: users.length,
@@ -75,43 +79,72 @@ class SearchBodyView extends StatelessWidget {
                       final user = users[index];
                       return Container(
                         decoration: BoxDecoration(
-                          color: const Color(0xFF1F2937),
+                          color: theme.cardColor,
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: ListTile(
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                          leading: user.profileImage != null && user.profileImage!.isNotEmpty
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          leading: user.profileImage != null &&
+                                  user.profileImage!.isNotEmpty
                               ? CircleAvatar(
                                   radius: 24,
                                   backgroundImage: NetworkImage(user.profileImage!),
                                 )
                               : CircleAvatar(
                                   radius: 24,
-                                  backgroundColor: Colors.blueGrey,
+                                  backgroundColor: theme.primaryColorDark,
                                   child: Text(
                                     user.userName.isNotEmpty
-                                        ? user.userName.split(' ').map((e) => e[0]).take(2).join()
+                                        ? user.userName
+                                            .split(' ')
+                                            .map((e) => e[0])
+                                            .take(2)
+                                            .join()
                                         : '',
-                                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                    style: textTheme.bodyLarge?.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                           title: Text(
                             user.userName,
-                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                            style: textTheme.bodyLarge?.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: theme.primaryColorLight,
+                            ),
                           ),
                           subtitle: Text(
                             user.jobTitle,
-                            style: const TextStyle(color: Colors.white54),
+                            style: textTheme.bodyMedium?.copyWith(
+                              color: theme.hintColor,
+                            ),
                           ),
                           onTap: () {
-                            // Handle user tap
+                            final myUid = LocalData.getData(key: SharedKey.uid)!;
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => ChatView(
+                                  myUid: myUid,
+                                  otherUser: user,
+                                ),
+                              ),
+                            );
                           },
                         ),
                       );
                     },
                   );
                 }
-                return const SizedBox();
+
+                return Center(
+                  child: Text(
+                    "Search for users to start chatting.",
+                    style: textTheme.bodyMedium?.copyWith(color: theme.hintColor),
+                  ),
+                );
               },
             ),
           ),
@@ -120,4 +153,3 @@ class SearchBodyView extends StatelessWidget {
     );
   }
 }
-
