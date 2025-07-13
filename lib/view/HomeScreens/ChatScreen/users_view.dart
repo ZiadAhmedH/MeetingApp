@@ -7,7 +7,7 @@ import 'package:meeting_app/view/HomeScreens/ChatScreen/ChatScreen.dart';
 import 'package:meeting_app/viewModel/bloc/ProfileCubit/profile_cubit.dart';
 import 'package:meeting_app/viewModel/data/SharedKeys.dart';
 import 'package:meeting_app/viewModel/data/SharedPrefrences.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+
 final userStatusService = UserStatusService();
 
 class AllUsersView extends StatefulWidget {
@@ -17,10 +17,9 @@ class AllUsersView extends StatefulWidget {
   State<AllUsersView> createState() => _AllUsersViewState();
 }
 
-class _AllUsersViewState extends State<AllUsersView>
-    with SingleTickerProviderStateMixin {
+class _AllUsersViewState extends State<AllUsersView> {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
-  List<UserModel> _users = [];
+  final List<UserModel> _users = [];
 
   @override
   void initState() {
@@ -33,10 +32,7 @@ class _AllUsersViewState extends State<AllUsersView>
     return BlocConsumer<ProfileCubit, ProfileState>(
       listener: (context, state) async {
         if (state is UsersLoaded) {
-          setState(() {
-            _users = [];
-          });
-
+          _users.clear();
           for (int i = 0; i < state.users.length; i++) {
             await Future.delayed(const Duration(milliseconds: 150));
             _users.insert(i, state.users[i]);
@@ -57,32 +53,40 @@ class _AllUsersViewState extends State<AllUsersView>
             final user = _users[index];
             return SlideTransition(
               position: animation.drive(
-                Tween<Offset>(begin: const Offset(1, 0), end: Offset.zero)
-                    .chain(CurveTween(curve: Curves.easeOut)),
+                Tween<Offset>(
+                  begin: const Offset(1, 0),
+                  end: Offset.zero,
+                ).chain(CurveTween(curve: Curves.easeOut)),
               ),
               child: FadeTransition(
                 opacity: animation,
                 child: ListTile(
                   leading: Stack(
-
+                    alignment: Alignment.bottomRight,
                     children: [
                       CircleAvatar(
-                        backgroundImage: NetworkImage(user.profileImage ?? ''),
+                        radius: 25,
+                        backgroundColor: Colors.grey.shade300,
+                        backgroundImage: user.profileImage != null && user.profileImage!.isNotEmpty
+                            ? NetworkImage(user.profileImage!)
+                            : null,
+                        child: (user.profileImage == null || user.profileImage!.isEmpty)
+                            ? const Icon(Icons.person, color: Colors.white)
+                            : null,
                       ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child:StreamBuilder<UserModel>(
-  stream: userStatusService.subscribeToUserStatus(user.uid),
-  builder: (context, snapshot) {
-    final isOnline = snapshot.data?.isOnline ?? false;
-   print('User ${user.uid} is online: $isOnline');
-    return CircleAvatar(
-      radius: 5,
-      backgroundColor: isOnline ? Colors.green : Colors.grey,
-    );
-  },
-                        ),
+                      StreamBuilder<bool>(
+                        stream: userStatusService.isUserOnline(user.uid),
+                        builder: (context, snapshot) {
+                          final isOnline = snapshot.data ?? false;
+                          return CircleAvatar(
+                            radius: 6,
+                            backgroundColor: Colors.white,
+                            child: CircleAvatar(
+                              radius: 4.5,
+                              backgroundColor: isOnline ? Colors.green : Colors.grey,
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),

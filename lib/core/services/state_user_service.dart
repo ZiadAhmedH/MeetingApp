@@ -1,6 +1,3 @@
-import 'dart:async';
-
-import 'package:meeting_app/model/Models/UserModel.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class UserStatusService {
@@ -10,7 +7,7 @@ class UserStatusService {
     await _client.from('users').update({
       'is_online': true,
       'last_seen': DateTime.now().toIso8601String(),
-    }).eq('id', userId); 
+    }).eq('id', userId);
   }
 
   Future<void> setUserOffline(String userId) async {
@@ -20,23 +17,18 @@ class UserStatusService {
     }).eq('id', userId);
   }
 
-  Stream<UserModel> subscribeToUserStatus(String userId) {
-  return _client
-      .from('users')
-      .stream(primaryKey: ['id'])
-      .map((event) {
-        final userJson = event.firstWhere(
-          (e) => e['id'] == userId,
-          orElse: () => <String, dynamic>{},
-        );
-        if (userJson.isEmpty) {
-          throw Exception('User not found');
-        }
-        return UserModel.fromJson(userJson);
-      });
-}
-
-
-
-
+  /// Stream to check real-time online status of a specific user
+  Stream<bool> isUserOnline(String userId) {
+    return _client
+        .from('users')
+        .stream(primaryKey: ['id'])
+        .eq('id', userId)
+        .map((users) {
+          if (users.isEmpty) return false;
+          final user = users.first;
+          final lastSeen = DateTime.tryParse(user['last_seen'] ?? '') ?? DateTime(2000);
+          final isOnline = DateTime.now().difference(lastSeen).inSeconds < 20;
+          return isOnline;
+        });
+  }
 }

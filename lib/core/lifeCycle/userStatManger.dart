@@ -37,9 +37,7 @@ class _UserStatusManagerState extends State<UserStatusManager>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       _statusService.setUserOnline(widget.userId);
-    } else if (state == AppLifecycleState.paused ||
-        state == AppLifecycleState.inactive ||
-        state == AppLifecycleState.detached) {
+    } else if (state == AppLifecycleState.detached) {
       _statusService.setUserOffline(widget.userId);
     }
   }

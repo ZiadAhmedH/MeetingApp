@@ -118,7 +118,8 @@ class MeetingCubit extends Cubit<MeetingState> {
 
   // ==================== MEETING HISTORY ====================
   Future<void> getMeetingHistory({required String userId}) async {
-    emit(MeetingHistoryLoadingState());
+    if (isClosed) return; // ✅ Prevent emitting after close
+     emit(MeetingHistoryLoadingState());
     try {
       final response = await _client
           .from('meetings')
