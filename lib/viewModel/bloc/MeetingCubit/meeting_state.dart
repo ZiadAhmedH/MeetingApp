@@ -43,3 +43,15 @@ class MeetingCreateFailedState extends MeetingState {
 
 class MeetingSavedSuccess extends MeetingState {}
 class MeetingSavedError extends MeetingState {}
+
+
+
+class MeetingHistoryLoadingState extends MeetingState {}
+class MeetingHistoryLoadedState extends MeetingState {
+  final List<Meetinghistorymodel> meetings;
+  MeetingHistoryLoadedState({required this.meetings});
+}
+class MeetingHistoryErrorState extends MeetingState {
+  final String errorMessage;
+  MeetingHistoryErrorState({required this.errorMessage});
+}

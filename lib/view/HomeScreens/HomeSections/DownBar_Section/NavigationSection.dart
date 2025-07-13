@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:meeting_app/core/utils/AppColor.dart';
 import 'package:meeting_app/core/utils/ThemeExtension.dart';
@@ -11,34 +12,34 @@ class NavigationSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var navigationCubit = NavigationCubit.get(context);
-    return BottomNavigationBar(
-      elevation: 1,
-      useLegacyColorScheme: true,
-      backgroundColor: context.primaryBackgroundColor,
-      currentIndex: navigationCubit.currentIndex,
-      items:  const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(FontAwesomeIcons.video),
-          label: 'Meeting',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(FontAwesomeIcons.addressBook),
-          label: 'contact',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(FontAwesomeIcons.comments),
-          label: 'Chats',
-        ),
-       
-      ],
-      selectedItemColor: AppColor.primaryBlue,
-      unselectedItemColor: context.thirdTextColor,
-       
-      onTap: (index) {
-        navigationCubit.changeIndex(index);
+    return BlocBuilder<NavigationCubit, NavigationState>(
+      builder: (context, state) {
+        return BottomNavigationBar(
+          elevation: 1,
+          useLegacyColorScheme: true,
+          backgroundColor: context.primaryBackgroundColor,
+          currentIndex: navigationCubit.currentIndex,
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(FontAwesomeIcons.video),
+              label: 'Meeting',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(FontAwesomeIcons.addressBook),
+              label: 'contact',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(FontAwesomeIcons.comments),
+              label: 'Chats',
+            ),
+          ],
+          selectedItemColor: AppColor.primaryBlue,
+          unselectedItemColor: context.thirdTextColor,
+          onTap: (index) {
+            navigationCubit.changeIndex(index);
+          },
+        );
       },
-
-
     );
   }
 }
