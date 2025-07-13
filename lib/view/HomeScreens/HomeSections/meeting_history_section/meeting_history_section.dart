@@ -44,75 +44,91 @@ class MeetingHistorySection extends StatelessWidget {
               );
             }
 
-            return CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: CustomText(
-                      text: 'History',
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                      color: context.thirdTextColor,
-                    ),
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomText(
+                        text: 'Meeting History',
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: context.primaryTextColor,
+                      ),
+                      IconButton(
+                        icon: const FaIcon(FontAwesomeIcons.refresh),
+                        onPressed: () {
+                          MeetingCubit.get(context).getMeetingHistory(userId: userId);
+                        },
+                      ),
+                    ],
                   ),
                 ),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final meeting = meetings[index];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: AppColor.primaryBlue,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(10),
+
+                Expanded(
+                  child: CustomScrollView(
+                    slivers: [
+                      SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            final meeting = meetings[index];
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 8),
+                              child: Container(
+                                padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(10),
+                                  color: AppColor.primaryBlue,
+                                  borderRadius: BorderRadius.circular(12),
                                 ),
-                                child: const FaIcon(
-                                  FontAwesomeIcons.video,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    CustomText(
-                                      text: meeting.meetingName,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                                    Container(
+                                      padding: const EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white.withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: const FaIcon(
+                                        FontAwesomeIcons.video,
+                                        color: Colors.white,
+                                        size: 20,
+                                      ),
                                     ),
-                                    const SizedBox(height: 4),
-                                    CustomText(
-                                      text:
-                                          'Scheduled on ${formatMeetingDate(meeting.createdAt.toIso8601String())}',
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.white.withOpacity(0.85),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          CustomText(
+                                            text: meeting.meetingName,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                          const SizedBox(height: 4),
+                                          CustomText(
+                                            text:
+                                                'Scheduled on ${formatMeetingDate(meeting.createdAt.toIso8601String())}',
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.white.withOpacity(0.85),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
                               ),
-                            ],
-                          ),
+                            );
+                          },
+                          childCount: meetings.length,
                         ),
-                      );
-                    },
-                    childCount: meetings.length,
+                      ),
+                    ],
                   ),
                 ),
               ],

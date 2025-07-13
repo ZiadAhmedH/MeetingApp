@@ -27,48 +27,45 @@ class MainHomeSection extends StatelessWidget {
             const MeetingSection(),
             const Divider(color: AppColor.darkGrey, thickness: 1),
             // ✅ Wrap StreamBuilder in Expanded to avoid unbounded height
-            Expanded(
-              flex: 1,
-              child: StreamBuilder<List<Map<String, dynamic>>>(
-                stream: MeetingCubit.get(context).getLiveOutgoingMeetings(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
-                      child: LinearProgressIndicator(
-                        color: AppColor.blackBtn,
-                        backgroundColor: AppColor.darkGrey,
-                      ),
-                    );
-                  }
-
-                  final meetings = snapshot.data ?? [];
-
-                  if (meetings.isEmpty) {
-                    return const Center(child: Text("No active meetings"));
-                  }
-
-                  return ListView.builder(
-                    itemCount: meetings.length,
-                    itemBuilder: (context, index) {
-                      final meeting = meetings[index];
-                      return ListTile(
-                        title: Text(
-                          meeting['meeting_name'] ?? 'Untitled Meeting',
-                          style: TextStyle(
-                            color: context.thirdTextColor,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        subtitle: Text('Host: ${meeting['host_id']}'),
-                        onTap: () {
-                          // TODO: handle join meeting
-                        },
-                      );
-                    },
+            StreamBuilder<List<Map<String, dynamic>>>(
+              stream: MeetingCubit.get(context).getLiveOutgoingMeetings(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: LinearProgressIndicator(
+                      color: AppColor.blackBtn,
+                      backgroundColor: AppColor.darkGrey,
+                    ),
                   );
-                },
-              ),
+                }
+            
+                final meetings = snapshot.data ?? [];
+            
+                if (meetings.isEmpty) {
+                  return SizedBox();
+                }
+            
+                return  ListView.builder(
+                  itemCount: meetings.length,
+                  itemBuilder: (context, index) {
+                    final meeting = meetings[index];
+                    return ListTile(
+                      title: Text(
+                        meeting['meeting_name'] ?? 'Untitled Meeting',
+                        style: TextStyle(
+                          color: context.thirdTextColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      subtitle: Text('Host: ${meeting['host_id']}'),
+                      onTap: () {
+                        // TODO: handle join meeting
+                      },
+                    );
+                  },
+                );
+              },
             ),
             // ✅ Meeting History Section (still scrollable inside Expanded)
             Expanded(

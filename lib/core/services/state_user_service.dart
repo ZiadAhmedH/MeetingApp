@@ -17,7 +17,6 @@ class UserStatusService {
     }).eq('id', userId);
   }
 
-  /// Stream to check real-time online status of a specific user
   Stream<bool> isUserOnline(String userId) {
     return _client
         .from('users')
