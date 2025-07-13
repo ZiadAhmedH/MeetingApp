@@ -11,7 +11,7 @@ class ChatBodyView extends StatelessWidget {
   final String me;
   final String other;
   final String otherName;
-
+ 
   const ChatBodyView({
     super.key,
     required this.me,

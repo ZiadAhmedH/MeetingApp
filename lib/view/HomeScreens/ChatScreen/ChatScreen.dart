@@ -7,6 +7,7 @@ import 'package:meeting_app/viewModel/bloc/chatCubit/chat_cubit.dart';
 class ChatView extends StatelessWidget {
   final String myUid;
   final UserModel otherUser;
+  
 
   const ChatView({super.key, required this.myUid, required this.otherUser});
 
@@ -18,7 +19,7 @@ class ChatView extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(title: Text(otherUser.userName)),
-        body: ChatBodyView(me: myUid, other: otherUser.uid ,otherName:otherUser.userName ,),
+        body: ChatBodyView(me: myUid, other: otherUser.uid ,otherName:otherUser.userName , ),
       ),
     );
   }

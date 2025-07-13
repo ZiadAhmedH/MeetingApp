@@ -47,7 +47,6 @@ class MainHomeSection extends StatelessWidget {
                   )
               ),
             ),
-            const Divider(color: AppColor.darkGrey, thickness: 1),
 
           ],
         );

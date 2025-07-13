@@ -32,6 +32,8 @@ class ProfileCubit extends Cubit<ProfileState> implements CommonFun {
   static TextEditingController lastName = TextEditingController();
   static TextEditingController jobtitle = TextEditingController();
 
+  bool isOnline = false;
+
   final supabase = Supabase.instance.client;
 
   @override
@@ -97,6 +99,7 @@ class ProfileCubit extends Cubit<ProfileState> implements CommonFun {
       userLocation.text = User!.location;
       currentStatus = User!.jobTitle;
       jobtitle.text = User!.jobTitle;
+      
 
       print('User Info: ${User!.toJson()}');
 

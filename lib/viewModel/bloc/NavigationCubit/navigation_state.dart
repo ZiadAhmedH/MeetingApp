@@ -6,6 +6,7 @@ abstract class NavigationState {}
 class NavigationInitial extends NavigationState {}
 
 class NavigationChangeIndexState extends NavigationState {}
+class NavigationPageChangeIndexState extends NavigationState {}
 
 
 class NavigationChanged extends NavigationState {}

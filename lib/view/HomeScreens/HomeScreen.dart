@@ -12,16 +12,20 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var navigationCubit = NavigationCubit.get(context);
-    return BlocConsumer<NavigationCubit, NavigationState>(
-      listener: (context, state) {},
+    final navigationCubit = NavigationCubit.get(context);
+    return BlocBuilder<NavigationCubit, NavigationState>(
       builder: (context, state) {
         return Scaffold(
           body: Column(
             children: [
               const AppBarHomeSection(),
               Expanded(
-                  child: navigationCubit.pages[navigationCubit.currentIndex]),
+                child: PageView(
+                  controller: navigationCubit.pageController,
+                  onPageChanged: navigationCubit.onPageChanged,
+                  children: navigationCubit.pages,
+                ),
+              ),
             ],
           ),
           floatingActionButton: const FloatingActionSection(),
@@ -32,3 +36,4 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
+

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:meeting_app/core/services/state_user_service.dart';
 import 'package:meeting_app/core/utils/AppColor.dart';
 import 'package:meeting_app/model/Models/UserModel.dart';
 import 'package:meeting_app/view/HomeScreens/ChatScreen/ChatScreen.dart';
 import 'package:meeting_app/viewModel/bloc/ProfileCubit/profile_cubit.dart';
 import 'package:meeting_app/viewModel/data/SharedKeys.dart';
 import 'package:meeting_app/viewModel/data/SharedPrefrences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+final userStatusService = UserStatusService();
 
 class AllUsersView extends StatefulWidget {
   const AllUsersView({super.key});
@@ -60,8 +63,28 @@ class _AllUsersViewState extends State<AllUsersView>
               child: FadeTransition(
                 opacity: animation,
                 child: ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: NetworkImage(user.profileImage ?? ''),
+                  leading: Stack(
+
+                    children: [
+                      CircleAvatar(
+                        backgroundImage: NetworkImage(user.profileImage ?? ''),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child:StreamBuilder<UserModel>(
+  stream: userStatusService.subscribeToUserStatus(user.uid),
+  builder: (context, snapshot) {
+    final isOnline = snapshot.data?.isOnline ?? false;
+   print('User ${user.uid} is online: $isOnline');
+    return CircleAvatar(
+      radius: 5,
+      backgroundColor: isOnline ? Colors.green : Colors.grey,
+    );
+  },
+                        ),
+                      ),
+                    ],
                   ),
                   title: Text(user.userName),
                   subtitle: Text(user.email),

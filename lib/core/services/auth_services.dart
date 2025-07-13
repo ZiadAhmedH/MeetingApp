@@ -67,9 +67,10 @@ class AuthService {
       location: location ?? '',
       jobTitle: jobTitle ?? '',
       profileImage: "awaiting", 
+      isOnline: false,
+      lastSeen: DateTime.now().toIso8601String(),
     );
 
-    // Step 4: Insert into custom 'users' table
     final insertRes = await _supabase.from('users').insert({
       'id': newUser.uid,
       'username': newUser.userName,

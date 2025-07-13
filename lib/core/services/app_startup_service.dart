@@ -32,6 +32,8 @@ class AppStartupService {
     }
   }
 
+
+
   static Future<void> handleNotificationTap(String? payload) async {
     if (payload == null) return;
 
@@ -39,7 +41,6 @@ class AppStartupService {
     if (parts.length != 2) return;
 
     final otherId = parts[0];
-    final otherName = parts[1];
     final myId = LocalData.getData(key: SharedKey.uid);
     if (myId == null) return;
 
@@ -59,4 +60,10 @@ class AppStartupService {
       },
     );
   }
+
+
+  
+  
+
+
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:meeting_app/core/lifeCycle/userStatManger.dart';
 import 'package:meeting_app/core/services/app_startup_service.dart';
 import 'package:meeting_app/viewModel/bloc/blocObserver.dart';
 import 'package:meeting_app/viewModel/bloc/AuthCubit/auth_cubit.dart';
@@ -10,6 +11,8 @@ import 'package:meeting_app/viewModel/bloc/ThemeCubit/theme_cubit.dart';
 import 'package:meeting_app/core/Routers/RouterContstants.dart';
 import 'package:meeting_app/core/Routers/go_Router.dart';
 import 'package:meeting_app/global_navigator.dart';
+import 'package:meeting_app/viewModel/data/SharedPrefrences.dart'; 
+import 'package:meeting_app/viewModel/data/SharedKeys.dart'; 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +20,16 @@ void main() async {
 
   await AppStartupService.initializeApp();
 
-  runApp(const MyApp());
+  final String? uid = LocalData.getData(key: SharedKey.uid); 
+
+  runApp(
+    uid != null
+        ? UserStatusManager(
+            userId: uid,
+            child: const MyApp(),
+          )
+        : const MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {

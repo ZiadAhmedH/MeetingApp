@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:meeting_app/core/services/state_user_service.dart';
 import 'package:meeting_app/model/Models/UserModel.dart';
 import 'package:meeting_app/core/components/CustomBtn.dart';
 import 'package:meeting_app/core/components/CustomText.dart';
@@ -62,7 +63,8 @@ class ProfileBodyView extends StatelessWidget {
                           backgroundImage: cubit.image != null
                               ? FileImage(File(cubit.image!.path))
                               : cubit.User?.profileImage != null
-                                  ? NetworkImage(cubit.User!.profileImage!) as ImageProvider
+                                  ? NetworkImage(cubit.User!.profileImage!)
+                                      as ImageProvider
                                   : null,
                           child: (cubit.image == null &&
                                   cubit.User?.profileImage == null)
@@ -75,7 +77,9 @@ class ProfileBodyView extends StatelessWidget {
                           child: GestureDetector(
                             onTap: () async {
                               await cubit.pickImageFromGallery(
-                                  email: user.email, uid: user.uid);
+                                email: user.email,
+                                uid: user.uid,
+                              );
                             },
                             child: Container(
                               padding: const EdgeInsets.all(6),
@@ -98,7 +102,9 @@ class ProfileBodyView extends StatelessWidget {
                       fontSize: 15,
                       color: context.thirdTextColor,
                     ),
-                    const SizedBox(height: 20),
+
+                    const SizedBox(height: 10),
+
                     CustomTextFormField(
                       hintText: "First Name",
                       controller: ProfileCubit.firstName,
@@ -140,7 +146,8 @@ class ProfileBodyView extends StatelessWidget {
                         if (!cubit.hasChanges()) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content: Text('⚠ Please change something before updating.'),
+                              content: Text(
+                                  '⚠ Please change something before updating.'),
                               backgroundColor: Colors.orange,
                             ),
                           );
