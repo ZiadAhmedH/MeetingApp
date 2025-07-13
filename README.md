@@ -49,7 +49,15 @@ A modern Flutter-based video meeting application powered by [ZegoCloud](https://
 
 | Login | Home | Meeting |
 |-------|------|---------|
-| ![login](screenshots/login.png) | ![home](screenshots/home.png) | ![meeting](screenshots/meeting.png) |
+<img width="200" height="600" alt="Screenshot_1752447256" src="https://github.com/user-attachments/assets/846b6447-9f77-4880-84a7-9426556d8d69" />
+<img width="200" height="600" alt="Screenshot_1752447240" src="https://github.com/user-attachments/assets/10749527-86e7-4c92-bc21-ea1e22ca0082" />
+<img width="200" height="600" alt="Screenshot_1752447226" src="https://github.com/user-attachments/assets/8823e468-6091-4c1e-902d-6b1006df8f83" />
+<img width="200" height="600" alt="Screenshot_1752447224" src="https://github.com/user-attachments/assets/7d8c0d06-b448-4385-b4ea-bd7c0e7bbaf2" />
+<img width="200" height="600" alt="Screenshot_1752447217" src="https://github.com/user-attachments/assets/53daaff1-2fd4-45ba-ae8b-4dbb79ac6f63" />
+<img width="200" height="600" alt="Screenshot_1752447209" src="https://github.com/user-attachments/assets/af0459bc-1893-4ec3-8749-605059716f83" />
+<img width="200" height="600" alt="Screenshot_1752447206" src="https://github.com/user-attachments/assets/95ed166a-20cf-424e-8794-d07285a8553c" />
+<img width="200" height="600" alt="Screenshot_1752447200" src="https://github.com/user-attachments/assets/88396f1a-1da4-439e-beb4-270533780054" />
+
 
 ---
 
