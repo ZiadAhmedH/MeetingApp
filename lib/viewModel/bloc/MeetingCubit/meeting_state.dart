@@ -55,3 +55,16 @@ class MeetingHistoryErrorState extends MeetingState {
   final String errorMessage;
   MeetingHistoryErrorState({required this.errorMessage});
 }
+
+
+class OutgoingMeetingLoadingState extends MeetingState {}
+
+class OutgoingMeetingLoadedState extends MeetingState {
+  final List<Map<String, dynamic>> meetings;
+  OutgoingMeetingLoadedState(this.meetings);
+}
+
+class OutgoingMeetingErrorState extends MeetingState {
+  final String error;
+  OutgoingMeetingErrorState(this.error);
+}

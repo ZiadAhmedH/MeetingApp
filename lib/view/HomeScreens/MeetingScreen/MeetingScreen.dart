@@ -83,18 +83,19 @@ class _MeetingScreenState extends State<MeetingScreen> {
       ),
     );
   }
+void _createMeetingLog() {
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    final meetingCubit = BlocProvider.of<MeetingCubit>(context);
+    meetingCubit.createMeeting(
+      meetingId: widget.meetingId,
+      durationMin: 0,
+      cameraOn: widget.isCameraOn,
+      micOn: widget.isMicOn,
+    );
+    meetingCubit.putItForOutgoingMeeting(widget.meetingId); 
+  });
+}
 
-  void _createMeetingLog() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final meetingCubit = BlocProvider.of<MeetingCubit>(context);
-      meetingCubit.createMeeting(
-        meetingId: widget.meetingId,
-        durationMin: 0,
-        cameraOn: widget.isCameraOn,
-        micOn: widget.isMicOn,
-      );
-    });
-  }
 
   @override
   void dispose() {
@@ -140,6 +141,7 @@ class _MeetingScreenState extends State<MeetingScreen> {
                 : DateTime.now().difference(_meetingStartTime!).inMinutes;
 
             await meetingCubit.updateMeetingDuration(widget.meetingId, durationMin);
+            await meetingCubit.deleteOutgoingMeeting(widget.meetingId); // ✅
 
 
             defaultAction();
