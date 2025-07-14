@@ -8,7 +8,7 @@ import 'package:meeting_app/view/AuthScreens/SignUpSection/signUpScreen.dart';
 import 'package:meeting_app/view/AuthScreens/SignUpSection/userInfoSection/UserInfoSection.dart';
 import 'package:meeting_app/view/AuthScreens/signMainScreen.dart';
 import 'package:meeting_app/view/HomeScreens/ChatScreen/ChatScreen.dart';
-import 'package:meeting_app/view/HomeScreens/HomeScreen.dart';
+import 'package:meeting_app/view/HomeScreens/HomeVeiw.dart';
 import 'package:meeting_app/view/HomeScreens/ProfileScreen/ProfileScreen.dart';
 import 'package:meeting_app/view/searchView/search_view.dart';
 import 'package:meeting_app/view/splashScreen.dart';
@@ -37,7 +37,7 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (_) => const UserInfoSection());
 
     case RouteConst.home:
-      return MaterialPageRoute(builder: (_) => const HomeScreen());
+      return MaterialPageRoute(builder: (_) => const HomeVeiw());
 
     case RouteConst.profile:
         final user = settings.arguments as UserModel;

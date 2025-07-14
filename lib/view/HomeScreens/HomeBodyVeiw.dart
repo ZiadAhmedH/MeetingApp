@@ -8,8 +8,8 @@ import 'package:meeting_app/viewModel/bloc/ProfileCubit/profile_cubit.dart';
 import 'HomeSections/DownBar_Section/FloatActionSection.dart';
 import 'HomeSections/DownBar_Section/NavigationSection.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class HomeBodyView extends StatelessWidget {
+  const HomeBodyView({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -91,12 +91,32 @@ class UsersLoadError extends ProfileState {
 
 // search
 class SearchLoading extends ProfileState {}
+
 class SearchSuccess extends ProfileState {
   final List<UserModel> users;
-  SearchSuccess(this.users);
+  final Map<String, String> friendStatuses; // friend_id -> status
+
+  SearchSuccess(this.users, {required this.friendStatuses});
 }
+
 class SearchError extends ProfileState {
   final String message;
   SearchError(this.message);
+}
+
+
+
+
+
+class FriendRequestLoading extends ProfileState {}
+
+class FriendRequestSent extends ProfileState {
+  final String friendId;
+  FriendRequestSent(this.friendId);
+}
+
+class FriendRequestError extends ProfileState {
+  final String message;
+  FriendRequestError(this.message);
 }
 

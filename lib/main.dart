@@ -42,7 +42,6 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => AuthCubit(AppStartupService.authService)),
         BlocProvider(create: (_) => ProfileCubit()),
         BlocProvider(create: (_) => ThemesCubit()),
-        BlocProvider(create: (_) => NavigationCubit()),
         BlocProvider(create: (_) => MeetingCubit()),
       ],
       child: BlocBuilder<ThemesCubit, ThemeData>(

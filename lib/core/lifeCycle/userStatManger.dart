@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:meeting_app/core/services/state_user_service.dart';
 
@@ -18,27 +19,56 @@ class UserStatusManager extends StatefulWidget {
 class _UserStatusManagerState extends State<UserStatusManager>
     with WidgetsBindingObserver {
   final UserStatusService _statusService = UserStatusService();
+  Timer? _heartbeatTimer;
+
+  static const Duration heartbeatInterval = Duration(seconds: 15);
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _startHeartbeat();
+  }
+
+  void _startHeartbeat() {
+    _sendHeartbeat(); // Initial update
+    _heartbeatTimer?.cancel();
+    _heartbeatTimer = Timer.periodic(heartbeatInterval, (_) {
+      _sendHeartbeat();
+    });
+  }
+
+  void _stopHeartbeat() {
+    _heartbeatTimer?.cancel();
+    _heartbeatTimer = null;
+    _statusService.setUserOffline(widget.userId); // optional but useful
+  }
+
+  void _sendHeartbeat() {
     _statusService.setUserOnline(widget.userId);
   }
 
   @override
   void dispose() {
-    _statusService.setUserOffline(widget.userId);
+    _stopHeartbeat();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      _statusService.setUserOnline(widget.userId);
-    } else if (state == AppLifecycleState.detached) {
-      _statusService.setUserOffline(widget.userId);
+    switch (state) {
+      case AppLifecycleState.resumed:
+        _startHeartbeat();
+        break;
+      case AppLifecycleState.paused:
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.detached:
+        _stopHeartbeat();
+        break;
+      case AppLifecycleState.hidden:
+        _stopHeartbeat();
+        break;
     }
   }
 

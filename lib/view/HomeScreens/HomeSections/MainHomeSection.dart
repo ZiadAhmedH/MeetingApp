@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:meeting_app/core/utils/ThemeExtension.dart';
 import 'package:meeting_app/view/HomeScreens/HomeSections/meeting_history_section/meeting_history_section.dart';
 import 'package:meeting_app/viewModel/bloc/MeetingCubit/meeting_cubit.dart';
@@ -31,10 +32,12 @@ class MainHomeSection extends StatelessWidget {
               stream: MeetingCubit.get(context).getLiveOutgoingMeetings(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: LinearProgressIndicator(
-                      color: AppColor.blackBtn,
-                      backgroundColor: AppColor.darkGrey,
+                  return Expanded(
+                    child: Center(
+                      child: LoadingAnimationWidget.dotsTriangle(
+                        color: AppColor.blue,
+                        size: 50,
+                      ),
                     ),
                   );
                 }
@@ -45,25 +48,27 @@ class MainHomeSection extends StatelessWidget {
                   return SizedBox();
                 }
             
-                return  ListView.builder(
-                  itemCount: meetings.length,
-                  itemBuilder: (context, index) {
-                    final meeting = meetings[index];
-                    return ListTile(
-                      title: Text(
-                        meeting['meeting_name'] ?? 'Untitled Meeting',
-                        style: TextStyle(
-                          color: context.thirdTextColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
+                return  Expanded(
+                  child: ListView.builder(
+                    itemCount: meetings.length,
+                    itemBuilder: (context, index) {
+                      final meeting = meetings[index];
+                      return ListTile(
+                        title: Text(
+                          meeting['meeting_name'] ?? 'Untitled Meeting',
+                          style: TextStyle(
+                            color: context.thirdTextColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                      ),
-                      subtitle: Text('Host: ${meeting['host_id']}'),
-                      onTap: () {
-                        // TODO: handle join meeting
-                      },
-                    );
-                  },
+                        subtitle: Text('Host: ${meeting['host_id']}'),
+                        onTap: () {
+                          // TODO: handle join meeting
+                        },
+                      );
+                    },
+                  ),
                 );
               },
             ),

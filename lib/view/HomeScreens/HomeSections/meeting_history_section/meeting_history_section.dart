@@ -55,7 +55,7 @@ class MeetingHistorySection extends StatelessWidget {
                         text: 'Meeting History',
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: context.primaryTextColor,
+                        color: context.thirdTextColor,
                       ),
                       IconButton(
                         icon: const FaIcon(FontAwesomeIcons.refresh),
