@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:meeting_app/core/services/state_user_service.dart';
 import 'package:meeting_app/model/Models/UserModel.dart';
@@ -9,6 +10,7 @@ import 'package:meeting_app/core/components/CustomText.dart';
 import 'package:meeting_app/core/components/TextFormFeild.dart';
 import 'package:meeting_app/core/utils/AppColor.dart';
 import 'package:meeting_app/core/utils/ThemeExtension.dart';
+import 'package:meeting_app/view/HomeScreens/FriendRequestScreen/friendRequestView.dart';
 import 'package:meeting_app/viewModel/bloc/ProfileCubit/profile_cubit.dart';
 
 class ProfileBodyView extends StatelessWidget {
@@ -49,8 +51,12 @@ class ProfileBodyView extends StatelessWidget {
                         ),
                         const Spacer(),
                         IconButton(
-                          icon: const Icon(Icons.settings),
-                          onPressed: () {},
+                          icon: FaIcon(FontAwesomeIcons.userPlus),
+                          onPressed: () {
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => FriendRequestsView(),
+                            ));
+                          },
                         ),
                       ],
                     ),

@@ -120,3 +120,11 @@ class FriendRequestError extends ProfileState {
   FriendRequestError(this.message);
 }
 
+class FriendRequestsLoading extends ProfileState {}
+
+class FriendRequestsLoaded extends ProfileState {
+  final List<Map<String, dynamic>> requests;
+  FriendRequestsLoaded(this.requests);
+}
+
+class FriendUpdated extends ProfileState {}
