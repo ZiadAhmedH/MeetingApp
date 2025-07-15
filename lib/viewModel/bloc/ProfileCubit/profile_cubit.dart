@@ -215,7 +215,6 @@ class ProfileCubit extends Cubit<ProfileState> implements CommonFun {
         .eq('friend_id', myId)
         .eq('status', 'pending');
 
-    // ✅ Force correct cast
     final data = (response as List).map((e) => Map<String, dynamic>.from(e)).toList();
 
     pendingRequests = data;
