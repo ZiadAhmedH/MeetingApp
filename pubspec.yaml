@@ -28,7 +28,7 @@ dependencies:
   intl: ^0.20.2
   zego_uikit_prebuilt_video_conference: ^2.10.0
   zego_uikit_prebuilt_call: ^4.12.11
-  zego_uikit_signaling_plugin: ^2.6.1 # ✅ This is required!
+  zego_uikit_signaling_plugin: ^2.8.12 # ✅ This is required!
 
   file_picker: ^10.1.2
   win32: ^5.5.1

@@ -7,10 +7,10 @@ import 'package:meeting_app/core/utils/ZigoCloudConst.dart';
 import 'package:meeting_app/supabase_helper.dart';
 import 'package:meeting_app/viewModel/data/SharedKeys.dart';
 import 'package:meeting_app/viewModel/data/SharedPrefrences.dart';
-import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:meeting_app/global_navigator.dart';
 import 'package:meeting_app/model/Models/UserModel.dart';
+import 'package:zego_uikit_prebuilt_video_conference/zego_uikit_prebuilt_video_conference.dart';
 
 class AppStartupService {
   static final AuthService authService = AuthService();
