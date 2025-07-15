@@ -202,8 +202,9 @@ class ProfileCubit extends Cubit<ProfileState> implements CommonFun {
       emit(FriendRequestError('Unexpected error: $e'));
     }
   }
-
- Future<void> loadPendingFriendRequests() async {
+  
+  
+  Future<void> loadPendingFriendRequests() async {
   emit(FriendRequestsLoading());
   final myId = LocalData.getData(key: SharedKey.uid);
 
@@ -214,12 +215,17 @@ class ProfileCubit extends Cubit<ProfileState> implements CommonFun {
         .eq('friend_id', myId)
         .eq('status', 'pending');
 
-    pendingRequests = List<Map<String, dynamic>>.from(response);
+    // ✅ Force correct cast
+    final data = (response as List).map((e) => Map<String, dynamic>.from(e)).toList();
+
+    pendingRequests = data;
     emit(FriendRequestsLoaded(pendingRequests));
   } catch (e) {
+    print('❌ Error loading pending friend requests: $e');
     emit(ProfileError('Failed to load friend requests: $e'));
   }
 }
+
 
 
 

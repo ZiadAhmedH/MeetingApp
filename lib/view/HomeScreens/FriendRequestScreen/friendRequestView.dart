@@ -9,53 +9,55 @@ class FriendRequestsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<ProfileCubit>();
 
-    return BlocBuilder<ProfileCubit, ProfileState>(
-      bloc: cubit..loadPendingFriendRequests(),
-      builder: (context, state) {
-        final requests = cubit.pendingRequests;
+    return Scaffold(
+      body: BlocBuilder<ProfileCubit, ProfileState>(
+        bloc: cubit..loadPendingFriendRequests(),
+        builder: (context, state) {
+          final requests = cubit.pendingRequests;
+      
+          if (state is FriendRequestsLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+      
+          if (requests.isEmpty) {
+            return const Center(child: Text("No pending friend requests."));
+          }
+      
+          return ListView.builder(
+  itemCount: requests.length,
+  itemBuilder: (context, index) {
+    final req = requests[index];
+    final requester = req['user'];
 
-        if (state is FriendRequestsLoading) {
-          return const Center(child: CircularProgressIndicator());
-        }
+    return ListTile(
+      leading: CircleAvatar(
+        backgroundImage: NetworkImage(requester['profile_image'] ?? ""),
+      ),
+      title: Text(requester['username'] ?? 'User'),
+      subtitle: Text(requester['job_title'] ?? ''),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            icon: const Icon(Icons.check, color: Colors.green),
+            onPressed: () {
+              cubit.acceptFriend(requester['id']);
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.close, color: Colors.red),
+            onPressed: () {
+              cubit.rejectFriend(requester['id']);
+            },
+          ),
+        ],
+      ),
+    );
+  },
+);
 
-        if (requests.isEmpty) {
-          return const Center(child: Text("No pending friend requests."));
-        }
-
-        return ListView.builder(
-          itemCount: requests.length,
-          itemBuilder: (context, index) {
-            final req = requests[index];
-            final requester = req['user'];
-
-            return ListTile(
-              leading: CircleAvatar(
-                backgroundImage:
-                    NetworkImage(requester['profile_image'] ?? ""),
-              ),
-              title: Text(requester['username'] ?? 'User'),
-              subtitle: Text(requester['job_title'] ?? ''),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.check, color: Colors.green),
-                    onPressed: () {
-                      cubit.acceptFriend(requester['id']);
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.close, color: Colors.red),
-                    onPressed: () {
-                      cubit.rejectFriend(requester['id']);
-                    },
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
+        },
+      ),
     );
   }
 }
