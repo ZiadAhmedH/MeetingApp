@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:meeting_app/core/components/CustomText.dart';
 import 'package:meeting_app/core/components/TextFormFeild.dart';
 import 'package:meeting_app/core/utils/ThemeExtension.dart';
-import 'package:meeting_app/core/utils/ZigoCloudConst.dart';
 import 'package:meeting_app/viewModel/bloc/MeetingCubit/meeting_cubit.dart';
 import 'package:meeting_app/viewModel/data/SharedKeys.dart';
 import 'package:meeting_app/viewModel/data/SharedPrefrences.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 
 class JoinScreen extends StatefulWidget {
   const JoinScreen({super.key});
@@ -20,63 +19,55 @@ class _JoinScreenState extends State<JoinScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _meetingIdController = TextEditingController();
 
+  final _localRenderer = RTCVideoRenderer();
+  final _remoteRenderer = RTCVideoRenderer();
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeRenderers();
+  }
+
+  Future<void> _initializeRenderers() async {
+    await _localRenderer.initialize();
+    await _remoteRenderer.initialize();
+  }
+
+  Future<void> _joinMeeting() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    final meetingId = _meetingIdController.text.trim();
+    final userId = LocalData.getData(key: SharedKey.uid);
+
+    final cubit = context.read<MeetingCubit>();
+
+    await cubit.initSignaling(
+      meetingId: meetingId,
+      isCameraOn: true,
+      isMicOn: true,
+      onLocalStream: (stream) {
+        setState(() {
+          _localRenderer.srcObject = stream;
+        });
+      },
+      onRemoteStream: (stream) {
+        setState(() {
+          _remoteRenderer.srcObject = stream;
+        });
+      },
+      onDisconnected: () {
+        if (mounted) Navigator.of(context).pop();
+      },
+    );
+  }
+
   @override
   void dispose() {
     _meetingIdController.dispose();
+    _localRenderer.dispose();
+    _remoteRenderer.dispose();
+    context.read<MeetingCubit>().disposeSignaling();
     super.dispose();
-  }
-
-  Future<void> _joinMeeting(BuildContext context) async {
-    if (_formKey.currentState!.validate()) {
-      final meetingCubit = MeetingCubit.get(context);
-      final callId = _meetingIdController.text.trim();
-      final userId = LocalData.getData(key: SharedKey.uid);
-
-      try{
-         await Supabase.instance.client
-        .from('meetings')
-        .select('id')
-        .eq('id', callId)
-         .maybeSingle();
-          
-          _meetingIdController.clear();
-      
-      } catch (e) {
-        print("❌ Error fetching meeting: $e");
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error joining meeting: $e')),
-        );
-        return;
-      }
-   
-
-    
-
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => ZegoUIKitPrebuiltCall(
-            appID: ZigoCloud.ZEGO_APP_ID, // Replace with your real App ID
-            appSign: ZigoCloud.ZEGO_APP_SIGN, // Replace with your real App Sign
-            userID: userId,
-            userName: LocalData.getData(key: SharedKey.email),
-              
-            callID: callId,
-            config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
-              ..turnOnCameraWhenJoining = meetingCubit.isCameraOn
-              ..turnOnMicrophoneWhenJoining = meetingCubit.isMicrophoneOn
-              ..useSpeakerWhenJoining = meetingCubit.isSpeakerOn,
-            events: ZegoUIKitPrebuiltCallEvents(
-              onCallEnd: (event, defaultAction) {
-                meetingCubit.logJoinEvent(meetingId: callId);
-                defaultAction();
-              },
-            ),
-          ),
-        ),
-      );
-    }
   }
 
   @override
@@ -94,21 +85,13 @@ class _JoinScreenState extends State<JoinScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomText(
-                text: 'Enter Meeting ID',
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-                color: context.thirdTextColor,
-              ),
-              const SizedBox(height: 20),
-              CustomTextFormField(
+        child: Column(
+          children: [
+            Form(
+              key: _formKey,
+              child: CustomTextFormField(
                 controller: _meetingIdController,
-                hintText: "Meeting ID",
+                hintText: "Enter Meeting ID",
                 icon: const Icon(Icons.video_call),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
@@ -117,27 +100,33 @@ class _JoinScreenState extends State<JoinScreen> {
                   return null;
                 },
               ),
-              const SizedBox(height: 30),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () => _joinMeeting(context),
-                  style: ButtonStyle(
-                    backgroundColor:
-                        WidgetStateProperty.all(context.thirdTextColor),
-                    padding: WidgetStateProperty.all(
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _joinMeeting,
+              child: const Text("Join"),
+            ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: Stack(
+                children: [
+                  Positioned.fill(child: RTCVideoView(_remoteRenderer)),
+                  Positioned(
+                    top: 10,
+                    right: 10,
+                    width: 120,
+                    height: 160,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
+                      child: RTCVideoView(_localRenderer, mirror: true),
                     ),
                   ),
-                  child: CustomText(
-                    text: 'Join Meeting',
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                    color: context.primaryBackgroundColor,
-                  ),
-                ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

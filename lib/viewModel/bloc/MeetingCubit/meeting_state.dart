@@ -3,29 +3,26 @@ part of 'meeting_cubit.dart';
 @immutable
 abstract class MeetingState {}
 
+/// === INITIAL STATE ===
 class MeetingInitial extends MeetingState {}
 
-
- // Random Id Generated State
+/// === RANDOM MEETING ID GENERATED ===
 class MeetingGeneratedIdState extends MeetingState {
   final String meetingId;
   MeetingGeneratedIdState(this.meetingId);
 }
 
-
-// meeting Setting Section states
+/// === MEETING TOGGLE STATES ===
 class MeetingCameraToggledState extends MeetingState {}
 
 class MeetingMicrophoneToggledState extends MeetingState {}
 
 class MeetingSpeakerToggledState extends MeetingState {}
 
-
-// Duration Selected State
+/// === DURATION SELECTION ===
 class MeetingDurationSelectedState extends MeetingState {}
 
-
-// Meeting Create States
+/// === MEETING CREATION ===
 class MeetingCreateLoadingState extends MeetingState {}
 
 class MeetingCreateSuccessState extends MeetingState {
@@ -38,25 +35,25 @@ class MeetingCreateFailedState extends MeetingState {
   MeetingCreateFailedState({this.errorMessage});
 }
 
-
-
-
+/// === MEETING SAVE RESULT ===
 class MeetingSavedSuccess extends MeetingState {}
+
 class MeetingSavedError extends MeetingState {}
 
-
-
+/// === MEETING HISTORY ===
 class MeetingHistoryLoadingState extends MeetingState {}
+
 class MeetingHistoryLoadedState extends MeetingState {
   final List<Meetinghistorymodel> meetings;
   MeetingHistoryLoadedState({required this.meetings});
 }
+
 class MeetingHistoryErrorState extends MeetingState {
   final String errorMessage;
   MeetingHistoryErrorState({required this.errorMessage});
 }
 
-
+/// === OUTGOING MEETINGS ===
 class OutgoingMeetingLoadingState extends MeetingState {}
 
 class OutgoingMeetingLoadedState extends MeetingState {
@@ -68,3 +65,14 @@ class OutgoingMeetingErrorState extends MeetingState {
   final String error;
   OutgoingMeetingErrorState(this.error);
 }
+
+/// === WEBRTC / SIGNALING ===
+
+/// Local camera/microphone stream is ready
+class MeetingLocalStreamInitialized extends MeetingState {}
+
+/// Remote peer's video/audio stream received
+class MeetingRemoteStreamReceived extends MeetingState {}
+
+/// Call has ended, signaling is closed
+class MeetingEnded extends MeetingState {}

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meeting_app/core/lifeCycle/userStatManger.dart';
 import 'package:meeting_app/core/services/app_startup_service.dart';
+import 'package:meeting_app/core/services/meeting_services.dart';
 import 'package:meeting_app/viewModel/bloc/blocObserver.dart';
 import 'package:meeting_app/viewModel/bloc/AuthCubit/auth_cubit.dart';
 import 'package:meeting_app/viewModel/bloc/MeetingCubit/meeting_cubit.dart';
-import 'package:meeting_app/viewModel/bloc/NavigationCubit/navigation_cubit.dart';
 import 'package:meeting_app/viewModel/bloc/ProfileCubit/profile_cubit.dart';
 import 'package:meeting_app/viewModel/bloc/ThemeCubit/theme_cubit.dart';
 import 'package:meeting_app/core/Routers/RouterContstants.dart';
@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => AuthCubit(AppStartupService.authService)),
         BlocProvider(create: (_) => ProfileCubit()),
         BlocProvider(create: (_) => ThemesCubit()),
-        BlocProvider(create: (_) => MeetingCubit()),
+        BlocProvider(create: (_) => MeetingCubit(MeetingService())),
       ],
       child: BlocBuilder<ThemesCubit, ThemeData>(
         builder: (_, theme) {

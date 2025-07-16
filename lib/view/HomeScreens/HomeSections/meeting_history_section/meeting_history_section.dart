@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:meeting_app/core/components/CustomText.dart';
+import 'package:meeting_app/core/services/meeting_services.dart';
 import 'package:meeting_app/core/utils/AppColor.dart';
 import 'package:meeting_app/core/utils/ThemeExtension.dart';
 import 'package:meeting_app/view/HomeScreens/HomeSections/MainHomeSection.dart';
@@ -16,7 +17,7 @@ class MeetingHistorySection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => MeetingCubit()..getMeetingHistory(userId: userId),
+      create: (context) => MeetingCubit(MeetingService())..getMeetingHistory(userId: userId),
       child: BlocBuilder<MeetingCubit, MeetingState>(
         builder: (context, state) {
           if (state is MeetingHistoryLoadingState) {
