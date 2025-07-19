@@ -65,14 +65,3 @@ class OutgoingMeetingErrorState extends MeetingState {
   final String error;
   OutgoingMeetingErrorState(this.error);
 }
-
-/// === WEBRTC / SIGNALING ===
-
-/// Local camera/microphone stream is ready
-class MeetingLocalStreamInitialized extends MeetingState {}
-
-/// Remote peer's video/audio stream received
-class MeetingRemoteStreamReceived extends MeetingState {}
-
-/// Call has ended, signaling is closed
-class MeetingEnded extends MeetingState {}

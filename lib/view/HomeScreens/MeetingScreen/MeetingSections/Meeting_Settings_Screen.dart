@@ -132,9 +132,10 @@ class MeetingSettings extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (_) => MeetingScreen(
-                            meetingId: meetingCubit.meetingId,
-                            isCameraOn: meetingCubit.isCameraOn,
-                            isMicOn: meetingCubit.isMicrophoneOn,
+                             isCameraOn: meetingCubit.isCameraOn,
+                               isMicOn: meetingCubit.isMicrophoneOn,
+                               meetingId: meetingCubit.meetingId,
+
                           ),
                         ),
                       );

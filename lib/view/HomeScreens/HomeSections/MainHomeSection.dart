@@ -27,7 +27,6 @@ class MainHomeSection extends StatelessWidget {
           children: [
             const MeetingSection(),
             const Divider(color: AppColor.darkGrey, thickness: 1),
-            // ✅ Wrap StreamBuilder in Expanded to avoid unbounded height
             StreamBuilder<List<Map<String, dynamic>>>(
               stream: MeetingCubit.get(context).getLiveOutgoingMeetings(),
               builder: (context, snapshot) {

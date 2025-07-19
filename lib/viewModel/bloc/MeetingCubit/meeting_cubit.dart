@@ -2,12 +2,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meeting_app/core/services/meeting_services.dart';
-import 'package:meeting_app/core/services/singling_serveices.dart';
 import 'package:meeting_app/model/Models/meetingHistoryModel.dart';
 import 'package:meeting_app/viewModel/data/SharedPrefrences.dart';
 import 'package:meeting_app/viewModel/data/SharedKeys.dart';
-import 'package:flutter_webrtc/flutter_webrtc.dart';
-
 part 'meeting_state.dart';
 
 class MeetingCubit extends Cubit<MeetingState> {
@@ -28,52 +25,15 @@ class MeetingCubit extends Cubit<MeetingState> {
   bool isSpeakerOn = true;
   int selectedDuration = 60;
 
-  // ========== Signaling Service ==========
-  SignalingService? _signalingService;
-  MediaStream? localStream;
-  MediaStream? remoteStream;
-
-  // WebRTC signaling initialization
-  Future<void> initSignaling({
-    required String meetingId,
-    required bool isCameraOn,
-    required bool isMicOn,
-    required Function(MediaStream stream) onLocalStream,
-    required Function(MediaStream stream) onRemoteStream,
-    required VoidCallback onDisconnected,
-  }) async {
-    final selfId = LocalData.getData(key: 'uid') ?? UniqueKey().toString();
-
-    _signalingService = SignalingService(
-      selfId: selfId,
-      meetingId: meetingId,
-      wsUrl: "wss://flutter-webrtc-server-production.up.railway.app/ws",
-      onRemoteStream: onRemoteStream,
-      onDisconnected: onDisconnected,
-    );
-
-    await _signalingService!.init();
-
-    if (_signalingService!.localStream != null) {
-      onLocalStream(_signalingService!.localStream!);
-    }
-  }
-
-  void disposeSignaling() {
-    _signalingService?.dispose();
-    _signalingService = null;
-  }
 
   // ========== UI Toggles ==========
  void toggleCamera() {
   isCameraOn = !isCameraOn;
-  _toggleTrack(kind: 'video', enabled: isCameraOn);
   emit(MeetingCameraToggledState());
 }
 
 void toggleMicrophone() {
   isMicrophoneOn = !isMicrophoneOn;
-  _toggleTrack(kind: 'audio', enabled: isMicrophoneOn);
   emit(MeetingMicrophoneToggledState());
 }
 
@@ -82,16 +42,6 @@ void toggleSpeaker() {
   emit(MeetingSpeakerToggledState());
 }
 
-void _toggleTrack({required String kind, required bool enabled}) {
-  final stream = _signalingService?.localStream;
-  if (stream != null) {
-    for (var track in stream.getTracks()) {
-      if (track.kind == kind) {
-        track.enabled = enabled;
-      }
-    }
-  }
-}
 
 
   void selectDuration(int minutes) {
@@ -115,6 +65,7 @@ void _toggleTrack({required String kind, required bool enabled}) {
     emit(MeetingCreateLoadingState());
     try {
       await service.createMeeting( meetingId: meetingId, ); // add meeting details in supabase backend
+      await service.putItForOutgoingMeeting(meetingId); // add meeting to outgoing meetings
       emit(MeetingCreateSuccessState(meetingId));
     } catch (e) {
       emit(MeetingCreateFailedState(errorMessage: e.toString()));
