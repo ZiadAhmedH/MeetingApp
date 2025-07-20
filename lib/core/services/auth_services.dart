@@ -119,8 +119,9 @@ class AuthService {
   }
 
   /// ✅ Step 3: Sign out
-  Future<void> signOut() async {
+  Future<Either<Failure,String>> signOut() async {
     await _supabase.auth.signOut();
+    return right("Successfully signed out.");
   }
 
   

@@ -33,7 +33,6 @@ class JoinMeetingScreen extends StatelessWidget {
         ..turnOnMicrophoneWhenJoining = isMicOn,
       events: ZegoUIKitPrebuiltCallEvents(
         onCallEnd: (event, defaultAction) {
-          // Just leave the meeting; don't delete or update anything
           defaultAction.call();
         },
       ),

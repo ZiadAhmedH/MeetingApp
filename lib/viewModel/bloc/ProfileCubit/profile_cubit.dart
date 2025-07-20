@@ -1,6 +1,7 @@
 // 📁 Updated ProfileCubit with Realtime Friends & Friend Request Logic
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -128,21 +129,24 @@ class ProfileCubit extends Cubit<ProfileState> implements CommonFun {
   }
 
   Future<void> updateUserInfo({required String username, required String uid, required String location}) async {
-    emit(LoadingUserInfoState());
-    try {
-      await supabase.from('users').update({
-        'username': username,
-        'profile_image': User!.profileImage,
-        'location': location,
-      }).eq('id', uid);
-      if (image != null) {
-        await uploadPImage(image: image!, email: LocalData.getData(key: SharedKey.email), uid: uid);
-      }
-      emit(UserInfoUpdatedSuccessfully());
-    } catch (e) {
-      emit(UserInfoUpdateError('Failed to update user info: $e'));
+  emit(UpdatingUserInfoState());
+  try {
+    await supabase.from('users').update({
+      'username': username,
+      'profile_image': User!.profileImage,
+      'location': location,
+    }).eq('id', uid);
+
+    if (image != null) {
+      await uploadPImage(image: image!, email: LocalData.getData(key: SharedKey.email), uid: uid);
     }
+    await getUserInfo();
+    emit(UserInfoUpdatedSuccessfully());
+  } catch (e) {
+    emit(UserInfoUpdateError('Failed to update user info: $e'));
   }
+}
+
 
   bool hasChanges() {
     final currentFullName = "${firstName.text.trim()} ${lastName.text.trim()}";
@@ -186,22 +190,32 @@ class ProfileCubit extends Cubit<ProfileState> implements CommonFun {
   }
 
   Future<void> addFriend(String friendId) async {
-    final myId = LocalData.getData(key: SharedKey.uid);
-    if (myId == null || myId == friendId) return;
-    emit(FriendRequestLoading());
-    try {
-      final response = await supabase.from('friends').insert({
-        'user_id': myId,
-        'friend_id': friendId,
-        'status': 'pending',
-      }).select();
-      emit(FriendRequestSent(friendId));
-    } on PostgrestException catch (e) {
-      emit(FriendRequestError(e.message));
-    } catch (e) {
-      emit(FriendRequestError('Unexpected error: $e'));
-    }
+  final myId = LocalData.getData(key: SharedKey.uid);
+  if (myId == null || myId == friendId) return;
+
+  final currentState = state;
+  if (currentState is! SearchSuccess) {
+    emit(FriendRequestError('You can only add friends from search results'));
+    return;
   }
+
+  emit(FriendRequestLoading());
+
+  try {
+    await supabase.from('friends').insert({
+      'user_id': myId,
+      'friend_id': friendId,
+      'status': 'pending',
+    });
+
+    final updatedStatuses = Map<String, String>.from(currentState.friendStatuses);
+    updatedStatuses[friendId] = 'pending';
+    emit(SearchSuccess(currentState.users, friendStatuses: updatedStatuses));
+  } catch (e) {
+    emit(FriendRequestError('Unexpected error: $e'));
+  }
+}
+
   
   
   Future<void> loadPendingFriendRequests() async {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:meeting_app/core/Routers/RouterContstants.dart';
 import 'package:meeting_app/core/components/CustomBtn.dart';
 import 'package:meeting_app/core/components/CustomText.dart';
@@ -109,7 +110,7 @@ class LoginScreen extends StatelessWidget {
                     onTap: () {
                       if (authCubit.loginKey.currentState!.validate()) {authCubit.fireAuthLogin(); }
                     },
-                    text: CustomText(
+                    text: state is LoadingLoginState ? LoadingAnimationWidget.progressiveDots(color: AppColor.lightGrey, size: 20) : CustomText(
                       text: 'Next',
                       fontFamily: 'Gilroy',
                       fontWeight: FontWeight.bold,

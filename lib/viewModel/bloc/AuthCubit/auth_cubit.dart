@@ -86,13 +86,32 @@ class AuthCubit extends Cubit<AuthState>  {
       (user) {
         currentUid = user.uid;
         storeDataLocally(user);
-        print("uhhhhhhhhhhhhhhhhhhhhhhhhhhhh${user.uid}"); 
+        print(" ${user.uid}"); 
          emit(SuccessRegisterState());
       },
     );
   }
 
-  // Method to send OTP to the phone number
+  Future<void> logout() async {
+    emit(LoadingLogoutState());
+
+    final result = await authService.signOut();
+
+    result.fold(
+      (failure) {
+        emit(ErrorLogoutState(message: failure.message));
+      },
+      (e) {
+        clearControllers();
+        LocalData.clearData();
+        emit(SuccessLogoutState(message: e));
+      },
+    );
+  }
+
+
+
+
   Future<void> sendOtp(String phoneNumber) async {
     try {
       emit(LoadingSendOtpState());
@@ -140,6 +159,7 @@ class AuthCubit extends Cubit<AuthState>  {
   void storeDataLocally(UserModel user) {
     LocalData.setData(key: SharedKey.uid, value: user.uid);
     LocalData.setData(key: SharedKey.email, value: user.email);
+    LocalData.setData(key: SharedKey.userName, value: user.userName);
     LocalData.setData(key: SharedKey.isLogin, value: true);
   }
 
