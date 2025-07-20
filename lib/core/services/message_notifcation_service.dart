@@ -9,7 +9,7 @@ class MessageNotificationService {
   static void subscribeToMessages(String currentUserId) {
     if (_channel != null) return;
 
-    print('✅ Subscribing to messages for user: $currentUserId');
+    print('✅ hhhhhhhhhhhh Subscribing to messages for user: $currentUserId');
 
     _channel = _supabase
         .channel('public:messages')
@@ -28,6 +28,8 @@ class MessageNotificationService {
 
             // 👇 Pass senderId and name in payload
             final payloadData = '${msg.senderId},$sender';
+            print('📬 New message from $sender: ${msg.content}');
+
 
             NotificationService.show(sender, msg.content, payload: payloadData);
           },

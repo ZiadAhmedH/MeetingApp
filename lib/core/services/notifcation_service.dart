@@ -12,12 +12,17 @@ class NotificationService {
     enableVibration: true,
   );
 
-  /// Initializes the notification system and sets a tap handler
+  /// Initializes notification system and sets up tap handler
   static Future<void> initialize({
     required void Function(String? payload) onNotificationTap,
   }) async {
     const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const iosInit = DarwinInitializationSettings();
+
+    const iosInit = DarwinInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
+    );
 
     final initSettings = InitializationSettings(
       android: androidInit,
@@ -31,13 +36,16 @@ class NotificationService {
       },
     );
 
-    await _plugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.createNotificationChannel(_channel);
+    final androidImpl = _plugin.resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>();
+
+    await androidImpl?.createNotificationChannel(_channel);
+
+    // ➕ Must for Android 13 (API 33+)
+    await androidImpl?.requestNotificationsPermission();
   }
 
-  /// Shows a notification with optional payload
+  /// Show local notification for chat
   static Future<void> show(String title, String body, {String? payload}) async {
     const androidDetails = AndroidNotificationDetails(
       'chat_channel',
@@ -52,11 +60,11 @@ class NotificationService {
     const iosDetails = DarwinNotificationDetails();
 
     await _plugin.show(
-      0, // Notification ID
+      DateTime.now().millisecondsSinceEpoch ~/ 1000, // ✅ Dynamic ID
       title,
       body,
       NotificationDetails(android: androidDetails, iOS: iosDetails),
-      payload: payload, // 👈 Pass chat payload here
+      payload: payload,
     );
   }
 }
