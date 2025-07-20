@@ -177,3 +177,12 @@ class FriendRequestsLoaded extends ProfileState {
 }
 
 class FriendUpdated extends ProfileState {}
+
+
+class FriendRequestPendingCount extends ProfileState {
+  final int count;
+  FriendRequestPendingCount(this.count);
+
+  @override
+  List<Object?> get props => [count];
+}

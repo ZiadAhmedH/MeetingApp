@@ -1,4 +1,5 @@
 // 📁 Updated ProfileCubit with Realtime Friends & Friend Request Logic
+import 'dart:async';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
@@ -306,7 +307,59 @@ Future<void> rejectFriend(String requesterId) async {
     emit(ProfileError('Failed to reject friend request: $e'));
   }
 }
+  
+  Stream<int> realtimeFriendRequestPendingCountStream() async* {
+  final myId = LocalData.getData(key: SharedKey.uid);
 
+  final controller = StreamController<int>(
+    onCancel: () async {
+      supabase.removeChannel(_friendSubscription!);
+    },
+  );
+
+  // Initial count fetch
+  final initialResponse = await supabase
+      .from('friends')
+      .select('user_id')
+      .eq('friend_id', myId)
+      .eq('status', 'pending');
+
+  final initialCount = initialResponse.length;
+  controller.add(initialCount);
+
+  // Set up Supabase realtime listener
+  final channel = supabase.channel('public:friends_count');
+
+  channel.onPostgresChanges(
+    event: PostgresChangeEvent.all,
+    schema: 'public',
+    table: 'friends',
+    callback: (payload) async {
+      final newData = payload.newRecord;
+      final oldData = payload.oldRecord;
+
+      final isRelevant = (newData != null && newData['friend_id'] == myId && newData['status'] == 'pending') ||
+                         (oldData != null && oldData['friend_id'] == myId && oldData['status'] == 'pending');
+
+      if (isRelevant) {
+        final updatedResponse = await supabase
+            .from('friends')
+            .select('user_id')
+            .eq('friend_id', myId)
+            .eq('status', 'pending');
+
+        final newCount = updatedResponse.length;
+        controller.add(newCount);
+      }
+    },
+  ).subscribe();
+
+  _friendSubscription = channel;
+
+  yield* controller.stream;
+}
+
+ 
 
   @override
   void acceptTerms() {
