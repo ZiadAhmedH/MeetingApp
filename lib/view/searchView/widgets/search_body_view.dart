@@ -26,10 +26,14 @@ class SearchBodyView extends StatelessWidget {
               filled: true,
               fillColor: theme.cardColor,
               hintStyle: textTheme.bodyMedium?.copyWith(color: theme.hintColor),
-              prefixIcon: Icon(Icons.search, color: theme.iconTheme.color),
+              prefixIcon: Icon(Icons.search, color: theme.iconTheme.color , size: 22),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide.none,
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: theme.primaryColor, width: 1.5),
               ),
             ),
             onChanged: (value) {

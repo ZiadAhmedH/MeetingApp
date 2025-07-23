@@ -22,7 +22,7 @@ class MeetingSection extends StatelessWidget {
               MeetingFBtn(
                 text: "Join",
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => JoinScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => JoinView()));
                 },
                 icon: FontAwesomeIcons.video,
 

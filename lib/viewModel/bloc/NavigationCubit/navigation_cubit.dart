@@ -18,7 +18,7 @@ class NavigationCubit extends Cubit<NavigationState> {
   List<Widget> pages = [
     const MainHomeSection(),
     const SearchView(),
-    AllUsersView(),
+    UsersView(),
   ];
 
   void changeIndex(int index) {
