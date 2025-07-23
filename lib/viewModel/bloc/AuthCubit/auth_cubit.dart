@@ -161,6 +161,7 @@ class AuthCubit extends Cubit<AuthState>  {
     LocalData.setData(key: SharedKey.email, value: user.email);
     LocalData.setData(key: SharedKey.userName, value: user.userName);
     LocalData.setData(key: SharedKey.isLogin, value: true);
+    LocalData.setData(key: SharedKey.userImage, value: user.profileImage);
   }
 
   void passwordConfirmation() {

@@ -95,6 +95,7 @@ class ProfileCubit extends Cubit<ProfileState> implements CommonFun {
       await supabase.storage.from('avatars').upload(imagePath, file, fileOptions: FileOptions(cacheControl: '3600', upsert: true));
       final publicUrl = supabase.storage.from('avatars').getPublicUrl(imagePath);
       await supabase.from('users').update({'profile_image': publicUrl}).eq('id', uid);
+      LocalData.setData(key: SharedKey.userImage, value: publicUrl);
     } catch (e) {
       print('❌ Error uploading profile image: $e');
     }

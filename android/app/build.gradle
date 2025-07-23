@@ -48,6 +48,8 @@ android {
 
     buildTypes {
         release {
+            minifyEnabled true     // <--- set this to false to bypass R8 for now
+            shrinkResources true   // <--- optional: disables resource shrinking
             signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

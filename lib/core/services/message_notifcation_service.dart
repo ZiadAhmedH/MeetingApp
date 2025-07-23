@@ -9,7 +9,7 @@ class MessageNotificationService {
   static void subscribeToMessages(String currentUserId) {
     if (_channel != null) return;
 
-    print('✅ hhhhhhhhhhhh Subscribing to messages for user: $currentUserId');
+    print('✅Subscribing to messages for user: $currentUserId');
 
     _channel = _supabase
         .channel('public:messages')

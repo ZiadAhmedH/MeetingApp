@@ -6,4 +6,6 @@ class SharedKey{
  static const String firstTime = "firstTime";
  static const String isVerify = "isVerify";
 
+ static const String userImage = "userImage";
+
 }

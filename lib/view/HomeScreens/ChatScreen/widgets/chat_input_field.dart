@@ -10,47 +10,63 @@ class ChatInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController controller = TextEditingController();
+    final controller = TextEditingController();
 
     return SafeArea(
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        child: Row(
-          children: [
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
-                  borderRadius: BorderRadius.circular(28),
-                ),
-                child: TextField(
-                  controller: controller,
-                  maxLines: 4,
-                  minLines: 1,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    hintText: "Type a message...",
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        child: Container(
+          decoration: BoxDecoration(
+            color: const Color(0xFF313143), // Slightly lighter than background
+            borderRadius: BorderRadius.circular(25),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                  child: TextField(
+                    controller: controller,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                    maxLines: 4,
+                    minLines: 1,
+                    decoration: const InputDecoration(
+                      hintText: "Thank you !!",
+                      hintStyle: TextStyle(
+                        color: Color(0xFFAAAAAA),
+                        fontSize: 16,
+                      ),
+                      border: InputBorder.none,
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(width: 8),
-            GestureDetector(
-              onTap: () {
-                final txt = controller.text.trim();
-                if (txt.isNotEmpty) {
-                  onSend(txt);
-                  controller.clear();
-                }
-              },
-              child: CircleAvatar(
-                backgroundColor: Theme.of(context).primaryColor,
-                radius: 22,
-                child:  Icon(Icons.send, color:Theme.of(context).colorScheme.onPrimary, size: 20),
+              Padding(
+                padding: const EdgeInsets.only(right: 4.0),
+                child: GestureDetector(
+                  onTap: () {
+                    final text = controller.text.trim();
+                    if (text.isNotEmpty) {
+                      onSend(text);
+                      controller.clear();
+                    }
+                  },
+                  child: CircleAvatar(
+                    backgroundColor: const Color(0xFF2973F6), // Blue send
+                    radius: 22,
+                    child: const Icon(
+                      Icons.send,
+                      color: Colors.white,
+                      size: 22,
+                    ),
+                  ),
+                ),
               ),
-            )
-          ],
+            ],
+          ),
         ),
       ),
     );
