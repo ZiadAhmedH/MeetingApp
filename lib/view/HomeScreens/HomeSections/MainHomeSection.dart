@@ -63,7 +63,7 @@ class MainHomeSection extends StatelessWidget {
                         ),
                         subtitle: Text('Host: ${meeting['host_id']}'),
                         onTap: () {
-                          // TODO: handle join meeting
+                          
                         },
                       );
                     },

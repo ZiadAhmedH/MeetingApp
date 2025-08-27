@@ -1,7 +1,7 @@
 import 'package:meeting_app/core/Routers/RouterContstants.dart';
-import 'package:meeting_app/core/services/auth_services.dart';
-import 'package:meeting_app/core/services/message_notifcation_service.dart';
-import 'package:meeting_app/core/services/notifcation_service.dart';
+import 'package:meeting_app/core/services/auth/auth_services.dart';
+import 'package:meeting_app/core/services/notification/message_notifcation_service.dart';
+import 'package:meeting_app/core/services/notification/notifcation_service.dart';
 import 'package:meeting_app/core/utils/ZigoCloudConst.dart';
 
 import 'package:meeting_app/supabase_helper.dart';
@@ -10,7 +10,6 @@ import 'package:meeting_app/viewModel/data/SharedPrefrences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:meeting_app/global_navigator.dart';
 import 'package:meeting_app/model/Models/UserModel.dart';
-import 'package:zego_uikit_prebuilt_video_conference/zego_uikit_prebuilt_video_conference.dart';
 
 class AppStartupService {
   static final AuthService authService = AuthService();
@@ -21,10 +20,6 @@ class AppStartupService {
 
     await NotificationService.initialize(onNotificationTap: handleNotificationTap);
 
-    ZegoUIKit().init(
-      appID: ZigoCloud.ZEGO_APP_ID,
-      appSign: ZigoCloud.ZEGO_APP_SIGN,
-    );
 
     final userId = LocalData.getData(key: SharedKey.uid);
     if (userId != null) {

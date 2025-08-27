@@ -1,4 +1,4 @@
-import 'package:meeting_app/core/services/notifcation_service.dart';
+import 'package:meeting_app/core/services/notification/notifcation_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:meeting_app/model/Models/message_model.dart';
 

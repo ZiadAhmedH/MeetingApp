@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:meeting_app/core/services/state_user_service.dart';
+import 'package:meeting_app/core/services/auth/state_user_service.dart';
 
 class UserStatusManager extends StatefulWidget {
   final String userId;

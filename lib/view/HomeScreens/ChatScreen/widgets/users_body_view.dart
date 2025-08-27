@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meeting_app/core/services/state_user_service.dart';
+import 'package:meeting_app/core/services/auth/state_user_service.dart';
 import 'package:meeting_app/core/utils/AppColor.dart';
 import 'package:meeting_app/model/Models/UserModel.dart';
 import 'package:meeting_app/view/HomeScreens/ChatScreen/ChatScreen.dart';

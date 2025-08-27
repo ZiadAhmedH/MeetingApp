@@ -4,7 +4,6 @@ import 'package:meeting_app/viewModel/data/SharedKeys.dart';
 import 'package:meeting_app/viewModel/data/SharedPrefrences.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:meeting_app/core/utils/ZigoCloudConst.dart';
-
 import 'package:meeting_app/viewModel/bloc/MeetingCubit/meeting_cubit.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -45,12 +44,16 @@ class _MeetingScreenState extends State<MeetingScreen> {
 
   Future<void> fetchZegoKitToken() async {
     try {
-      final response = await Supabase.instance.client.functions.invoke('generate-zego-token');
+      final response = await Supabase.instance.client.functions.invoke(
+        'generate-zego-token',
+        body: {'room_id': widget.meetingId, 'user_id': userID},
+      );
 
       if (response.status == 200 && response.data['token'] != null) {
         setState(() {
           zegoKitToken = response.data['token'] as String;
         });
+        debugPrint("✅ Token fetched successfully: $zegoKitToken");
       } else {
         debugPrint("❌ Token fetch failed: ${response.data}");
         setState(() => _isError = true);
@@ -89,13 +92,14 @@ class _MeetingScreenState extends State<MeetingScreen> {
       );
     }
 
+    // ✅ Simplified prebuilt call without plugins or custom video processing
     return ZegoUIKitPrebuiltCall(
       appID: ZigoCloud.ZEGO_APP_ID,
-      appSign: ZigoCloud.ZEGO_APP_SIGN,
       userID: userID,
       userName: userName,
       callID: widget.meetingId,
-      config: ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+      token: zegoKitToken!,
+      config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
         ..turnOnCameraWhenJoining = widget.isCameraOn
         ..turnOnMicrophoneWhenJoining = widget.isMicOn,
       events: ZegoUIKitPrebuiltCallEvents(
@@ -109,6 +113,7 @@ class _MeetingScreenState extends State<MeetingScreen> {
           defaultAction.call();
         },
       ),
+      plugins: [], // ✅ منع أي plugin يسبب NullPointer
     );
   }
 }

@@ -121,13 +121,14 @@ class MeetingSettings extends StatelessWidget {
                   ),
                   const SizedBox(height: 30),
 
-                  // Join Button
+                  
                   CustomButton(
                     borderColor: AppColor.lightGrey,
                     backgroundColor: AppColor.darkGrey,
                     textColor: AppColor.white,
                     isClickable: 1,
                     onTap: () {
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(

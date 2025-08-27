@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meeting_app/core/services/meeting_services.dart';
+import 'package:meeting_app/core/services/meeting/meeting_services.dart';
 import 'package:meeting_app/model/Models/meetingHistoryModel.dart';
 import 'package:meeting_app/viewModel/data/SharedPrefrences.dart';
 import 'package:meeting_app/viewModel/data/SharedKeys.dart';

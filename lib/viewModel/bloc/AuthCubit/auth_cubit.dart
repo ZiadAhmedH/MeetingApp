@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:meeting_app/model/Models/UserModel.dart';
-import 'package:meeting_app/core/services/auth_services.dart';
+import 'package:meeting_app/core/services/auth/auth_services.dart';
 import 'package:meeting_app/viewModel/data/SharedKeys.dart';
 import 'package:meeting_app/viewModel/data/SharedPrefrences.dart';
 import 'package:meeting_app/core/utils/AppColor.dart';

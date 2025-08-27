@@ -1,5 +1,5 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../model/Models/meetingHistoryModel.dart';
+import '../../../model/Models/meetingHistoryModel.dart';
 
 class MeetingService {
   final SupabaseClient _client = Supabase.instance.client;

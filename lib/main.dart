@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meeting_app/core/lifeCycle/userStatManger.dart';
 import 'package:meeting_app/core/services/app_startup_service.dart';
-import 'package:meeting_app/core/services/meeting_services.dart';
+import 'package:meeting_app/core/services/meeting/meeting_services.dart';
 import 'package:meeting_app/viewModel/bloc/blocObserver.dart';
 import 'package:meeting_app/viewModel/bloc/AuthCubit/auth_cubit.dart';
 import 'package:meeting_app/viewModel/bloc/MeetingCubit/meeting_cubit.dart';

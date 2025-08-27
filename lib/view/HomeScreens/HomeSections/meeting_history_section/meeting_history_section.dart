@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:meeting_app/core/components/CustomText.dart';
-import 'package:meeting_app/core/services/meeting_services.dart';
+import 'package:meeting_app/core/services/meeting/meeting_services.dart';
 import 'package:meeting_app/core/utils/AppColor.dart';
 import 'package:meeting_app/core/utils/ThemeExtension.dart';
 import 'package:meeting_app/view/HomeScreens/HomeSections/MainHomeSection.dart';
