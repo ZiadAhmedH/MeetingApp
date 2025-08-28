@@ -1758,13 +1758,13 @@ packages:
     source: hosted
     version: "1.0.0+5"
   zego_express_engine:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: zego_express_engine
-      sha256: "5d7e446196b5836e395765cd298b96265d9f04c56f6da8a21dc60bbfef721e32"
+      sha256: aa61abc57d0b1208b3c3d72495143dac1947edbaaefed3d75b27a05657842eb6
       url: "https://pub.dev"
     source: hosted
-    version: "3.21.0"
+    version: "3.22.0"
   zego_plugin_adapter:
     dependency: transitive
     description:
@@ -1774,7 +1774,7 @@ packages:
     source: hosted
     version: "2.13.9"
   zego_uikit:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: zego_uikit
       sha256: "81308fc660b37fbc3cffe02d544e9121b55277d4c3b2ba6026161411bb7cc34d"
