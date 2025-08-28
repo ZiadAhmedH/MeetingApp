@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meeting_app/viewModel/data/SharedKeys.dart';
-import 'package:meeting_app/viewModel/data/SharedPrefrences.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:meeting_app/core/utils/ZigoCloudConst.dart';
 import 'package:meeting_app/viewModel/bloc/MeetingCubit/meeting_cubit.dart';
+import 'package:meeting_app/viewModel/data/SharedKeys.dart';
+import 'package:meeting_app/viewModel/data/SharedPrefrences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
@@ -80,19 +80,23 @@ class _MeetingScreenState extends State<MeetingScreen> {
   Widget build(BuildContext context) {
     if (_isError) {
       return const Scaffold(
-        body: Center(child: Text("Failed to join the meeting. Please try again.")),
+        body: Center(
+          child: Text("Failed to join the meeting. Please try again."),
+        ),
       );
     }
 
     if (zegoKitToken == null) {
       return Scaffold(
         body: Center(
-          child: LoadingAnimationWidget.dotsTriangle(color: Colors.blue, size: 50),
+          child: LoadingAnimationWidget.dotsTriangle(
+            color: Colors.blue,
+            size: 50,
+          ),
         ),
       );
     }
 
-    // ✅ Simplified prebuilt call without plugins or custom video processing
     return ZegoUIKitPrebuiltCall(
       appID: ZigoCloud.ZEGO_APP_ID,
       userID: userID,
@@ -113,7 +117,6 @@ class _MeetingScreenState extends State<MeetingScreen> {
           defaultAction.call();
         },
       ),
-      plugins: [], // ✅ منع أي plugin يسبب NullPointer
     );
   }
 }

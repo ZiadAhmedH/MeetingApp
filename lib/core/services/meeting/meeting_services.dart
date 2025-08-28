@@ -1,3 +1,7 @@
+import 'package:flutter/material.dart';
+import 'package:meeting_app/model/Models/outingGoingMeetingModel.dart';
+import 'package:meeting_app/viewModel/data/SharedKeys.dart';
+import 'package:meeting_app/viewModel/data/SharedPrefrences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../model/Models/meetingHistoryModel.dart';
 
@@ -19,12 +23,15 @@ class MeetingService {
 
   Future<void> putItForOutgoingMeeting(String meetingId) async {
     final userId = _client.auth.currentUser?.id;
+
     if (userId == null) return;
     await _client.from('outgoing_meetings').insert({
       'id': meetingId,
       'host_id': userId,
       'meeting_name': 'Meeting $meetingId',
       'start_time': DateTime.now().toIso8601String(),
+      'host_name': LocalData.getData(key: SharedKey.userName) ,
+      'host_image': LocalData.getData(key: SharedKey.userImage),
     });
   }
 
@@ -32,11 +39,15 @@ class MeetingService {
     await _client.from('outgoing_meetings').delete().eq('id', meetingId);
   }
 
-  Stream<List<Map<String, dynamic>>> getLiveOutgoingMeetings() {
+  Stream<List<Outinggoingmeetingmodel>> getLiveOutgoingMeetings() {
+     
     return _client
         .from('outgoing_meetings')
         .stream(primaryKey: ['id'])
-        .order('start_time');
+        .order('start_time')
+        .map((data) => data
+            .map<Outinggoingmeetingmodel>((json) => Outinggoingmeetingmodel.fromJson(json))
+            .toList());
   }
 
   Future<List<Meetinghistorymodel>> getMeetingHistory(String userId) async {

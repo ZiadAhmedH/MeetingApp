@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:meeting_app/core/utils/ThemeExtension.dart';
+import 'package:meeting_app/model/Models/outingGoingMeetingModel.dart';
 import 'package:meeting_app/view/HomeScreens/HomeSections/meeting_history_section/meeting_history_section.dart';
 import 'package:meeting_app/viewModel/bloc/MeetingCubit/meeting_cubit.dart';
 import 'package:meeting_app/viewModel/bloc/ProfileCubit/profile_cubit.dart';
@@ -27,7 +28,7 @@ class MainHomeSection extends StatelessWidget {
           children: [
             const MeetingSection(),
             const Divider(color: AppColor.darkGrey, thickness: 1),
-            StreamBuilder<List<Map<String, dynamic>>>(
+            StreamBuilder<List<Outinggoingmeetingmodel>>(
               stream: MeetingCubit.get(context).getLiveOutgoingMeetings(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -40,31 +41,83 @@ class MainHomeSection extends StatelessWidget {
                     ),
                   );
                 }
-            
+
                 final meetings = snapshot.data ?? [];
-            
+
                 if (meetings.isEmpty) {
                   return SizedBox();
                 }
-            
-                return  Expanded(
+
+                
+
+                return Expanded(
                   child: ListView.builder(
                     itemCount: meetings.length,
                     itemBuilder: (context, index) {
                       final meeting = meetings[index];
-                      return ListTile(
-                        title: Text(
-                          meeting['meeting_name'] ?? 'Untitled Meeting',
-                          style: TextStyle(
-                            color: context.thirdTextColor,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                              children: [
+                                CircleAvatar(
+                                  radius: 25,
+                                  backgroundImage: meeting.hostImage != null
+                                      ? NetworkImage(meeting.hostImage!)
+                                      : const AssetImage('assets/images/default_avatar.png') as ImageProvider,
+                                ),
+                                const SizedBox(width: 10),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CustomText(
+                                      text:"${meeting.hostName}'s Meeting",
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColor.primaryBlue,
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          FontAwesomeIcons.clock,
+                                          size: 14,
+                                          color: AppColor.grey,
+                                        ),
+                                        const SizedBox(width: 6),
+                                        CustomText(
+                                          text: "ID: ${meeting.id}",
+                                          fontSize: 14,
+                                          color: AppColor.grey,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+
+                                const Spacer(),
+                                
+                                ElevatedButton(
+                                  onPressed: () {
+                                   
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColor.green,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  child: CustomText(
+                                    text: "Join",
+                                    fontSize: 14,
+                                    color: AppColor.white,
+                                  ),
+                                ),
+
+                              ],
+                           
+                           
+                           
                         ),
-                        subtitle: Text('Host: ${meeting['host_id']}'),
-                        onTap: () {
-                          
-                        },
                       );
                     },
                   ),
@@ -85,7 +138,6 @@ class MainHomeSection extends StatelessWidget {
     );
   }
 }
-
 
 String formatMeetingDate(String dateStr) {
   final dateUtc = DateTime.parse(dateStr).toUtc();

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meeting_app/core/services/meeting/meeting_services.dart';
 import 'package:meeting_app/model/Models/meetingHistoryModel.dart';
+import 'package:meeting_app/model/Models/outingGoingMeetingModel.dart';
 import 'package:meeting_app/viewModel/data/SharedPrefrences.dart';
 import 'package:meeting_app/viewModel/data/SharedKeys.dart';
 part 'meeting_state.dart';
@@ -89,7 +90,7 @@ void toggleSpeaker() {
     }
   }
 
-  Stream<List<Map<String, dynamic>>> getLiveOutgoingMeetings() {
+  Stream<List<Outinggoingmeetingmodel>> getLiveOutgoingMeetings() {
     return service.getLiveOutgoingMeetings();
   }
 
@@ -122,4 +123,6 @@ void toggleSpeaker() {
       print('❌ Failed to update meeting duration: $e');
     }
   }
+
+  
 }
