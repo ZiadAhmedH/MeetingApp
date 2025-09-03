@@ -17,16 +17,18 @@ dependencies:
   bloc: ^9.0.0
   flutter_bloc: ^9.1.0
   shared_preferences: ^2.2.3
-  fluttertoast: ^8.2.6
+  fluttertoast: ^8.2.12
   fancy_password_field: ^2.0.7
   image_picker: ^1.1.2
-  permission_handler: ^11.3.1
+
+  # upgraded to match videosdk requirement
+  permission_handler: ^12.0.1
+
   dropdown_button2: ^2.3.9
   dio: ^5.6.0
   font_awesome_flutter: ^10.7.0
   flutter_expandable_fab: ^2.2.0
   intl: ^0.19.0
-
 
   file_picker: ^10.1.2
   win32: ^5.5.1
@@ -45,8 +47,11 @@ dependencies:
   zego_uikit_prebuilt_call: ^4.17.13
   zego_uikit: ^2.28.23
   zego_express_engine: ^3.22.0
-  videosdk: ^1.1.5
 
+  # upgraded to resolve flutter_foreground_task + namespace issue
+  videosdk: ^2.3.1
+  flutter_dotenv: ^6.0.0
+  flutter_webrtc: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -56,12 +61,12 @@ dev_dependencies:
   build_runner: ^2.4.9
 
 flutter:
-
   uses-material-design: true
 
   assets:
     - assets/logos/
     - assets/images/
+    - .env
 
   fonts:
     - family: Gilroy

@@ -4,16 +4,57 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meeting_app/core/components/CustomBtn.dart';
 import 'package:meeting_app/core/components/CustomText.dart';
 import 'package:meeting_app/core/utils/ThemeExtension.dart';
+import 'package:meeting_app/core/utils/api_video_sdk.dart';
 import 'package:meeting_app/view/HomeScreens/MeetingScreen/MeetingScreen.dart';
 import 'package:meeting_app/viewModel/bloc/MeetingCubit/meeting_cubit.dart';
-import '../../../../core/utils/AppColor.dart';
+import 'package:meeting_app/core/utils/AppColor.dart';
 
-class MeetingSettings extends StatelessWidget {
+
+class MeetingSettings extends StatefulWidget {
   const MeetingSettings({super.key});
 
   @override
+  State<MeetingSettings> createState() => _MeetingSettingsState();
+}
+
+class _MeetingSettingsState extends State<MeetingSettings> {
+  String? _meetingId;
+  String? _token;
+  bool _loading = false;
+
+  Future<void> _initMeeting() async {
+    setState(() => _loading = true);
+
+    try {
+      // 1. Fetch auth token
+      final token = await fetchToken(context);
+
+      // 2. Create meeting on VideoSDK server
+      final meetingId = await createMeeting(token);
+
+      setState(() {
+        _token = token;
+        _meetingId = meetingId;
+      });
+    } catch (e) {
+      debugPrint("Error creating meeting: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error creating meeting: $e")),
+      );
+    } finally {
+      setState(() => _loading = false);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initMeeting(); // fetch meetingId + token when screen loads
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var meetingCubit = MeetingCubit.get(context)..generateRandomId();
+    var meetingCubit = MeetingCubit.get(context);
 
     return BlocBuilder<MeetingCubit, MeetingState>(
       builder: (context, state) {
@@ -41,12 +82,16 @@ class MeetingSettings extends StatelessWidget {
                     color: context.thirdTextColor,
                   ),
                   const SizedBox(height: 10),
-                  CustomText(
-                    text: meetingCubit.meetingId,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColor.primaryBlue,
-                  ),
+
+                  // Show meetingId or loader
+                  _loading
+                      ? const CircularProgressIndicator()
+                      : CustomText(
+                          text: _meetingId ?? "No meeting yet",
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: AppColor.primaryBlue,
+                        ),
                   const SizedBox(height: 20),
 
                   // Camera toggle
@@ -121,25 +166,25 @@ class MeetingSettings extends StatelessWidget {
                   ),
                   const SizedBox(height: 30),
 
-                  
+                  // Join Meeting Button
                   CustomButton(
                     borderColor: AppColor.lightGrey,
                     backgroundColor: AppColor.darkGrey,
                     textColor: AppColor.white,
-                    isClickable: 1,
+                    isClickable: (_meetingId != null && _token != null) ? 1 : 0,
                     onTap: () {
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => MeetingScreen(
-                               displayName: 'User',
-                               token: const String.fromEnvironment("AUTH_TOKEN"),
-                               meetingId: meetingCubit.meetingId,
-
+                      if (_meetingId != null && _token != null) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => MeetingScreen(
+                              displayName: 'User',
+                              token: _token!,
+                              meetingId: _meetingId!,
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      }
                     },
                     text: CustomText(
                       text: "GO TO MEETING",
