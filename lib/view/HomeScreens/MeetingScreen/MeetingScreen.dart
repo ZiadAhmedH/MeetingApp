@@ -1,124 +1,114 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
-import 'package:meeting_app/core/utils/ZigoCloudConst.dart';
-import 'package:meeting_app/viewModel/bloc/MeetingCubit/meeting_cubit.dart';
-import 'package:meeting_app/viewModel/data/SharedKeys.dart';
-import 'package:meeting_app/viewModel/data/SharedPrefrences.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:videosdk/videosdk.dart';
 
 class MeetingScreen extends StatefulWidget {
   final String meetingId;
-  final bool isCameraOn;
-  final bool isMicOn;
+  final String token;
+  final String displayName;
 
   const MeetingScreen({
-    super.key,
+    Key? key,
     required this.meetingId,
-    required this.isCameraOn,
-    required this.isMicOn,
-  });
+    required this.token,
+    required this.displayName,
+  }) : super(key: key);
 
   @override
   State<MeetingScreen> createState() => _MeetingScreenState();
 }
 
 class _MeetingScreenState extends State<MeetingScreen> {
-  late final String userID;
-  late final String userName;
-  DateTime? _meetingStartTime;
+  Room? _room;
+  final Map<String, Participant> _participants = {};
 
   @override
   void initState() {
     super.initState();
-    userID = LocalData.getData(key: SharedKey.uid)!;
-    userName = LocalData.getData(key: SharedKey.email) ?? "User";
-    _meetingStartTime = DateTime.now();
-    _createMeetingLog();
+    _initMeeting();
   }
 
-  Future<String?> fetchZegoKitToken() async {
-    try {
-      final response = await Supabase.instance.client.functions.invoke(
-        'generate-zego-token',
-        body: {'room_id': widget.meetingId, 'user_id': userID},
-      );
+  void _initMeeting() {
+    // Create Room
+    _room = VideoSDK.createRoom(
+      roomId: widget.meetingId,
+      token: widget.token,
+      displayName: widget.displayName,
+      micEnabled: true,
+      camEnabled: true,
+    );
 
-      if (response.status == 200 && response.data['token'] != null) {
-        final token = response.data['token'] as String;
-        debugPrint("✅ Token fetched successfully: $token");
-        return token;
-      } else {
-        debugPrint("❌ Token fetch failed: ${response.data}");
-        return null;
-      }
-    } catch (e) {
-      debugPrint("❌ Token fetch exception: $e");
-      return null;
-    }
-  }
-
-  void _createMeetingLog() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final meetingCubit = BlocProvider.of<MeetingCubit>(context);
-      meetingCubit.createMeeting(
-        meetingId: widget.meetingId,
-        durationMin: 0,
-        cameraOn: widget.isCameraOn,
-        micOn: widget.isMicOn,
-      );
+    // Listen to meeting events
+    _room?.on("meeting-joined" as Events, () {
+      debugPrint("✅ Meeting Joined");
+      setState(() {
+        _participants[_room!.localParticipant.id] = _room!.localParticipant;
+      });
     });
+
+    _room?.on("participant-joined" as Events, (Participant participant) {
+      debugPrint("👤 Participant Joined: ${participant.displayName}");
+      setState(() {
+        _participants[participant.id] = participant;
+      });
+    });
+
+    _room?.on("participant-left" as Events, (Participant participant) {
+      debugPrint("🚪 Participant Left: ${participant.displayName}");
+      setState(() {
+        _participants.remove(participant.id);
+      });
+    });
+
+    _room?.on("meeting-left" as Events, () {
+      debugPrint("❌ Meeting Left");
+      Navigator.pop(context);
+    });
+
+    // Join room
+    _room?.join();
+  }
+
+  @override
+  void dispose() {
+    _room?.leave();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<String?>(
-      future: fetchZegoKitToken(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
-          return Scaffold(
-            body: Center(
-              child: LoadingAnimationWidget.dotsTriangle(
-                color: Colors.blue,
-                size: 50,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Meeting: ${widget.meetingId}"),
+      ),
+      body: _participants.isEmpty
+          ? const Center(child: CircularProgressIndicator())
+          : GridView.builder(
+              padding: const EdgeInsets.all(8),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 16 / 9,
               ),
+              itemCount: _participants.length,
+              itemBuilder: (context, index) {
+                final participant =
+                    _participants.values.elementAt(index);
+
+                return Card(
+                  color: Colors.black,
+                  child: Center(
+                    child: Text(
+                      participant.displayName,
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ),
+                );
+              },
             ),
-          );
-        }
-
-        final token = snapshot.data;
-
-        if (token == null) {
-          return const Scaffold(
-            body: Center(
-              child: Text("Failed to join the meeting. Please try again."),
-            ),
-          );
-        }
-
-        return ZegoUIKitPrebuiltCall(
-          appID: ZigoCloud.ZEGO_APP_ID,
-          userID: userID,
-          userName: userName,
-          callID: widget.meetingId,
-          token: token,
-          config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
-            ..turnOnCameraWhenJoining = widget.isCameraOn
-            ..turnOnMicrophoneWhenJoining = widget.isMicOn,
-          events: ZegoUIKitPrebuiltCallEvents(
-            onCallEnd: (event, defaultAction) async {
-              final meetingCubit = BlocProvider.of<MeetingCubit>(context);
-              final durationMin = _meetingStartTime == null
-                  ? 0
-                  : DateTime.now().difference(_meetingStartTime!).inMinutes;
-              await meetingCubit.updateMeetingDuration(widget.meetingId, durationMin);
-              await meetingCubit.deleteOutgoingMeeting(widget.meetingId);
-              defaultAction.call();
-            },
-          ),
-        );
-      },
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _room?.leave(),
+        child: const Icon(Icons.call_end, color: Colors.white),
+        backgroundColor: Colors.red,
+      ),
     );
   }
 }

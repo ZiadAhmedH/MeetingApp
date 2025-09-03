@@ -133,8 +133,8 @@ class MeetingSettings extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (_) => MeetingScreen(
-                             isCameraOn: meetingCubit.isCameraOn,
-                               isMicOn: meetingCubit.isMicrophoneOn,
+                               displayName: 'User',
+                               token: const String.fromEnvironment("AUTH_TOKEN"),
                                meetingId: meetingCubit.meetingId,
 
                           ),
