@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:meeting_app/core/components/CustomText.dart';
+import 'package:meeting_app/viewModel/bloc/MeetingCubit/meeting_cubit.dart';
 import 'package:videosdk/videosdk.dart';
-import 'package:videosdk/videosdk.dart' as rtc; // for RTCVideoView & Stream
+import 'package:videosdk/videosdk.dart' as rtc;
+
+import '../../../core/utils/AppColor.dart'; // for RTCVideoView & Stream
 
 class MeetingScreen extends StatefulWidget {
   final String meetingId;
@@ -21,229 +27,238 @@ class MeetingScreen extends StatefulWidget {
 class _MeetingScreenState extends State<MeetingScreen> {
   Room? _room;
 
-  /// Track participants’ *video* streams for rendering
+  // ✅ Track participants
+  final Map<String, Participant> _participants = {};
+
+  // ✅ Track video streams
   final Map<String, rtc.Stream?> _videoStreams = {};
 
-  /// Local UI state for mic/cam buttons
   bool _micEnabled = true;
   bool _camEnabled = true;
 
   @override
   void initState() {
     super.initState();
-    _initMeeting();
+    _joinMeeting();
   }
 
-  void _initMeeting() {
+  void _joinMeeting() {
     _room = VideoSDK.createRoom(
       roomId: widget.meetingId,
       token: widget.token,
       displayName: widget.displayName,
       micEnabled: _micEnabled,
       camEnabled: _camEnabled,
-      // optional extras:
-      // maxResolution: 'hd',
-      // defaultCameraIndex: 1,
     );
+    context.read<MeetingCubit>().createMeeting(cameraOn: _camEnabled, micOn: _micEnabled, durationMin: 60, meetingId: widget.meetingId);
 
-    // Set up room-level listeners
+    // Meeting events
     _room?.on(Events.roomJoined, _onRoomJoined);
     _room?.on(Events.participantJoined, _onParticipantJoined);
     _room?.on(Events.participantLeft, _onParticipantLeft);
-    _room?.on(Events.roomLeft, _onRoomLeft);
-    _room?.on(Events.error, (err) {
-      debugPrint("VIDEOSDK ERROR :: ${err['code']} :: ${err['name']} :: ${err['message']}");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("VideoSDK error: ${err['message']}")),
-      );
-    });
 
-    // Join the room
     _room?.join();
   }
 
   void _onRoomJoined() {
     debugPrint("✅ Meeting Joined");
 
-    // Start listening to local participant streams
+    // Add local participant
+    setState(() {
+      _participants[_room!.localParticipant.id] = _room!.localParticipant;
+    });
+
+    // Attach local streams
     _attachParticipantStreamListeners(_room!.localParticipant);
 
-    // If local participant already has a video stream, store it so it renders immediately
     for (final s in _room!.localParticipant.streams.values) {
       if (s.kind == 'video') {
-        setState(() => _videoStreams[_room!.localParticipant.id] = s as rtc.Stream?);
-      }
-      if (s.kind == 'audio') {
-        setState(() => _micEnabled = true);
+        setState(
+            () => _videoStreams[_room!.localParticipant.id] = s as rtc.Stream?);
       }
     }
+
+    // Add already connected participants
+    _room!.participants.forEach((id, participant) {
+      _onParticipantJoined(participant);
+    });
   }
 
   void _onParticipantJoined(Participant participant) {
     debugPrint("👤 Participant Joined: ${participant.displayName}");
+    setState(() {
+      _participants[participant.id] = participant;
+    });
     _attachParticipantStreamListeners(participant);
   }
 
   void _onParticipantLeft(String participantId) {
     debugPrint("🚪 Participant Left: $participantId");
     setState(() {
+      _participants.remove(participantId);
       _videoStreams.remove(participantId);
     });
   }
 
-  void _onRoomLeft() {
-    debugPrint("❌ Meeting Left");
-    _videoStreams.clear();
-    if (mounted) Navigator.pop(context);
-  }
-
-  /// Listen to a participant’s media stream events and keep our UI state in sync.
   void _attachParticipantStreamListeners(Participant participant) {
-    // When a new stream is enabled (published)
-    participant.on(Events.streamEnabled, (rtc.Stream stream) {
+    participant.on(Events.streamEnabled, (Stream stream) {
       if (stream.kind == 'video') {
-        setState(() => _videoStreams[participant.id] = stream);
-        if (_room != null && participant.id == _room!.localParticipant.id) {
-          _camEnabled = true; // reflect local cam state
-        }
-      } else if (stream.kind == 'audio') {
-        if (_room != null && participant.id == _room!.localParticipant.id) {
-          setState(() => _micEnabled = true);
-        }
+        setState(() => _videoStreams[participant.id] = stream as rtc.Stream?);
       }
     });
 
-    // When a stream is disabled (unpublished)
-    participant.on(Events.streamDisabled, (rtc.Stream stream) {
+    participant.on(Events.streamDisabled, (Stream stream) {
       if (stream.kind == 'video') {
         setState(() => _videoStreams.remove(participant.id));
-        if (_room != null && participant.id == _room!.localParticipant.id) {
-          _camEnabled = false;
-        }
-      } else if (stream.kind == 'audio') {
-        if (_room != null && participant.id == _room!.localParticipant.id) {
-          setState(() => _micEnabled = false);
-        }
       }
     });
+  }
 
-    // If participant already has an active video stream when we attach listeners
-    for (final s in participant.streams.values) {
-      final stream = s as rtc.Stream;
-      if (stream.kind == 'video') {
-        setState(() => _videoStreams[participant.id] = stream);
-      }
-    }
+  // ✅ UI for video tiles
+  List<Widget> _buildVideoTiles() {
+    return _videoStreams.entries.map((entry) {
+      final participant = _participants[entry.key];
+      if (participant == null) return const SizedBox.shrink();
+
+      return Container(
+        margin: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.blueAccent),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              child: rtc.RTCVideoView(
+                entry.value!.renderer!,
+                objectFit: rtc.RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Text(
+                participant.displayName,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        ),
+      );
+    }).toList();
+  }
+
+  // ✅ UI for participant list
+  Widget _buildParticipantList() {
+    final items = _participants.values.map((p) {
+      final isLocal = p.id == _room?.localParticipant.id;
+      return ListTile(
+        leading: const Icon(Icons.person),
+        title: Text(
+          p.displayName + (isLocal ? " (You)" : ""),
+          style: TextStyle(
+            fontWeight: isLocal ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
+      );
+    }).toList();
+
+    return ListView(children: items);
+  }
+
+  void _leaveMeeting() {
+    _room?.leave();
+    Navigator.pop(context);
   }
 
   @override
   void dispose() {
-    // Clean up
-    _room?.leave();
+   
+   context.read<MeetingCubit>().deleteOutgoingMeeting(widget.meetingId);
+
+    _room?.end();
     super.dispose();
   }
 
-  // --- Controls ---
-
-  void _toggleMic() {
-    if (_room == null) return;
-    if (_micEnabled) {
-      _room!.muteMic();
-      setState(() => _micEnabled = false);
-    } else {
-      _room!.unmuteMic();
-      setState(() => _micEnabled = true);
-    }
-  }
-
-  void _toggleCam() {
-    if (_room == null) return;
-    if (_camEnabled) {
-      _room!.disableCam();
-      setState(() => _camEnabled = false);
-    } else {
-      _room!.enableCam();
-      setState(() => _camEnabled = true);
-    }
-  }
-
-  void _leave() => _room?.leave();
-
   @override
   Widget build(BuildContext context) {
-    final tiles = _videoStreams.values
-        .where((s) => s != null)
-        .map((s) => _VideoTile(stream: s!))
-        .toList();
+    final tiles = _buildVideoTiles();
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Meeting: ${widget.meetingId}"),
+        title: CustomText(
+          text: "Meeting Details",
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
+        ),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [AppColor.blue, AppColor.blueAccent],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.people),
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                builder: (_) => SizedBox(
+                  height: 300,
+                  child: _buildParticipantList(),
+                ),
+              );
+            },
+          )
+        ],
       ),
       body: tiles.isEmpty
-          ? const Center(child: Text('Waiting for video…'))
+          ? Center(
+              child: LoadingAnimationWidget.staggeredDotsWave(
+                color: AppColor.blue,
+                size: 50,
+              ),
+            )
           : GridView.builder(
               padding: const EdgeInsets.all(8),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                childAspectRatio: 16 / 9,
+                childAspectRatio: 3 / 4,
               ),
               itemCount: tiles.length,
               itemBuilder: (context, index) => tiles[index],
             ),
-      bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              // Leave
-              FloatingActionButton(
-                heroTag: 'leave',
-                backgroundColor: Colors.red,
-                onPressed: _leave,
-                child: const Icon(Icons.call_end, color: Colors.white),
-              ),
-              // Mic
-              FloatingActionButton(
-                heroTag: 'mic',
-                onPressed: _toggleMic,
-                child: Icon(_micEnabled ? Icons.mic : Icons.mic_off),
-              ),
-              // Camera
-              FloatingActionButton(
-                heroTag: 'cam',
-                onPressed: _toggleCam,
-                child: Icon(_camEnabled ? Icons.videocam : Icons.videocam_off),
-              ),
-            ],
-          ),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              icon: Icon(_micEnabled ? Icons.mic : Icons.mic_off),
+              onPressed: () {
+                setState(() {
+                  _micEnabled = !_micEnabled;
+                  _micEnabled ? _room?.unmuteMic() : _room?.muteMic();
+                });
+              },
+            ),
+            IconButton(
+              icon: Icon(_camEnabled ? Icons.videocam : Icons.videocam_off),
+              onPressed: () {
+                setState(() {
+                  _camEnabled = !_camEnabled;
+                  _camEnabled ? _room?.enableCam() : _room?.disableCam();
+                });
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.call_end, color: Colors.red),
+              onPressed: _leaveMeeting,
+            ),
+          ],
         ),
-      ),
-    );
-  }
-}
-
-/// Renders a single participant video stream.
-/// IMPORTANT: requires `package:videosdk/rtc.dart`.
-class _VideoTile extends StatelessWidget {
-  final rtc.Stream stream;
-  const _VideoTile({required this.stream});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      clipBehavior: Clip.antiAlias,
-      color: Colors.black,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          // This fixes the “black camera” — we actually render the video track.
-          rtc.RTCVideoView(
-            stream.renderer!,
-            objectFit: rtc.RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
-          ),
-        ],
       ),
     );
   }
