@@ -8,6 +8,8 @@ import 'package:meeting_app/core/utils/api_video_sdk.dart';
 import 'package:meeting_app/view/HomeScreens/MeetingScreen/MeetingScreen.dart';
 import 'package:meeting_app/viewModel/bloc/MeetingCubit/meeting_cubit.dart';
 import 'package:meeting_app/core/utils/AppColor.dart';
+import 'package:meeting_app/viewModel/data/SharedKeys.dart';
+import 'package:meeting_app/viewModel/data/SharedPrefrences.dart';
 
 
 class MeetingSettings extends StatefulWidget {
@@ -49,7 +51,7 @@ class _MeetingSettingsState extends State<MeetingSettings> {
   @override
   void initState() {
     super.initState();
-    _initMeeting(); // fetch meetingId + token when screen loads
+    _initMeeting(); 
   }
 
   @override
@@ -178,7 +180,7 @@ class _MeetingSettingsState extends State<MeetingSettings> {
                           context,
                           MaterialPageRoute(
                             builder: (_) => MeetingScreen(
-                              displayName: 'User',
+                              displayName: LocalData.getData(key: SharedKey.userName) ?? "Guest",
                               token: _token!,
                               meetingId: _meetingId!,
                             ),

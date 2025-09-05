@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:meeting_app/core/components/CustomText.dart';
+import 'package:meeting_app/view/HomeScreens/MeetingScreen/widgets/video_tiles.dart';
 import 'package:meeting_app/viewModel/bloc/MeetingCubit/meeting_cubit.dart';
 import 'package:videosdk/videosdk.dart';
 import 'package:videosdk/videosdk.dart' as rtc;
 
-import '../../../core/utils/AppColor.dart'; // for RTCVideoView & Stream
+import '../../../core/utils/AppColor.dart';
+import 'widgets/participaint_list.dart'; // for RTCVideoView & Stream
 
 class MeetingScreen extends StatefulWidget {
   final String meetingId;
@@ -114,58 +116,10 @@ class _MeetingScreenState extends State<MeetingScreen> {
     });
   }
 
-  // ✅ UI for video tiles
-  List<Widget> _buildVideoTiles() {
-    return _videoStreams.entries.map((entry) {
-      final participant = _participants[entry.key];
-      if (participant == null) return const SizedBox.shrink();
-
-      return Container(
-        margin: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.blueAccent),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Column(
-          children: [
-            Expanded(
-              child: rtc.RTCVideoView(
-                entry.value!.renderer!,
-                objectFit: rtc.RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Text(
-                participant.displayName,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-          ],
-        ),
-      );
-    }).toList();
-  }
-
-  // ✅ UI for participant list
-  Widget _buildParticipantList() {
-    final items = _participants.values.map((p) {
-      final isLocal = p.id == _room?.localParticipant.id;
-      return ListTile(
-        leading: const Icon(Icons.person),
-        title: Text(
-          p.displayName + (isLocal ? " (You)" : ""),
-          style: TextStyle(
-            fontWeight: isLocal ? FontWeight.bold : FontWeight.normal,
-          ),
-        ),
-      );
-    }).toList();
-
-    return ListView(children: items);
-  }
+ 
 
   void _leaveMeeting() {
+       context.read<MeetingCubit>().deleteOutgoingMeeting(widget.meetingId);
     _room?.leave();
     Navigator.pop(context);
   }
@@ -173,7 +127,6 @@ class _MeetingScreenState extends State<MeetingScreen> {
   @override
   void dispose() {
    
-   context.read<MeetingCubit>().deleteOutgoingMeeting(widget.meetingId);
 
     _room?.end();
     super.dispose();
@@ -181,7 +134,7 @@ class _MeetingScreenState extends State<MeetingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final tiles = _buildVideoTiles();
+    final tiles = videoTiles( _participants, _videoStreams);
 
     return Scaffold(
       appBar: AppBar(
@@ -208,7 +161,7 @@ class _MeetingScreenState extends State<MeetingScreen> {
                 context: context,
                 builder: (_) => SizedBox(
                   height: 300,
-                  child: _buildParticipantList(),
+                  child: ParticipantList( _participants, _room),
                 ),
               );
             },
@@ -232,11 +185,19 @@ class _MeetingScreenState extends State<MeetingScreen> {
               itemBuilder: (context, index) => tiles[index],
             ),
       bottomNavigationBar: BottomAppBar(
+        color: Colors.transparent,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             IconButton(
+              color: AppColor.blue,
               icon: Icon(_micEnabled ? Icons.mic : Icons.mic_off),
+               style: TextButton.styleFrom(
+                backgroundColor: AppColor.darkGrey,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ) ,
+              ),
               onPressed: () {
                 setState(() {
                   _micEnabled = !_micEnabled;
@@ -245,6 +206,7 @@ class _MeetingScreenState extends State<MeetingScreen> {
               },
             ),
             IconButton(
+              color: AppColor.blue,
               icon: Icon(_camEnabled ? Icons.videocam : Icons.videocam_off),
               onPressed: () {
                 setState(() {

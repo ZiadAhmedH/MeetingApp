@@ -7,12 +7,10 @@ import 'package:meeting_app/core/utils/ThemeExtension.dart';
 import 'package:meeting_app/model/Models/outingGoingMeetingModel.dart';
 import 'package:meeting_app/view/HomeScreens/HomeSections/meeting_history_section/meeting_history_section.dart';
 import 'package:meeting_app/viewModel/bloc/MeetingCubit/meeting_cubit.dart';
-import 'package:meeting_app/viewModel/bloc/ProfileCubit/profile_cubit.dart';
 import 'package:meeting_app/viewModel/data/SharedKeys.dart';
 import 'package:meeting_app/viewModel/data/SharedPrefrences.dart';
 import '../../../core/components/CustomText.dart';
 import '../../../core/utils/AppColor.dart';
-import 'AppBar_Section/AppBarHomeSection.dart';
 import 'AppBar_Section/NavBar.dart';
 
 class MainHomeSection extends StatelessWidget {

@@ -32,13 +32,29 @@ class MeetingHistorySection extends StatelessWidget {
               return Center(
                 child: Column(
                   children: [
-                    Image.asset("assets/images/people.png", width: 250),
-                    CustomText(
-                      text: 'No Meeting Scheduled',
-                      fontSize: 20,
-                      fontWeight: FontWeight.normal,
-                      color: context.thirdTextColor,
-                      fontFamily: 'Gilroy',
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          CustomText(
+                            text: 'Meeting History',
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: context.thirdTextColor,
+                          ),
+                        ],
+                      ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset("assets/images/people.png", width: 250),
+                        CustomText(
+                          text: 'No Meeting Scheduled',
+                          fontSize: 20,
+                          fontWeight: FontWeight.normal,
+                          color: context.thirdTextColor,
+                          fontFamily: 'Gilroy',
+                        ),
+                      ],
                     ),
                   ],
                 ),
